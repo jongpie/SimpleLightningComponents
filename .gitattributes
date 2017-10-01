@@ -1,0 +1,22 @@
+# Set the default line return behavior, in case people don't have core.autocrlf set.
+* text=auto eol=lf
+
+# Common git file types
+.gitattributes text
+.gitignore text
+*.md text
+
+# Salesforce-specfic file types
+*.app text
+*.cls text
+*.cmp text
+*.component text
+*.css text
+*.html text
+*.js text
+*.page text
+*.resource text binary
+*.trigger text
+*.xml text
+
+## Specific Salesforce static resources that should be treated like text
