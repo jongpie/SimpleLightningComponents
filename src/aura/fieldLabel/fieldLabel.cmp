@@ -1,0 +1,17 @@
+<aura:component controller="LightningMetadataController">
+
+    <!-- Public Attributes -->
+    <aura:attribute name="sobjectName" type="String" required="true" />
+    <aura:attribute name="fieldName" type="String" required="true" />
+
+    <!-- Private Attributes -->
+    <aura:attribute name="fieldMetadata" type="Object" access="private" />
+    <aura:attribute name="label" type="String" access="private" />
+
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <!-- Markup -->
+    <ui:outputText value="{!v.label}" />
+
+</aura:component>

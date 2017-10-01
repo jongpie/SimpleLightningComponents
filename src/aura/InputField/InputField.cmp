@@ -1,0 +1,55 @@
+<aura:component controller="LightningMetadataController">
+
+    <!-- Public Attributes -->
+    <aura:attribute name="sobjectName" type="String" required="true" />
+    <aura:attribute name="fieldName" type="String" required="true" />
+    <aura:attribute name="record" type="SObject" required="true" />
+
+    <!-- Private Attributes -->
+    <aura:attribute name="fieldMetadata" type="Object" access="private" />
+    <aura:attribute name="fieldValue" type="Object" access="private" />
+
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.record}" action="{!c.handleRecordChanged}" />
+    <aura:handler name="change" value="{!v.fieldValue}" action="{!c.handleFieldValueChanged}" />
+
+    <!-- Markup -->
+    <div class="slds-form-element">
+        <label class="slds-form-element__label" for="{!v.auraId}">{!v.fieldMetadata.fieldLabel}</label>
+        <div class="slds-form-element__control">
+
+            <!-- BOOLEAN -->
+            <aura:if isTrue="{!v.fieldMetadata.fieldType == 'BOOLEAN'}">
+                 <ui:inputCheckbox value="{!v.fieldValue}" class="slds-input" />
+            </aura:if>
+
+            <!-- CURRENCY -->
+            <aura:if isTrue="{!v.fieldMetadata.fieldType == 'CURRENCY'}">
+                 <ui:inputCurrency value="{!v.fieldValue}" class="slds-input" />
+            </aura:if>
+
+            <!-- DATE -->
+            <aura:if isTrue="{!v.fieldMetadata.fieldType == 'DATE'}">
+                <ui:inputDate value="{!v.fieldValue}" class="slds-input" displayDatePicker="true" />
+            </aura:if>
+
+            <!-- PICKLIST -->
+            <aura:if isTrue="{!v.fieldMetadata.fieldType == 'PICKLIST'}">
+                <ui:inputSelect aura:id="auraId" required="{v.required}" class="{!'slds-select ' + v.styleClass}" change="{!c.handleFieldValueChanged}">
+                    <aura:iteration items="{!v.fieldMetadata.picklistOptions}" var="picklistOption">
+                        <ui:inputSelectOption label="{!picklistOption.picklistLabel}" text="{!picklistOption.picklistValue}"
+                            value="{!or(picklistOption.picklistValue == v.fieldValue, picklistOption.isDefaultValue)}"
+                        />
+                    </aura:iteration>
+                </ui:inputSelect>
+            </aura:if>
+
+            <!-- STRING -->
+            <aura:if isTrue="{!v.fieldMetadata.fieldType == 'STRING'}">
+                <ui:inputText value="{!v.fieldValue}" class="slds-input" maxLength="{!v.fieldMetadata.fieldMaxLength}" />
+            </aura:if>
+        </div>
+    </div>
+
+</aura:component>
