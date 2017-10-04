@@ -5,11 +5,10 @@
             "sobjectName": component.get("v.sobjectName"),
             "fieldName": component.get("v.fieldName")
         });
+        action.setStorable();
         action.setCallback(this, function(response) {
-            if (response.getState() == "SUCCESS") {
-                console.log(response.getReturnValue());
+            if(response.getState() == "SUCCESS") {
                 component.set('v.fieldMetadata', response.getReturnValue());
-
                 component.set('v.label', response.getReturnValue().fieldLabel);
             }
         });

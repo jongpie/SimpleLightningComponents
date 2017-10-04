@@ -4,13 +4,13 @@
         action.setParams({
             "sobjectName": component.get("v.sobjectName")
         });
+        action.setStorable();
         action.setCallback(this, function(response) {
             if (response.getState() == "SUCCESS") {
-                console.log(response.getReturnValue());
-                component.set('v.sobjectMetadata', response.getReturnValue());
-
-                component.set('v.label', response.getReturnValue().sobjectLabel);
-                component.set('v.labelPlural', response.getReturnValue().sobjectLabelPlural);
+                var sobjectMetadata = response.getReturnValue();
+                component.set('v.sobjectMetadata', sobjectMetadata);
+                component.set('v.label', sobjectMetadata.sobjectLabel);
+                component.set('v.labelPlural', sobjectMetadata.sobjectLabelPlural);
             }
         });
         $A.enqueueAction(action);
