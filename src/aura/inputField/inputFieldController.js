@@ -2,6 +2,7 @@
     doInit : function(component, event, helper) {
         helper.fetchFieldMetadata(component, event);
         helper.parseFieldValue(component, event);
+        helper.parsePicklistOptions(component, event);
     },
     handleRecordChanged : function(component, event, helper) {
         var record     = component.get('v.record');
@@ -24,9 +25,9 @@
             if(fieldMetadata != null && fieldType != fieldMetadata.fieldType && typeof fieldType == 'string') {
                 newFieldValue = newFieldValue.toString();
             }
-
             record[changedField] = newFieldValue;
             component.set('v.record', record);
+            helper.parsePicklistOptions(component, event);
         }
     }
 })

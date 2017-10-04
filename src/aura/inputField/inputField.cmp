@@ -53,31 +53,11 @@
 
             <!-- PICKLIST -->
             <aura:if isTrue="{!or(v.fieldType == 'PICKLIST', v.fieldType == 'MULTIPICKLIST')}">
-                <!-- <aura:iteration items="{!v.picklistOptions}" var="picklistOption">
-                    picklistOption - ((( {!picklistOption} )))
-                    <table><tr>
-                    <td>picklistOption.picklistValue - {!picklistOption.picklistValue}</td>
-                    <td>value = [[{!v.fieldValue}]</td>
-                    <td>{!and(v.fieldValue == null, picklistOption.picklistValue == null)}</td>
-                    <td>{!and(v.fieldValue != null, v.fieldValue == picklistOption.picklistValue)}</td>
-                </tr></table>
-                </aura:iteration> -->
-
-                <!-- <aura:iteration items="{!v.fieldMetadata.picklistOptions}" var="picklistOption">
-                    <table><tr>
-                    <td>picklistOption.picklistValue - {!picklistOption.picklistValue}</td>
-                    <td>value = [[{!v.fieldValue}]</td>
-                    <td>{!and(v.fieldValue == null, picklistOption.picklistValue == null)}</td>
-                    <td>{!and(v.fieldValue != null, v.fieldValue == picklistOption.picklistValue)}</td>
-                </tr></table>
-                </aura:iteration> -->
                 <ui:inputSelect aura:id="auraId" required="{v.required}" disabled="{!v.disabled}" class="{!'slds-select ' + v.styleClass}"
                     multiple="{!v.fieldType == 'MULTIPICKLIST'}" change="{!c.handleFieldValueChanged}"
                 >
                     <aura:iteration items="{!v.picklistOptions}" var="picklistOption">
-                        <ui:inputSelectOption label="{!picklistOption.picklistLabel}" text="{!picklistOption.picklistValue}"
-                            value="{!v.fieldValue == picklistOption.picklistValue}"
-                        />
+                        <ui:inputSelectOption label="{!picklistOption.picklistLabel}" text="{!picklistOption.picklistValue}" value="{!picklistOption.isSelectedValue}" />
                     </aura:iteration>
                 </ui:inputSelect>
             </aura:if>

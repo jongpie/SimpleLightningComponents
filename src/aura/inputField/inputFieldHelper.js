@@ -14,11 +14,7 @@
                 if(component.get('v.fieldType') == null) {
                     component.set('v.fieldType', fieldMetadata.fieldType);
                 }
-
-                var picklistOptions = component.get('v.picklistOptions');
-                if(picklistOptions == null || component.get('v.picklistOptions').length == 0) {
-                    component.set('v.picklistOptions', component.get('v.fieldMetadata').picklistOptions);
-                }
+                this.parsePicklistOptions(component, event);
             } else {
             	console.log('ERROR');
             	console.log(response.getError());
@@ -34,5 +30,32 @@
         if(record.hasOwnProperty(fieldName)) {
     		component.set('v.fieldValue', record[fieldName]);
         }
-    }
+    },
+    parsePicklistOptions : function(component, event) {
+        var fieldValue = component.get('v.fieldValue');
+        var picklistOptions = component.get('v.picklistOptions');
+        console.log(component.get('v.fieldMetadata'));
+        if(component.get('v.fieldType') =='PICKLIST') {
+            console.log('start parsePicklistOptions');
+            console.log('picklistOptions');
+            for(var i=0; i < picklistOptions.length; i++) {
+                console.log(picklistOptions[i]);
+            }
+        }
+        if(picklistOptions == null || picklistOptions.length == 0) {
+            console.log('adding field fieldMetadata picklistOptions');
+            var fieldMetadata = component.get('v.fieldMetadata');
+
+            if(fieldMetadata == null) return;
+
+            picklistOptions = fieldMetadata.picklistOptions;
+        }
+        for(var i=0; i < picklistOptions.length; i++) {
+            var picklistOption = picklistOptions[i];
+            console.log('fieldValue');
+            console.log(fieldValue);
+            picklistOption.isSelectedValue = fieldValue == picklistOption.picklistValue;
+        }
+        component.set('v.picklistOptions', picklistOptions);
+    },
 })
