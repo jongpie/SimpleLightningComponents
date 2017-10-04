@@ -2,16 +2,11 @@ public with sharing class LightningMetadataController {
 
     @AuraEnabled
     public static SObjectMetadata getSObjectMetadata(String sobjectName) {
-        system.debug('sobjectName --->' + sobjectName);
-
         return new SObjectMetadata(sobjectName);
     }
 
     @AuraEnabled
     public static FieldMetadata getFieldMetadata(String sobjectName, string fieldName) {
-        //http://www.sfdcmonkey.com/2016/12/05/how-to-fetch-picklist-value-from-sobject-and-set-in-uiinputselect/
-        system.debug('sobjectName --->' + sobjectName);
-        system.debug('fieldName --->' + fieldName);
         return new FieldMetadata(sobjectName, fieldName);
     }
 
@@ -43,6 +38,7 @@ public with sharing class LightningMetadataController {
         @AuraEnabled public String sobjectName {get;set;}
         @AuraEnabled public String fieldName {get;set;}
         @AuraEnabled public String fieldType {get;set;}
+        @AuraEnabled public String fieldInlineHelpText {get;set;}
         @AuraEnabled public String fieldLabel {get;set;}
         @AuraEnabled public Boolean fieldRequired {get;set;}
         @AuraEnabled public Integer fieldMaxLength {get;set;}
@@ -59,6 +55,7 @@ public with sharing class LightningMetadataController {
             this.fieldDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName).getDescribe();
 
             this.setFieldType();
+            this.setFieldInlineHelpText();
             this.setFieldLabel();
             this.setFieldRequired();
             this.setFieldMaxLength();
@@ -68,6 +65,10 @@ public with sharing class LightningMetadataController {
 
         private void setFieldType() {
             this.fieldType = fieldDescribe.getType().name();
+        }
+
+        private void setFieldInlineHelpText() {
+            this.fieldInlineHelpText = fieldDescribe.getInlineHelpText();
         }
 
         private void setFieldLabel() {
