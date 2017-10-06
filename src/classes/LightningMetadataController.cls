@@ -10,7 +10,7 @@ public with sharing class LightningMetadataController {
         return new FieldMetadata(sobjectName, fieldName);
     }
 
-    public class SObjectMetadata {
+    private class SObjectMetadata {
 
         @AuraEnabled public String sobjectName {get;set;}
         @AuraEnabled public String sobjectLabel {get;set;}
@@ -33,7 +33,7 @@ public with sharing class LightningMetadataController {
 
     }
 
-    public class FieldMetadata {
+    private class FieldMetadata {
 
         @AuraEnabled public String sobjectName {get;set;}
         @AuraEnabled public String fieldName {get;set;}
@@ -102,7 +102,7 @@ public with sharing class LightningMetadataController {
         }
     }
 
-    public class PicklistEntryMetadata {
+    private class PicklistEntryMetadata {
 
         @AuraEnabled public String picklistLabel {get;set;}
         @AuraEnabled public String picklistValue {get;set;}
