@@ -2,8 +2,12 @@
 A collection of custom Salesforce Lightning components to try to make Lightning development a little bit less frustrating
 
 ## lightningData.cmp
-* A service component that dynamically queries any SObject. Features toggling field level security and query caching
+* A service component that dynamically queries any SObject
     `<c:lightningData sobjectType="Account" fields="Id,Name,MyCustomField__c" />`
+* Feature: Field level security is automatically enforced by default - only fields that the current user has access to read (based on field.isAccessible()) will be returned. When false, all fields specified in the "fields" attribute are returned, regardless of field level security settings.
+    `<c:lightningData sobjectType="Account" fields="Id,Name,MyCustomField__c" enforceFLS="false" />`
+* Feature: Query caching can be enabled. When true, the Lightning component will cache the results for subsequent calls (action.setStorable())
+    `<c:lightningData sobjectType="Account" fields="Id,Name,MyCustomField__c" cacheResults="true" />`
 
 ## inputField.cmp
 * Provides a simple way to display an SObject's field that automatically determines the field type, field label, etc. Attributes can be overridden to allow control over the field when needed
