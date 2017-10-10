@@ -1,16 +1,27 @@
 public with sharing class LightningMetadataController {
 
     @AuraEnabled
+    public static User getCurrentUser() {
+        return [
+            SELECT Id, Name, Email, FirstName, LastName, ProfileId, Profile.Name
+            FROM User
+            WHERE Id = :UserInfo.getUserId()
+        ];
+    }
+
+    @AuraEnabled
     public static SObjectMetadata getSObjectMetadata(String sobjectName) {
+        System.debug('getSObjectMetadata');
         return new SObjectMetadata(sobjectName);
     }
 
     @AuraEnabled
     public static FieldMetadata getFieldMetadata(String sobjectName, string fieldName) {
+        System.debug('getFieldMetadata');
         return new FieldMetadata(sobjectName, fieldName);
     }
 
-    private class SObjectMetadata {
+    public class SObjectMetadata {
 
         @AuraEnabled public String sobjectName {get;set;}
         @AuraEnabled public String sobjectLabel {get;set;}
@@ -33,12 +44,13 @@ public with sharing class LightningMetadataController {
 
     }
 
-    private class FieldMetadata {
+    public class FieldMetadata {
 
         @AuraEnabled public String sobjectName {get;set;}
         @AuraEnabled public String fieldName {get;set;}
         @AuraEnabled public String fieldType {get;set;}
         @AuraEnabled public String fieldInlineHelpText {get;set;}
+        @AuraEnabled public Boolean fieldIsUpdateable {get;set;}
         @AuraEnabled public String fieldLabel {get;set;}
         @AuraEnabled public Boolean fieldRequired {get;set;}
         @AuraEnabled public Integer fieldMaxLength {get;set;}
@@ -56,6 +68,7 @@ public with sharing class LightningMetadataController {
 
             this.setFieldType();
             this.setFieldInlineHelpText();
+            this.setFieldIsUpdateable();
             this.setFieldLabel();
             this.setFieldRequired();
             this.setFieldMaxLength();
@@ -64,15 +77,19 @@ public with sharing class LightningMetadataController {
         }
 
         private void setFieldType() {
-            this.fieldType = fieldDescribe.getType().name();
+            this.fieldType = this.fieldDescribe.getType().name();
         }
 
         private void setFieldInlineHelpText() {
-            this.fieldInlineHelpText = fieldDescribe.getInlineHelpText();
+            this.fieldInlineHelpText = this.fieldDescribe.getInlineHelpText();
+        }
+
+        private void setFieldIsUpdateable() {
+            this.fieldIsUpdateable = this.fieldDescribe.isUpdateable();
         }
 
         private void setFieldLabel() {
-            this.fieldLabel = fieldDescribe.getLabel();
+            this.fieldLabel = this.fieldDescribe.getLabel();
         }
 
         private void setFieldRequired() {
@@ -102,10 +119,11 @@ public with sharing class LightningMetadataController {
         }
     }
 
-    private class PicklistEntryMetadata {
+    public class PicklistEntryMetadata {
 
         @AuraEnabled public String picklistLabel {get;set;}
         @AuraEnabled public String picklistValue {get;set;}
+        @AuraEnabled public Boolean isSelectedValue {get;set;}
         @AuraEnabled public Boolean isDefaultValue {get;set;}
 
         private Schema.PicklistEntry picklistEntry;
