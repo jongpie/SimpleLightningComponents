@@ -21,11 +21,11 @@
     <!-- Markup -->
     <div class="slds-form-element">
         <aura:if isTrue="{!v.variant == 'form'}">
-    		<label class="slds-form-element__label" for="{!v.auraId}">
-                <aura:if isTrue="{!v.fieldMetadata.fieldRequired}">
+            <label class="slds-form-element__label" for="{!v.auraId}">
+                <aura:if isTrue="{!and(v.fieldMetadata.fieldRequired, v.fieldMetadata.fieldType != 'BOOLEAN')}">
                     <abbr class="slds-required" title="required">*</abbr>
                 </aura:if>
-                {!v.fieldMetadata.fieldLabel}
+                <c:fieldLabel sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" showHelpText="{!v.fieldMetadata.fieldInlineHelpText != null}" />
             </label>
         </aura:if>
 

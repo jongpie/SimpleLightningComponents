@@ -3,6 +3,7 @@
     <!-- Public Attributes -->
     <aura:attribute name="sobjectName" type="String" required="true" />
     <aura:attribute name="fieldName" type="String" required="true" />
+    <aura:attribute name="showHelpText" type="Boolean" default="false" />
 
     <!-- Private Attributes -->
     <aura:attribute name="fieldMetadata" type="Object" access="private" />
@@ -13,5 +14,11 @@
 
     <!-- Markup -->
     <ui:outputText value="{!v.label}" />
+    <aura:if isTrue="{!and(v.showHelpText, v.fieldMetadata.fieldInlineHelpText != null)}">
+        <a class="help-icon" href="javascript:void(0);">
+            <lightning:icon iconName="utility:info" variant="info" title="{!v.fieldMetadata.fieldInlineHelpText}" />
+            <span class="slds-assistive-text">Help</span>
+        </a>
+    </aura:if>
 
 </aura:component>
