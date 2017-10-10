@@ -21,11 +21,18 @@ A collection of custom Salesforce Lightning components to try to make Lightning 
 * Displays the localized version of the provided field's label
 
     `<c:fieldLabel sobjectName="Account" fieldName="Type" />`
+
+* Feature: Show the field's inline help text
+
+    `<c:fieldLabel sobjectName="Account" fieldName="Type" showHelpText="true" />`
 ## sobjectLabel.cmp
 * Displays the localized version of the provided SObject's label
 
     `<c:sobjectLabel sobjectName="Account" />`
 
+* Feature: Show the SObject's plural label
+
+    `<c:sobjectLabel sobjectName="Account" variant="labelPlural" />`
 ## modal.cmp
 * Generates a modal window and displays your contents inside
     ```
