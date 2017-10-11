@@ -1,0 +1,16 @@
+<aura:component>
+
+    <!-- Public Attributes -->
+    <aura:attribute name="object" type="Object" required="true" />
+    <aura:attribute name="propertyName" type="String" required="true" />
+
+    <!-- Private Attributes -->
+    <aura:attribute name="displayValue" type="Object" access="private" />
+
+    <!-- Handlers-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <!-- Markup -->
+    <ui:outputText value="{!v.displayValue}" />
+
+</aura:component>

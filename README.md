@@ -42,3 +42,8 @@ A collection of custom Salesforce Lightning components to try to make Lightning 
         </aura:set>
     </c:modal>
     ```
+
+## objectPropertyValue.cmp
+* Displays the specified property of any javascript object - this is helpful since Lightning does not support dynamic dot notation
+
+    `<c:objectPropertyValue object="{!v.my.complex.nested.object}" propertyName="someProperty" />`
