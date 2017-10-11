@@ -44,6 +44,6 @@ A collection of custom Salesforce Lightning components to try to make Lightning 
     ```
 
 ## objectPropertyValue.cmp
-* Displays the specified property of any javascript object - this is helpful since Lightning does not allow you to dynamically get a property value by (like 'myObject[someProperty]')
+* Displays the specified property of any javascript object - this is helpful since Lightning does not allow you to dynamically get a property value by name (like 'myObject[someProperty]')
 
     `<c:objectPropertyValue object="{!v.my.complex.nested.object}" propertyName="someProperty" />`
