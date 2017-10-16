@@ -1,7 +1,7 @@
 <aura:component>
 
-    <aura:attribute name="title" type="String" />
     <aura:attribute name="showModal" type="Boolean" default="false" />
+    <aura:attribute name="title" type="String" />
     <aura:attribute name="class" type="String" />
     <aura:attribute name="primaryAction" type="Aura.Action" />
     <aura:attribute name="primaryActionLabel" type="String" />
