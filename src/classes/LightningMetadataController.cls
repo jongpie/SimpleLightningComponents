@@ -1,33 +1,24 @@
 public with sharing class LightningMetadataController {
 
     @AuraEnabled
-    public static User getCurrentUser() {
-        return [
-            SELECT Id, Name, Email, FirstName, LastName, ProfileId, Profile.Name
-            FROM User
-            WHERE Id = :UserInfo.getUserId()
-        ];
-    }
-
-    @AuraEnabled
     public static SObjectMetadata getSObjectMetadata(String sobjectName) {
-        System.debug('getSObjectMetadata');
         return new SObjectMetadata(sobjectName);
     }
 
     @AuraEnabled
     public static FieldMetadata getFieldMetadata(String sobjectName, string fieldName) {
-        System.debug('getFieldMetadata');
         return new FieldMetadata(sobjectName, fieldName);
     }
 
     public class SObjectMetadata {
 
-        @AuraEnabled public String sobjectName {get;set;}
-        @AuraEnabled public String sobjectLabel {get;set;}
-        @AuraEnabled public String sobjectLabelPlural {get;set;}
+        @AuraEnabled public String sobjectName {get;private set;}
+        @AuraEnabled public String sobjectLabel {get;private set;}
+        @AuraEnabled public String sobjectLabelPlural {get;private set;}
+        @AuraEnabled public String nameField {get;private set;}
+        @AuraEnabled public Set<String> fieldNames {get;private set;}
 
-        private Schema.DescribeSObjectResult sobjectDescribe;
+        public Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
 
         public SObjectMetadata(String sobjectName) {
             this.sobjectName = sobjectName;
@@ -35,6 +26,8 @@ public with sharing class LightningMetadataController {
             this.sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
 
             this.setSObjectLabels();
+            this.setNameField();
+            this.setFieldNames();
         }
 
         private void setSObjectLabels() {
@@ -42,22 +35,36 @@ public with sharing class LightningMetadataController {
             this.sobjectLabelPlural = this.sobjectDescribe.getLabelPlural();
         }
 
+        private void setNameField() {
+            for(Schema.SObjectField field : this.sobjectDescribe.fields.getMap().values()) {
+                Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
+
+                if(fieldDescribe.isNameField()) {
+                    this.nameField = fieldDescribe.getName();
+                    break;
+                }
+            }
+        }
+
+        private void setFieldNames() {
+            this.fieldNames = this.sobjectDescribe.fields.getMap().keySet();
+        }
+
     }
 
     public class FieldMetadata {
 
-        @AuraEnabled public String sobjectName {get;set;}
-        @AuraEnabled public String fieldName {get;set;}
-        @AuraEnabled public String fieldType {get;set;}
-        @AuraEnabled public String fieldInlineHelpText {get;set;}
-        @AuraEnabled public Boolean fieldIsUpdateable {get;set;}
-        @AuraEnabled public String fieldLabel {get;set;}
-        @AuraEnabled public Boolean fieldRequired {get;set;}
-        @AuraEnabled public Integer fieldMaxLength {get;set;}
-        @AuraEnabled public Object fieldDefaultValue {get;set;}
-        @AuraEnabled public List<PicklistEntryMetadata> picklistOptions {get;set;}
+        @AuraEnabled public String sobjectName {get;private set;}
+        @AuraEnabled public String fieldName {get;private set;}
+        @AuraEnabled public String fieldType {get;private set;}
+        @AuraEnabled public String fieldInlineHelpText {get;private set;}
+        @AuraEnabled public String fieldLabel {get;private set;}
+        @AuraEnabled public Boolean fieldRequired {get;private set;}
+        @AuraEnabled public Integer fieldMaxLength {get;private set;}
+        @AuraEnabled public Object fieldDefaultValue {get;private set;}
+        @AuraEnabled public List<PicklistEntryMetadata> picklistOptions {get;private set;}
 
-        private Schema.DescribeFieldResult fieldDescribe;
+        public Schema.DescribeFieldResult fieldDescribe {get;private set;}
 
         public FieldMetadata(String sobjectName, String fieldName) {
             this.sobjectName     = sobjectName;
@@ -68,7 +75,6 @@ public with sharing class LightningMetadataController {
 
             this.setFieldType();
             this.setFieldInlineHelpText();
-            this.setFieldIsUpdateable();
             this.setFieldLabel();
             this.setFieldRequired();
             this.setFieldMaxLength();
@@ -77,19 +83,15 @@ public with sharing class LightningMetadataController {
         }
 
         private void setFieldType() {
-            this.fieldType = this.fieldDescribe.getType().name();
+            this.fieldType = fieldDescribe.getType().name();
         }
 
         private void setFieldInlineHelpText() {
-            this.fieldInlineHelpText = this.fieldDescribe.getInlineHelpText();
-        }
-
-        private void setFieldIsUpdateable() {
-            this.fieldIsUpdateable = this.fieldDescribe.isUpdateable();
+            this.fieldInlineHelpText = fieldDescribe.getInlineHelpText();
         }
 
         private void setFieldLabel() {
-            this.fieldLabel = this.fieldDescribe.getLabel();
+            this.fieldLabel = fieldDescribe.getLabel();
         }
 
         private void setFieldRequired() {
@@ -119,11 +121,10 @@ public with sharing class LightningMetadataController {
         }
     }
 
-    public class PicklistEntryMetadata {
+    private class PicklistEntryMetadata {
 
         @AuraEnabled public String picklistLabel {get;set;}
         @AuraEnabled public String picklistValue {get;set;}
-        @AuraEnabled public Boolean isSelectedValue {get;set;}
         @AuraEnabled public Boolean isDefaultValue {get;set;}
 
         private Schema.PicklistEntry picklistEntry;
