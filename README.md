@@ -47,3 +47,22 @@ A collection of custom Salesforce Lightning components to try to make Lightning 
 * Displays the specified property of any javascript object - this is helpful since Lightning does not allow you to dynamically get a property value by name (like 'myObject[someProperty]')
 
     `<c:objectPropertyValue object="{!v.my.complex.nested.object}" propertyName="someProperty" />`
+
+# Apex Classes
+Two Apex classes are included in this repo. Future updates will try to keep the number of custom classes to a minumum so this library remains lightweight.
+
+## LightningDataController.cls
+Contains methods for accessing and modifying data. All methods are designed to work with any SObject type.
+* getNewRecord(String sobjectName) - returns a new SObject record of the specified type - any default field values are populated on fields that the current user can modify (based on the field describe's isUpdateable())
+* queryRecords(String parameterString) - accepts a serialized version of LightningDataController.QueryParameters and returns the SOQL results of the dynamic query
+* insertRecords(List<SObject> records) - inserts & returns the provided records
+* updateRecords(List<SObject> records) - updates & returns the provided records
+* upsertRecords(List<SObject> records) - upserts & returns the provided records
+* deleteRecords(List<SObject> records) - deletes the provided records, no return value
+* hardDeleteRecords(List<SObject> records) - hard deletes the provided records, no return value
+* undeleteRecords(List<SObject> records) - undeletes the provided records, no return value
+
+## LightningMetadataController.cls
+Contains methods for describing your orgs metadata and returning the info as aura-friendly objects that can be consumed by Lightning Components
+* getSObjectMetadata(String sobjectName) - returns an instance of LightningMetadataController.SObjectMetadata
+* getFieldMetadata(String sobjectName, String fieldName) - returns an instance of LightningMetadataController.FieldMetadata
