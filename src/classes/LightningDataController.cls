@@ -1,6 +1,25 @@
 public with sharing class LightningDataController {
 
     @AuraEnabled
+    public static SObject getNewRecord(String sobjectName) {
+        Schema.SObjectType sobjectType = Schema.getGlobalDescribe().get(sobjectName);
+
+        SObject newRecord = sobjectType.newSObject();
+        for(Schema.SObjectField field : sobjectType.getDescribe().fields.getMap().values()) {
+            Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
+
+            // Skip if the current user does not have READ access to the field
+            if(!fieldDescribe.isAccessible()) continue;
+            // Skip if the current user does not have WRITE access to the field
+            if(!fieldDescribe.isUpdateable()) continue;
+
+            newRecord.put(field, fieldDescribe.getDefaultValue());
+        }
+
+        return newRecord;
+    }
+
+    @AuraEnabled
     public static List<SObject> queryRecords(String parameterString) {
         QueryParameters parameters = (QueryParameters)JSON.deserialize(parameterString, QueryParameters.class);
 
@@ -15,6 +34,41 @@ public with sharing class LightningDataController {
         System.debug('query=' + query);
 
         return Database.query(query);
+    }
+
+    @AuraEnabled
+    public static List<SObject> insertRecords(List<SObject> records) {
+        Database.insert(records);
+        return records;
+    }
+
+    @AuraEnabled
+    public static List<SObject> updateRecords(List<SObject> records) {
+        Database.update(records);
+        return records;
+    }
+
+    @AuraEnabled
+    public static List<SObject> upsertRecords(List<SObject> records) {
+        Database.upsert(records);
+        return records;
+    }
+
+    @AuraEnabled
+    public static void deleteRecords(List<SObject> records) {
+        Database.delete(records);
+    }
+
+    @AuraEnabled
+    public static void hardDeleteRecords(List<SObject> records) {
+        deleteRecords(records);
+        Database.emptyRecycleBin(records);
+    }
+
+    @AuraEnabled
+    public static List<SObject> undeleteRecords(List<SObject> records) {
+        Database.undelete(records);
+        return records;
     }
 
     private class QueryParameters {
