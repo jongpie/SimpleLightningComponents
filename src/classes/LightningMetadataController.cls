@@ -12,27 +12,27 @@ public with sharing class LightningMetadataController {
 
     public class SObjectMetadata {
 
-        @AuraEnabled public String sobjectName {get;private set;}
-        @AuraEnabled public String sobjectLabel {get;private set;}
-        @AuraEnabled public String sobjectLabelPlural {get;private set;}
+        @AuraEnabled public String name {get;private set;}
+        @AuraEnabled public String label {get;private set;}
+        @AuraEnabled public String labelPlural {get;private set;}
         @AuraEnabled public String nameField {get;private set;}
-        @AuraEnabled public Set<String> fieldNames {get;private set;}
+        @AuraEnabled public Set<String> allFields {get;private set;}
+        @AuraEnabled public Set<String> accessibleFields {get;private set;}
+        @AuraEnabled public Set<String> createableFields {get;private set;}
+        @AuraEnabled public Set<String> updateableFields {get;private set;}
 
         public Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
 
         public SObjectMetadata(String sobjectName) {
-            this.sobjectName = sobjectName;
+            this.name = sobjectName;
 
             this.sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
 
-            this.setSObjectLabels();
-            this.setNameField();
-            this.setFieldNames();
-        }
+            this.label       = this.sobjectDescribe.getLabel();
+            this.labelPlural = this.sobjectDescribe.getLabelPlural();
 
-        private void setSObjectLabels() {
-            this.sobjectLabel       = this.sobjectDescribe.getLabel();
-            this.sobjectLabelPlural = this.sobjectDescribe.getLabelPlural();
+            this.setNameField();
+            this.setFieldLists();
         }
 
         private void setNameField() {
@@ -46,8 +46,16 @@ public with sharing class LightningMetadataController {
             }
         }
 
-        private void setFieldNames() {
-            this.fieldNames = this.sobjectDescribe.fields.getMap().keySet();
+        private void setFieldLists() {
+            for(Schema.SObjectField field : this.sobjectDescribe.fields.getMap().values()) {
+                Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
+                String fieldName = fieldDescribe.getName();
+
+                this.allFields.add(fieldName);
+                if(fieldDescribe.isAccessible()) this.accessibleFields.add(fieldName);
+                if(fieldDescribe.isCreateable()) this.accessibleFields.add(fieldName);
+                if(fieldDescribe.isUpdateable()) this.updateableFields.add(fieldName);
+            }
         }
 
     }
