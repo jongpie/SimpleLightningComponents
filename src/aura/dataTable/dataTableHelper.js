@@ -14,12 +14,7 @@
         action.setCallback(this, function(response) {
             if(response.getState() == 'SUCCESS') {
                 var fieldSetMetadata = response.getReturnValue();
-                var fields = [];
-                for(var i=0; i < fieldSetMetadata.length; i++) {
-                    fields.push(fieldSetMetadata[i].name);
-                }
-                component.set('v.fields', fields)
-                console.log('fields=' + fields);
+                component.set('v.fields', response.getReturnValue())
             } else {
                 console.log('ERROR');
                 console.log(response.getError());

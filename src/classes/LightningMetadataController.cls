@@ -41,10 +41,10 @@ public with sharing class LightningMetadataController {
         @AuraEnabled public String label {get;private set;}
         @AuraEnabled public String labelPlural {get;private set;}
         @AuraEnabled public String nameField {get;private set;}
-        @AuraEnabled public Set<String> allFields {get;private set;}
-        @AuraEnabled public Set<String> accessibleFields {get;private set;}
-        @AuraEnabled public Set<String> createableFields {get;private set;}
-        @AuraEnabled public Set<String> updateableFields {get;private set;}
+        @AuraEnabled public List<FieldMetadata> allFields {get;private set;}
+        @AuraEnabled public List<FieldMetadata> accessibleFields {get;private set;}
+        @AuraEnabled public List<FieldMetadata> createableFields {get;private set;}
+        @AuraEnabled public List<FieldMetadata> updateableFields {get;private set;}
 
         public Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
 
@@ -52,10 +52,10 @@ public with sharing class LightningMetadataController {
             this.name = sobjectName;
             this.sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
 
-            this.allFields        = new Set<String>();
-            this.accessibleFields = new Set<String>();
-            this.createableFields = new Set<String>();
-            this.updateableFields = new Set<String>();
+            this.allFields        = new List<FieldMetadata>();
+            this.accessibleFields = new List<FieldMetadata>();
+            this.createableFields = new List<FieldMetadata>();
+            this.updateableFields = new List<FieldMetadata>();
 
             this.label       = this.sobjectDescribe.getLabel();
             this.labelPlural = this.sobjectDescribe.getLabelPlural();
@@ -79,12 +79,11 @@ public with sharing class LightningMetadataController {
             for(Schema.SObjectField field : this.sobjectDescribe.fields.getMap().values()) {
                 Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
                 String fieldName = fieldDescribe.getName();
-System.debug('fieldName=' + fieldName);
-System.debug('fieldDescribe=' + fieldDescribe);
-                this.allFields.add(fieldName);
-                if(fieldDescribe.isAccessible()) this.accessibleFields.add(fieldName);
-                if(fieldDescribe.isCreateable()) this.accessibleFields.add(fieldName);
-                if(fieldDescribe.isUpdateable()) this.updateableFields.add(fieldName);
+
+                this.allFields.add(new FieldMetadata(this.name, fieldName));
+                if(fieldDescribe.isAccessible()) this.accessibleFields.add(new FieldMetadata(this.name, fieldName));
+                if(fieldDescribe.isCreateable()) this.accessibleFields.add(new FieldMetadata(this.name, fieldName));
+                if(fieldDescribe.isUpdateable()) this.updateableFields.add(new FieldMetadata(this.name, fieldName));
             }
         }
 
