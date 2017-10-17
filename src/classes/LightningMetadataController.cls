@@ -63,64 +63,37 @@ public with sharing class LightningMetadataController {
     public class FieldMetadata {
 
         @AuraEnabled public String sobjectName {get;private set;}
-        @AuraEnabled public String fieldName {get;private set;}
-        @AuraEnabled public String fieldType {get;private set;}
-        @AuraEnabled public String fieldInlineHelpText {get;private set;}
-        @AuraEnabled public String fieldLabel {get;private set;}
-        @AuraEnabled public Boolean fieldRequired {get;private set;}
-        @AuraEnabled public Integer fieldMaxLength {get;private set;}
-        @AuraEnabled public Object fieldDefaultValue {get;private set;}
+        @AuraEnabled public String name {get;private set;}
+        @AuraEnabled public String displayType {get;private set;}
+        @AuraEnabled public String inlineHelpText {get;private set;}
+        @AuraEnabled public String label {get;private set;}
+        @AuraEnabled public Boolean required {get;private set;}
+        @AuraEnabled public Integer maxLength {get;private set;}
+        @AuraEnabled public Object defaultValue {get;private set;}
         @AuraEnabled public List<PicklistEntryMetadata> picklistOptions {get;private set;}
 
         public Schema.DescribeFieldResult fieldDescribe {get;private set;}
 
         public FieldMetadata(String sobjectName, String fieldName) {
             this.sobjectName     = sobjectName;
-            this.fieldName       = fieldName;
+            this.name            = fieldName;
             this.picklistOptions = new List<PicklistEntryMetadata>();
 
             this.fieldDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName).getDescribe();
 
-            this.setFieldType();
-            this.setFieldInlineHelpText();
-            this.setFieldLabel();
-            this.setFieldRequired();
-            this.setFieldMaxLength();
-            this.setFieldDefaultValue();
+            this.displayType    = fieldDescribe.getType().name();
+            this.inlineHelpText = fieldDescribe.getInlineHelpText();
+            this.label          = fieldDescribe.getLabel();
+            this.required       = !this.fieldDescribe.isNillable(); // If a field is NOT nillable, then it's required
+            this.maxLength      = this.fieldDescribe.getLength();
+            this.defaultValue   = this.fieldDescribe.getDefaultValue();
+
             this.setPicklistOptions();
-        }
-
-        private void setFieldType() {
-            this.fieldType = fieldDescribe.getType().name();
-        }
-
-        private void setFieldInlineHelpText() {
-            this.fieldInlineHelpText = fieldDescribe.getInlineHelpText();
-        }
-
-        private void setFieldLabel() {
-            this.fieldLabel = fieldDescribe.getLabel();
-        }
-
-        private void setFieldRequired() {
-            // If a field is NOT nillable, then it's required
-            this.fieldRequired = !this.fieldDescribe.isNillable();
-        }
-
-        private void setFieldMaxLength() {
-            this.fieldMaxLength = this.fieldDescribe.getLength();
-        }
-
-        private void setFieldDefaultValue() {
-            this.fieldDefaultValue = this.fieldDescribe.getDefaultValue();
         }
 
         private void setPicklistOptions() {
             Schema.DisplayType fieldDisplayType = this.fieldDescribe.getType();
             if(fieldDisplayType != Schema.DisplayType.Picklist && fieldDisplayType != Schema.DisplayType.MultiPicklist) return;
-
-            Schema.DescribeSObjectResult sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
-            Schema.DescribeFieldResult fieldDescribe = sobjectDescribe.fields.getMap().get(fieldName).getDescribe();
 
             this.picklistOptions.add(new PicklistEntryMetadata()); // Empty picklist value
             for(Schema.PicklistEntry picklistEntry : this.fieldDescribe.getPickListValues()) {
@@ -131,8 +104,8 @@ public with sharing class LightningMetadataController {
 
     private class PicklistEntryMetadata {
 
-        @AuraEnabled public String picklistLabel {get;set;}
-        @AuraEnabled public String picklistValue {get;set;}
+        @AuraEnabled public String label {get;set;}
+        @AuraEnabled public String value {get;set;}
         @AuraEnabled public Boolean isDefaultValue {get;set;}
 
         private Schema.PicklistEntry picklistEntry;
@@ -143,10 +116,10 @@ public with sharing class LightningMetadataController {
 
         public PicklistEntryMetadata(Schema.PicklistEntry picklistEntry) {
             this.picklistEntry  = picklistEntry;
-            this.isDefaultValue = picklistEntry.isDefaultValue();
 
-            this.picklistLabel = picklistEntry.getLabel();
-            this.picklistValue = picklistEntry.getValue();
+            this.label          = picklistEntry.getLabel();
+            this.value          = picklistEntry.getValue();
+            this.isDefaultValue = picklistEntry.isDefaultValue();
         }
 
     }
