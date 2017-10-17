@@ -1,4 +1,4 @@
-<aura:component controller="LightningMetadataController">
+<aura:component controller="LightningMetadataController" implements="flexipage:availableForAllPageTypes">
 
     <!-- Public Attributes -->
     <aura:attribute name="sobjectName" type="String" required="true" />
