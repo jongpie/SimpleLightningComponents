@@ -2,11 +2,16 @@ public with sharing class LightningMetadataController {
 
     @AuraEnabled
     public static SObjectMetadata getSObjectMetadata(String sobjectName) {
+        System.debug('Start LightningMetadataController.getSObjectMetadata(\'' + sobjectName + '\')');
+        System.debug('sobjectName=' + sobjectName);
         return new SObjectMetadata(sobjectName);
     }
 
     @AuraEnabled
     public static FieldMetadata getFieldMetadata(String sobjectName, String fieldName) {
+        System.debug('Start LightningMetadataController.getFieldMetadata(\'' + sobjectName + '\', \'' + fieldName + '\')');
+        System.debug('sobjectName=' + sobjectName);
+        System.debug('fieldName=' + fieldName);
         return new FieldMetadata(sobjectName, fieldName);
     }
 
