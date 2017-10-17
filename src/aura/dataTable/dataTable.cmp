@@ -1,0 +1,37 @@
+<aura:component controller="LightningMetadataController">
+
+    <!-- Public Attributes -->
+    <aura:attribute name="sobjectName" type="String" required="true" />
+    <aura:attribute name="records" type="SObject[]" required="true" />
+    <aura:attribute name="fields" type="String[]" />
+    <aura:attribute name="fieldSetName" type="String" description="(Optional) Fully qualified name of the field set. If your org uses a namespace, then include the namespace in the field set name." />
+    <aura:attribute name="variant" type="String" default="input" description="(Optional) Determines if the records are editable (input) or read-only (output)" />
+
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <!-- Markup -->
+    <table>
+        <thead>
+            <tr>
+                <aura:iteration items="{!v.fields}" var="field">
+                    <td role="gridcell"><c:fieldLabel sobjectName="{!v.sobjectName}" fieldName="{!field}" /></td>
+                </aura:iteration>
+            </tr>
+        </thead>
+        <aura:iteration items="{!v.records}" var="record">
+            <tr>
+                <aura:iteration items="{!v.fields}" var="field">
+                    <td>
+                        <aura:if isTrue="{!v.variant == 'input'}">
+                            <c:inputField sobjectName="{!v.sobjectName}" record="{!record}" fieldName="{!field}" variant="bare" />
+                        </aura:if>
+                        <aura:if isTrue="{!v.variant == 'output'}">
+                            <c:objectPropertyValue object="{!record}" propertyName="{!field}" />
+                        </aura:if>
+                    </td>
+                </aura:iteration>
+            </tr>
+        </aura:iteration>
+    </table>
+</aura:component>

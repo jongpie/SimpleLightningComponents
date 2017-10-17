@@ -15,6 +15,26 @@ public with sharing class LightningMetadataController {
         return new FieldMetadata(sobjectName, fieldName);
     }
 
+    @AuraEnabled
+    public static List<FieldMetadata> getFieldSetMetadata(String sobjectName, String fieldSetName) {
+        System.debug('Start LightningMetadataController.getFieldSetMetadata(\'' + sobjectName + '\', \'' + fieldSetName + '\')');
+        System.debug('sobjectName=' + sobjectName);
+        System.debug('fieldSetName=' + fieldSetName);
+
+        Schema.DescribeSObjectResult sobjectDescribe = new SObjectMetadata(sobjectName).sobjectDescribe;
+        Schema.FieldSet fieldSet = sobjectDescribe.fieldSets.getMap().get(fieldSetName);
+        System.debug('fieldSet=' + fieldSet);
+        List<FieldMetadata> fieldSetMetadata = new List<FieldMetadata>();
+        for(Schema.FieldSetMember fieldSetMember : fieldSet.getFields()) {
+            FieldMetadata fieldMetadata = new FieldMetadata(sobjectName, fieldSetMember.getFieldPath());
+            fieldMetadata.required = (fieldSetMember.getDBRequired() || fieldSetMember.getRequired());
+
+            fieldSetMetadata.add(fieldMetadata);
+        }
+        return fieldSetMetadata;
+    }
+
+
     public class SObjectMetadata {
 
         @AuraEnabled public String name {get;private set;}
@@ -30,8 +50,12 @@ public with sharing class LightningMetadataController {
 
         public SObjectMetadata(String sobjectName) {
             this.name = sobjectName;
-
             this.sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
+
+            this.allFields        = new Set<String>();
+            this.accessibleFields = new Set<String>();
+            this.createableFields = new Set<String>();
+            this.updateableFields = new Set<String>();
 
             this.label       = this.sobjectDescribe.getLabel();
             this.labelPlural = this.sobjectDescribe.getLabelPlural();
@@ -55,7 +79,8 @@ public with sharing class LightningMetadataController {
             for(Schema.SObjectField field : this.sobjectDescribe.fields.getMap().values()) {
                 Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
                 String fieldName = fieldDescribe.getName();
-
+System.debug('fieldName=' + fieldName);
+System.debug('fieldDescribe=' + fieldDescribe);
                 this.allFields.add(fieldName);
                 if(fieldDescribe.isAccessible()) this.accessibleFields.add(fieldName);
                 if(fieldDescribe.isCreateable()) this.accessibleFields.add(fieldName);

@@ -12,6 +12,19 @@ A collection of custom Salesforce Lightning components to try to make Lightning 
 
     `<c:lightningData sobjectType="Account" fields="Id,Name,MyCustomField__c" cacheResults="true" />`
 
+## dataTable.cmp
+* Easily build a table for a list of SObject records. Each specified field is displayed as a column in the table.
+
+    `<c:dataTable sobjectName="Account" records="{!v.myRecords}" fields="Name,Type,AccountNumber" />`
+
+* Feature: leverage a field set to determine the fields displayed. If a field set and a list of fields are both provided, only the list of fields will be used.
+
+    `<c:dataTable sobjectName="Account" records="{!v.myRecords}" fieldSetName="Nebula__derp" />
+
+* Feature: Use 'variant' to change if the fields are displayed as 'input' (editable, default) or 'output' (read-only)
+
+    `<c:dataTable sobjectName="Account" records="{!v.myRecords}" fieldSetName="Nebula__derp" variant="output" />
+
 ## inputField.cmp
 * Provides a simple way to display an SObject's field that automatically determines the field type, field label, etc. Attributes can be overridden to allow control over the field when needed
 
