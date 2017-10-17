@@ -6,7 +6,7 @@ public with sharing class LightningMetadataController {
     }
 
     @AuraEnabled
-    public static FieldMetadata getFieldMetadata(String sobjectName, string fieldName) {
+    public static FieldMetadata getFieldMetadata(String sobjectName, String fieldName) {
         return new FieldMetadata(sobjectName, fieldName);
     }
 

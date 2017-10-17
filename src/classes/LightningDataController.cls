@@ -1,17 +1,15 @@
 public with sharing class LightningDataController {
 
     @AuraEnabled
-    public static SObject getNewRecord(String sobjectName) {
+    public static SObject createNewRecord(String sobjectName) {
         Schema.SObjectType sobjectType = Schema.getGlobalDescribe().get(sobjectName);
 
         SObject newRecord = sobjectType.newSObject();
         for(Schema.SObjectField field : sobjectType.getDescribe().fields.getMap().values()) {
             Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
 
-            // Skip if the current user does not have READ access to the field
-            if(!fieldDescribe.isAccessible()) continue;
-            // Skip if the current user does not have WRITE access to the field
-            if(!fieldDescribe.isUpdateable()) continue;
+            // Skip if the current user does not have write access to the field
+            if(!fieldDescribe.isCreateable()) continue;
 
             newRecord.put(field, fieldDescribe.getDefaultValue());
         }
@@ -36,6 +34,26 @@ public with sharing class LightningDataController {
         return Database.query(query);
     }
 
+    private static List<SObject> queryRecords(List<SObject> records) {
+        String sobjectName = String.valueOf(records.getSObjectType());
+        Set<String> fieldNames = new Set<String>();
+        Set<String> recordIdStrings = new Set<String>();
+        for(SObject record : records) {
+            recordIdStrings.add('\'' + record.Id + '\'');
+            fieldNames.addAll(record.getPopulatedFieldsAsMap().keySet());
+        }
+
+        String joinedRecordIds ;//TODO fix this line= String.join(recordIdStrings, ', ');
+        String recordFilter = 'WHERE Id IN (' + joinedRecordIds + ')';
+
+        QueryParameters queryParameters = new QueryParameters();
+        queryParameters.sobjectType = sobjectName;
+        queryParameters.fields = new List<String>(fieldNames);
+        queryparameters.filters = recordFilter;
+
+        return queryRecords(JSON.serialize(queryParameters));
+    }
+
     @AuraEnabled
     public static List<SObject> insertRecords(List<SObject> records) {
         Database.insert(records);
@@ -45,6 +63,7 @@ public with sharing class LightningDataController {
     @AuraEnabled
     public static List<SObject> updateRecords(List<SObject> records) {
         Database.update(records);
+        records = queryRecords(records);
         return records;
     }
 

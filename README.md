@@ -53,7 +53,7 @@ Two Apex classes are included in this repo. Future updates will try to keep the 
 
 ## LightningDataController.cls
 Contains methods for accessing and modifying data. All methods are designed to work with any SObject type.
-* getNewRecord(String sobjectName) - returns a new SObject record of the specified type - any default field values are populated on fields that the current user can modify (based on the field describe's isUpdateable())
+* createNewRecord(String sobjectName) - returns a new SObject record of the specified type - any default field values are populated on fields that the current user can modify (based on the field describe's isCreateable())
 * queryRecords(String parameterString) - accepts a serialized version of LightningDataController.QueryParameters and returns the SOQL results of the dynamic query
 * insertRecords(List<SObject> records) - inserts & returns the provided records
 * updateRecords(List<SObject> records) - updates & returns the provided records
