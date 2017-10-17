@@ -50,12 +50,6 @@
 
             picklistOptions = fieldMetadata.picklistOptions;
         }
-        for(var i=0; i < picklistOptions.length; i++) {
-            var picklistOption = picklistOptions[i];
-            console.log('fieldValue');
-            console.log(fieldValue);
-            picklistOption.isSelectedValue = fieldValue == picklistOption.picklistValue;
-        }
         component.set('v.picklistOptions', picklistOptions);
     },
 })

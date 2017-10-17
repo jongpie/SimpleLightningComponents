@@ -116,6 +116,7 @@ public with sharing class LightningMetadataController {
         private Schema.PicklistEntry picklistEntry;
 
         public PicklistEntryMetadata() {
+            this.value = '';
             this.isDefaultValue = false;
         }
 

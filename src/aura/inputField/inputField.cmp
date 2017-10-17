@@ -84,7 +84,7 @@
                     multiple="{!v.displayType == 'MULTIPICKLIST'}" change="{!c.handleFieldValueChanged}"
                 >
                     <aura:iteration items="{!v.picklistOptions}" var="picklistOption">
-                        <ui:inputSelectOption label="{!picklistOption.label}" text="{!picklistOption.value}" value="{!picklistOption.isSelectedValue}" />
+                        <ui:inputSelectOption label="{!picklistOption.label}" text="{!picklistOption.value}" value="{!picklistOption.value == v.fieldValue}" />
                     </aura:iteration>
                 </ui:inputSelect>
             </aura:if>
