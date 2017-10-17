@@ -9,8 +9,11 @@
             if(response.getState() == 'SUCCESS') {
                 var sobjectMetadata = response.getReturnValue();
                 component.set('v.sobjectMetadata', sobjectMetadata);
-                component.set('v.label', sobjectMetadata.sobjectLabel);
-                component.set('v.labelPlural', sobjectMetadata.sobjectLabelPlural);
+                component.set('v.label', sobjectMetadata.label);
+                component.set('v.labelPlural', sobjectMetadata.labelPlural);
+            } else if(response.getState() == 'ERROR') {
+                console.log('Error');
+                console.log(response.getError());
             }
         });
         $A.enqueueAction(action);

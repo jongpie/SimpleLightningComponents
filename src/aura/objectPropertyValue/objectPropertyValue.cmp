@@ -1,4 +1,4 @@
-<aura:component>
+<aura:component >
 
     <!-- Public Attributes -->
     <aura:attribute name="object" type="Object" required="true" />

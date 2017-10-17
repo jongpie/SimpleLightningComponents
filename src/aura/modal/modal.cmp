@@ -1,4 +1,4 @@
-<aura:component>
+<aura:component >
 
     <aura:attribute name="showModal" type="Boolean" default="false" />
     <aura:attribute name="title" type="String" />

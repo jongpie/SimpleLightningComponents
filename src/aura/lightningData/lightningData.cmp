@@ -11,7 +11,7 @@
 
     <!-- Config Details -->
     <aura:attribute name="cacheResults" type="Boolean" default="false" description="When true, the Lightning component will cache the results for subsequent calls (action.setStorable())" />
-    <aura:attribute name="enforceFLS" type="Boolean" default="true" description="When true, only fields that the current user has access to read (isAccessible()) will be returned"  />
+    <aura:attribute name="enforceFLS" type="Boolean" default="true" description="When true, only fields that the current user has access to read (isAccessible()) will be returned" />
 
     <!-- Methods -->
     <aura:method name="query" action="{!c.query}">

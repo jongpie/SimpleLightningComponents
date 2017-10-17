@@ -4,7 +4,7 @@
     <aura:attribute name="sobjectName" type="String" required="true" />
     <aura:attribute name="fieldName" type="String" required="true" />
     <aura:attribute name="record" type="SObject" required="true" />
-    <aura:attribute name="fieldType" type="String" />
+    <aura:attribute name="displayType" type="String" />
     <aura:attribute name="picklistOptions" type="Object[]" />
     <aura:attribute name="variant" type="String" default="form" description="Options: form (default) and bare" />
     <aura:attribute name="disabled" type="Boolean" required="false" />
@@ -32,44 +32,44 @@
         <div class="slds-form-element__control">
 
             <!-- BOOLEAN -->
-            <aura:if isTrue="{!v.fieldType == 'BOOLEAN'}">
+            <aura:if isTrue="{!v.displayType == 'BOOLEAN'}">
                 <ui:inputCheckbox value="{!v.fieldValue}" required="{v.required}" disabled="{!v.disabled}" class="slds-input" />
             </aura:if>
 
             <!-- CURRENCY -->
-            <aura:if isTrue="{!v.fieldType == 'CURRENCY'}">
+            <aura:if isTrue="{!v.displayType == 'CURRENCY'}">
                  <ui:inputCurrency value="{!v.fieldValue}" required="{v.required}" disabled="{!v.disabled}" class="slds-input" />
             </aura:if>
 
             <!-- DATE -->
-            <aura:if isTrue="{!v.fieldType == 'DATE'}">
+            <aura:if isTrue="{!v.displayType == 'DATE'}">
                 <ui:inputDate value="{!v.fieldValue}" required="{v.required}" disabled="{!v.disabled}" class="slds-input" displayDatePicker="true" />
             </aura:if>
 
             <!-- DOUBLE -->
-            <aura:if isTrue="{!or(v.fieldType == 'DOUBLE', v.fieldType == 'INTEGER')}">
+            <aura:if isTrue="{!or(v.displayType == 'DOUBLE', v.displayType == 'INTEGER')}">
                  <ui:inputNumber value="{!v.fieldValue}" required="{v.required}" disabled="{!v.disabled}" class="slds-input" />
             </aura:if>
 
             <!-- PICKLIST -->
-            <aura:if isTrue="{!or(v.fieldType == 'PICKLIST', v.fieldType == 'MULTIPICKLIST')}">
+            <aura:if isTrue="{!or(v.displayType == 'PICKLIST', v.displayType == 'MULTIPICKLIST')}">
                 <ui:inputSelect aura:id="auraId" required="{v.required}" disabled="{!v.disabled}" class="{!'slds-select ' + v.styleClass}"
-                    multiple="{!v.fieldType == 'MULTIPICKLIST'}" change="{!c.handleFieldValueChanged}"
+                    multiple="{!v.displayType == 'MULTIPICKLIST'}" change="{!c.handleFieldValueChanged}"
                 >
                     <aura:iteration items="{!v.picklistOptions}" var="picklistOption">
-                        <ui:inputSelectOption label="{!picklistOption.picklistLabel}" text="{!picklistOption.picklistValue}" value="{!picklistOption.isSelectedValue}" />
+                        <ui:inputSelectOption label="{!picklistOption.label}" text="{!picklistOption.value}" value="{!picklistOption.isSelectedValue}" />
                     </aura:iteration>
                 </ui:inputSelect>
             </aura:if>
 
             <!-- STRING -->
-            <aura:if isTrue="{!v.fieldType == 'STRING'}">
-                <ui:inputText value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.fieldMaxLength}" />
+            <aura:if isTrue="{!v.displayType == 'STRING'}">
+                <ui:inputText value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}" />
             </aura:if>
 
             <!-- TEXTAREA -->
-            <aura:if isTrue="{!v.fieldType == 'TEXTAREA'}">
-                <ui:inputTextArea value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.fieldMaxLength}" />
+            <aura:if isTrue="{!v.displayType == 'TEXTAREA'}">
+                <ui:inputTextArea value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}" />
             </aura:if>
         </div>
     </div>
