@@ -30,6 +30,18 @@
         </aura:if>
 
         <div class="slds-form-element__control">
+            <!--
+                Input type is determined based on the field's display type
+                More info: https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_enum_Schema_DisplayType.htm
+            -->
+            <!-- ADDRESS - TODO -->
+            <!-- BASE64 - TODO -->
+            <!-- COMBOBOX - TODO -->
+            <!-- DATACATEGORYGROUPREFERENCE - TODO -->
+            <!-- ID - TODO -->
+            <!-- PERCENT - TODO -->
+            <!-- REFERENCE - TODO -->
+            <!-- TIME - TODO -->
 
             <!-- BOOLEAN -->
             <aura:if isTrue="{!v.displayType == 'BOOLEAN'}">
@@ -46,13 +58,28 @@
                 <ui:inputDate value="{!v.fieldValue}" required="{v.required}" disabled="{!v.disabled}" class="slds-input" displayDatePicker="true" />
             </aura:if>
 
-            <!-- DOUBLE -->
+            <!-- DATETIME -->
+            <aura:if isTrue="{!v.displayType == 'DATETIME'}">
+                <ui:inputDatetime value="{!v.fieldValue}" required="{v.required}" disabled="{!v.disabled}" class="slds-input" displayDatePicker="true" />
+            </aura:if>
+
+            <!-- DOUBLE or INTEGER -->
             <aura:if isTrue="{!or(v.displayType == 'DOUBLE', v.displayType == 'INTEGER')}">
                  <ui:inputNumber value="{!v.fieldValue}" required="{v.required}" disabled="{!v.disabled}" class="slds-input" />
             </aura:if>
 
-            <!-- PICKLIST -->
-            <aura:if isTrue="{!or(v.displayType == 'PICKLIST', v.displayType == 'MULTIPICKLIST')}">
+            <!-- EMAIL -->
+            <aura:if isTrue="{!v.displayType == 'EMAIL'}">
+                <ui:inputEmail value="{!v.fieldValue}" required="{v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}" />
+            </aura:if>
+
+            <!-- ENCRYPTEDSTRING -->
+            <aura:if isTrue="{!v.displayType == 'ENCRYPTEDSTRING'}">
+                <ui:inputSecret value="{!v.fieldValue}" required="{v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}" />
+            </aura:if>
+
+            <!-- MULTIPICKLIST or PICKLIST -->
+            <aura:if isTrue="{!or(v.displayType == 'MULTIPICKLIST', v.displayType == 'PICKLIST')}">
                 <ui:inputSelect aura:id="auraId" required="{v.required}" disabled="{!v.disabled}" class="{!'slds-select ' + v.styleClass}"
                     multiple="{!v.displayType == 'MULTIPICKLIST'}" change="{!c.handleFieldValueChanged}"
                 >
@@ -60,6 +87,11 @@
                         <ui:inputSelectOption label="{!picklistOption.label}" text="{!picklistOption.value}" value="{!picklistOption.isSelectedValue}" />
                     </aura:iteration>
                 </ui:inputSelect>
+            </aura:if>
+
+            <!-- PHONE -->
+            <aura:if isTrue="{!v.displayType == 'PHONE'}">
+                <ui:inputPhone value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}" />
             </aura:if>
 
             <!-- STRING -->
@@ -70,6 +102,11 @@
             <!-- TEXTAREA -->
             <aura:if isTrue="{!v.displayType == 'TEXTAREA'}">
                 <ui:inputTextArea value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}" />
+            </aura:if>
+
+            <!-- URL -->
+            <aura:if isTrue="{!v.displayType == 'URL'}">
+                <ui:inputURL value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}" />
             </aura:if>
         </div>
     </div>
