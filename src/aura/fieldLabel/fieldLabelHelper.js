@@ -11,8 +11,10 @@
                 component.set('v.fieldMetadata', response.getReturnValue());
                 component.set('v.label', response.getReturnValue().label);
             } else if(response.getState() == 'ERROR') {
-                console.log('Error');
-                console.log(response.getError());
+                console.log('ERROR');
+                for(var i=0; i < response.getError().length; i++) {
+                   console.log(response.getError()[i]);
+                }
             }
         });
         $A.enqueueAction(action);

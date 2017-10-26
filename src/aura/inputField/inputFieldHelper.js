@@ -1,9 +1,10 @@
 ({
-	fetchFieldMetadata : function(component, event) {
-		var action = component.get('c.getFieldMetadata');
+    fetchFieldMetadata : function(component, event) {
+        var fieldName = component.get('v.fieldName');
+        var action = component.get('c.getFieldMetadata');
         action.setParams({
             'sobjectName': component.get('v.sobjectName'),
-            'fieldName': component.get('v.fieldName')
+            'fieldName': fieldName
         });
         action.setStorable();
         action.setCallback(this, function(response) {
@@ -14,36 +15,41 @@
                 if(component.get('v.displayType') == null) {
                     component.set('v.displayType', fieldMetadata.displayType);
                 }
+                if(component.get('v.disabled') == null) {
+                    component.set('v.disabled', fieldMetadata.fieldLevelSecurity.isUpdateable == false);
+                }
+                if(component.get('v.required') == null) {
+                    component.set('v.required', fieldMetadata.required);
+                }
                 this.parsePicklistOptions(component, event);
             } else {
-            	console.log('ERROR');
-            	console.log(response.getError());
+                console.log('ERROR');
+                for(var i=0; i < response.getError().length; i++) {
+                   console.log(response.getError()[i]);
+                }
             }
         });
         $A.enqueueAction(action);
     },
+    applyInputOptionOverrides : function(component, event) {
+        var inputOptions = component.get('v.inputOptions');
+        component.find('uiInputField');
+        //Object.assign(obj1, obj2);
+    },
     parseFieldValue : function(component, event) {
-    	var record = component.get('v.record');
+        var record = component.get('v.record');
         var fieldName = component.get('v.fieldName');
-    	if(record == null) return;
+        if(record == null) return;
 
         if(record.hasOwnProperty(fieldName)) {
-    		component.set('v.fieldValue', record[fieldName]);
+            component.set('v.fieldValue', record[fieldName]);
         }
     },
     parsePicklistOptions : function(component, event) {
         var fieldValue = component.get('v.fieldValue');
         var picklistOptions = component.get('v.picklistOptions');
-        console.log(component.get('v.fieldMetadata'));
-        if(component.get('v.fieldType') =='PICKLIST') {
-            console.log('start parsePicklistOptions');
-            console.log('picklistOptions');
-            for(var i=0; i < picklistOptions.length; i++) {
-                console.log(picklistOptions[i]);
-            }
-        }
+
         if(picklistOptions == null || picklistOptions.length == 0) {
-            console.log('adding field fieldMetadata picklistOptions');
             var fieldMetadata = component.get('v.fieldMetadata');
 
             if(fieldMetadata == null) return;
@@ -52,4 +58,21 @@
         }
         component.set('v.picklistOptions', picklistOptions);
     },
+    validateFieldValue : function(component, event) {
+        var fieldRequired = component.get('v.required');
+
+        if(fieldRequired == false) return;
+
+        var changedField  = component.get('v.fieldName');
+        var record        = component.get('v.record');
+        var fieldValue    = component.get('v.fieldValue');
+        var fieldMetadata = component.get('v.fieldMetadata');
+        var fieldType     = component.get('v.fieldType');
+
+        var fieldValueMissing = fieldRequired && (fieldValue == null || fieldValue == '');
+        if(fieldValueMissing) {
+            var inputField = component.find('inputField');
+            if(inputField) inputField.set('v.errors', [{message:'The field is required'}]);
+        }
+    }
 })

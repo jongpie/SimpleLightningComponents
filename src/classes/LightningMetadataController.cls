@@ -99,6 +99,7 @@ public with sharing class LightningMetadataController {
         @AuraEnabled public Boolean required {get;private set;}
         @AuraEnabled public Integer maxLength {get;private set;}
         @AuraEnabled public Object defaultValue {get;private set;}
+        @AuraEnabled public FieldLevelSecurity fieldLevelSecurity {get;private set;}
         @AuraEnabled public List<PicklistEntryMetadata> picklistOptions {get;private set;}
 
         public Schema.DescribeFieldResult fieldDescribe {get;private set;}
@@ -117,7 +118,14 @@ public with sharing class LightningMetadataController {
             this.maxLength      = this.fieldDescribe.getLength();
             this.defaultValue   = this.fieldDescribe.getDefaultValue();
 
+            this.setFieldLevelSecurity();
             this.setPicklistOptions();
+        }
+
+        private void setFieldLevelSecurity() {
+            this.fieldLevelSecurity = new FieldLevelSecurity();
+            this.fieldLevelSecurity.isAccessible = this.fieldDescribe.isAccessible();
+            this.fieldLevelSecurity.isUpdateable = this.fieldDescribe.isUpdateable();
         }
 
         private void setPicklistOptions() {
@@ -129,6 +137,13 @@ public with sharing class LightningMetadataController {
                 this.picklistOptions.add(new PicklistEntryMetadata(picklistEntry));
             }
         }
+    }
+
+    private class FieldLevelSecurity {
+
+        @AuraEnabled public Boolean isAccessible {get;set;}
+        @AuraEnabled public Boolean isUpdateable {get;set;}
+
     }
 
     private class PicklistEntryMetadata {

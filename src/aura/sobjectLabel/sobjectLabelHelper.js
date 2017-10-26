@@ -12,8 +12,10 @@
                 component.set('v.label', sobjectMetadata.label);
                 component.set('v.labelPlural', sobjectMetadata.labelPlural);
             } else if(response.getState() == 'ERROR') {
-                console.log('Error');
-                console.log(response.getError());
+                console.log('ERROR');
+                for(var i=0; i < response.getError().length; i++) {
+                   console.log(response.getError()[i]);
+                }
             }
         });
         $A.enqueueAction(action);

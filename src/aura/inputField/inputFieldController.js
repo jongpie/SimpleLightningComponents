@@ -29,5 +29,8 @@
             component.set('v.record', record);
             helper.parsePicklistOptions(component, event);
         }
+    },
+    handleBlur : function(component, event, helper) {
+        helper.validateFieldValue(component, event, helper)
     }
 })
