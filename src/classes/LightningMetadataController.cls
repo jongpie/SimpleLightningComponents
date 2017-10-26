@@ -98,6 +98,7 @@ public with sharing class LightningMetadataController {
         @AuraEnabled public String label {get;private set;}
         @AuraEnabled public Boolean required {get;private set;}
         @AuraEnabled public Integer maxLength {get;private set;}
+        @AuraEnabled public Boolean isDefaultedOnCreate {get;private set;}
         @AuraEnabled public Object defaultValue {get;private set;}
         @AuraEnabled public FieldLevelSecurity fieldLevelSecurity {get;private set;}
         @AuraEnabled public List<PicklistEntryMetadata> picklistOptions {get;private set;}
@@ -111,12 +112,13 @@ public with sharing class LightningMetadataController {
 
             this.fieldDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName).getDescribe();
 
-            this.displayType    = fieldDescribe.getType().name();
-            this.inlineHelpText = fieldDescribe.getInlineHelpText();
-            this.label          = fieldDescribe.getLabel();
-            this.required       = !this.fieldDescribe.isNillable(); // If a field is NOT nillable, then it's required
-            this.maxLength      = this.fieldDescribe.getLength();
-            this.defaultValue   = this.fieldDescribe.getDefaultValue();
+            this.displayType         = fieldDescribe.getType().name();
+            this.inlineHelpText      = fieldDescribe.getInlineHelpText();
+            this.label               = fieldDescribe.getLabel();
+            this.required            = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
+            this.maxLength           = this.fieldDescribe.getLength();
+            this.isDefaultedOnCreate = this.fieldDescribe.isDefaultedOnCreate();
+            this.defaultValue        = this.fieldDescribe.getDefaultValue();
 
             this.setFieldLevelSecurity();
             this.setPicklistOptions();
@@ -125,6 +127,7 @@ public with sharing class LightningMetadataController {
         private void setFieldLevelSecurity() {
             this.fieldLevelSecurity = new FieldLevelSecurity();
             this.fieldLevelSecurity.isAccessible = this.fieldDescribe.isAccessible();
+            this.fieldLevelSecurity.isCreateable = this.fieldDescribe.isCreateable();
             this.fieldLevelSecurity.isUpdateable = this.fieldDescribe.isUpdateable();
         }
 
@@ -142,6 +145,7 @@ public with sharing class LightningMetadataController {
     private class FieldLevelSecurity {
 
         @AuraEnabled public Boolean isAccessible {get;set;}
+        @AuraEnabled public Boolean isCreateable {get;set;}
         @AuraEnabled public Boolean isUpdateable {get;set;}
 
     }
