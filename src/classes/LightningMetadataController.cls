@@ -32,7 +32,6 @@ public with sharing class LightningMetadataController {
     }
 
     public class SObjectMetadata {
-
         @AuraEnabled public String name                               {get;private set;}
         @AuraEnabled public String label                              {get;private set;}
         @AuraEnabled public String labelPlural                        {get;private set;}
@@ -68,22 +67,26 @@ public with sharing class LightningMetadataController {
             this.sobjectLevelSecurity.isAccessible  = this.sobjectDescribe.isAccessible();
             this.sobjectLevelSecurity.isCreateable  = this.sobjectDescribe.isCreateable();
             this.sobjectLevelSecurity.isDeletable   = this.sobjectDescribe.isDeletable();
-            this.sobjectLevelSecurity.isUpdateable  = this.sobjectDescribe.isUpdateable();
+            this.sobjectLevelSecurity.isMergeable   = this.sobjectDescribe.isMergeable();
+            this.sobjectLevelSecurity.isQueryable   = this.sobjectDescribe.isQueryable();
+            this.sobjectLevelSecurity.isSearchable  = this.sobjectDescribe.isSearchable();
             this.sobjectLevelSecurity.isUndeletable = this.sobjectDescribe.isUndeletable();
+            this.sobjectLevelSecurity.isUpdateable  = this.sobjectDescribe.isUpdateable();
         }
-
     }
 
     private class SObjectLevelSecurity {
         @AuraEnabled public Boolean isAccessible  {get;private set;}
         @AuraEnabled public Boolean isCreateable  {get;private set;}
-        @AuraEnabled public Boolean isUpdateable  {get;private set;}
         @AuraEnabled public Boolean isDeletable   {get;private set;}
+        @AuraEnabled public Boolean isMergeable   {get;private set;}
+        @AuraEnabled public Boolean isQueryable   {get;private set;}
+        @AuraEnabled public Boolean isSearchable  {get;private set;}
         @AuraEnabled public Boolean isUndeletable {get;private set;}
+        @AuraEnabled public Boolean isUpdateable  {get;private set;}
     }
 
     public class FieldMetadata {
-
         @AuraEnabled public String name                                 {get;private set;}
         @AuraEnabled public String sobjectName                          {get;private set;}
         @AuraEnabled public Object defaultValue                         {get;private set;}
@@ -146,7 +149,6 @@ public with sharing class LightningMetadataController {
     }
 
     private class PicklistEntryMetadata {
-
         @AuraEnabled public String label           {get;private set;}
         @AuraEnabled public String value           {get;private set;}
         @AuraEnabled public Boolean isDefaultValue {get;private set;}
@@ -166,7 +168,6 @@ public with sharing class LightningMetadataController {
             this.value          = picklistEntry.getValue();
             this.isDefaultValue = picklistEntry.isDefaultValue();
         }
-
     }
 
 }
