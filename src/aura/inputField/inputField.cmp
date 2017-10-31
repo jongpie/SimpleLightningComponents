@@ -6,13 +6,13 @@
     <aura:attribute name="record" type="SObject" required="true" />
     <aura:attribute name="displayType" type="String" />
     <aura:attribute name="picklistOptions" type="Object[]" />
-    <aura:attribute name="variant" type="String" default="form" description="Options: form (default) and bare" />
-    <aura:attribute name="disabled" type="Boolean" />
-    <aura:attribute name="required" type="Boolean" />
-
-    <aura:attribute name="inputOptions" type="Object" />
+    <aura:attribute name="showLabel" type="Boolean" default="true" />
+    <aura:attribute name="render" type="Boolean" default="true" />
+    <aura:attribute name="disabled" type="Boolean" default="false" />
+    <aura:attribute name="required" type="Boolean" default="false" />
 
     <!-- Private Attributes -->
+    <aura:attribute name="sobjectMetadata" type="Object" access="private" />
     <aura:attribute name="fieldMetadata" type="Object" access="private" />
     <aura:attribute name="fieldValue" type="Object" access="private" />
 
@@ -23,126 +23,128 @@
     <aura:handler name="change" value="{!v.handleBlur}" action="{!c.handleFieldValueChanged}" />
 
     <!-- Markup -->
-    <div class="slds-form-element">
-        <aura:if isTrue="{!v.variant == 'form'}">
-            <label class="slds-form-element__label" for="{!v.auraId}">
-                <aura:if isTrue="{!and(v.required, v.displayType != 'BOOLEAN')}">
-                    <abbr class="slds-required" title="required">*</abbr>
+    <aura:if isTrue="{!and(v.sobjectMetadata.sobjectLevelSecurity.isAccessible, v.fieldMetadata.fieldLevelSecurity.isAccessible, v.render)}">
+        <div class="slds-form-element">
+            <aura:if isTrue="{!v.showLabel}">
+                <label class="slds-form-element__label" for="{!v.auraId}">
+                    <aura:if isTrue="{!and(v.required, v.displayType != 'BOOLEAN')}">
+                        <abbr class="slds-required" title="required">*</abbr>
+                    </aura:if>
+                    <c:fieldLabel sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" showHelpText="{!v.fieldMetadata.inlineHelpText != null}" />
+                </label>
+            </aura:if>
+
+            <div class="slds-form-element__control">
+                <!--
+                    Input type is determined based on the field's display type
+                    More info: https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_enum_Schema_DisplayType.htm
+                -->
+                <!-- ADDRESS - TODO -->
+                <!-- BASE64 - TODO -->
+                <!-- COMBOBOX - TODO -->
+                <!-- DATACATEGORYGROUPREFERENCE - TODO -->
+                <!-- ID - TODO -->
+                <!-- PERCENT - TODO -->
+                <!-- REFERENCE - TODO -->
+                <!-- TIME - TODO -->
+
+                <!-- BOOLEAN -->
+                <aura:if isTrue="{!v.displayType == 'BOOLEAN'}">
+                    <div class="slds-form-element">
+                        <label class="slds-checkbox_toggle slds-grid">
+                        <!-- <span class="slds-form-element__label slds-m-bottom_none">Toggle Label</span> -->
+                        <ui:inputCheckbox value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input slds-checkbox uiInput--checkbox" />
+                        <span id="toggle-desc" class="slds-checkbox_faux_container" aria-live="assertive">
+                            <span class="slds-checkbox_faux"></span>
+                            <!-- <span class="slds-checkbox_on">Enabled</span>
+                            <span class="slds-checkbox_off">Disabled</span> -->
+                        </span>
+                        </label>
+                    </div>
                 </aura:if>
-                <c:fieldLabel sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" showHelpText="{!v.fieldMetadata.inlineHelpText != null}" />
-            </label>
-        </aura:if>
 
-        <div class="slds-form-element__control">
-            <!--
-                Input type is determined based on the field's display type
-                More info: https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_enum_Schema_DisplayType.htm
-            -->
-            <!-- ADDRESS - TODO -->
-            <!-- BASE64 - TODO -->
-            <!-- COMBOBOX - TODO -->
-            <!-- DATACATEGORYGROUPREFERENCE - TODO -->
-            <!-- ID - TODO -->
-            <!-- PERCENT - TODO -->
-            <!-- REFERENCE - TODO -->
-            <!-- TIME - TODO -->
+                <!-- CURRENCY -->
+                <aura:if isTrue="{!v.displayType == 'CURRENCY'}">
+                    <ui:inputCurrency aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input"
+                        blur="{!c.handleBlur}"
+                    />
+                </aura:if>
 
-            <!-- BOOLEAN -->
-            <aura:if isTrue="{!v.displayType == 'BOOLEAN'}">
-                <div class="slds-form-element">
-                    <label class="slds-checkbox_toggle slds-grid">
-                    <!-- <span class="slds-form-element__label slds-m-bottom_none">Toggle Label</span> -->
-                    <ui:inputCheckbox value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input slds-checkbox uiInput--checkbox" />
-                    <span id="toggle-desc" class="slds-checkbox_faux_container" aria-live="assertive">
-                        <span class="slds-checkbox_faux"></span>
-                        <!-- <span class="slds-checkbox_on">Enabled</span>
-                        <span class="slds-checkbox_off">Disabled</span> -->
-                    </span>
-                    </label>
-                </div>
-            </aura:if>
+                <!-- DATE -->
+                <aura:if isTrue="{!v.displayType == 'DATE'}">
+                    <ui:inputDate aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" displayDatePicker="true"
+                        blur="{!c.handleBlur}"
+                    />
+                </aura:if>
 
-            <!-- CURRENCY -->
-            <aura:if isTrue="{!v.displayType == 'CURRENCY'}">
-                <ui:inputCurrency value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input"
-                    blur="{!c.handleBlur}"
-                />
-            </aura:if>
+                <!-- DATETIME -->
+                <aura:if isTrue="{!v.displayType == 'DATETIME'}">
+                    <ui:inputDatetime aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" displayDatePicker="true"
+                        blur="{!c.handleBlur}"
+                    />
+                </aura:if>
 
-            <!-- DATE -->
-            <aura:if isTrue="{!v.displayType == 'DATE'}">
-                <ui:inputDate value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" displayDatePicker="true"
-                    blur="{!c.handleBlur}"
-                />
-            </aura:if>
+                <!-- DOUBLE or INTEGER -->
+                <aura:if isTrue="{!or(v.displayType == 'DOUBLE', v.displayType == 'INTEGER')}">
+                     <ui:inputNumber aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input"
+                        blur="{!c.handleBlur}"
+                    />
+                </aura:if>
 
-            <!-- DATETIME -->
-            <aura:if isTrue="{!v.displayType == 'DATETIME'}">
-                <ui:inputDatetime value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" displayDatePicker="true"
-                    blur="{!c.handleBlur}"
-                />
-            </aura:if>
+                <!-- EMAIL -->
+                <aura:if isTrue="{!v.displayType == 'EMAIL'}">
+                    <ui:inputEmail aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
+                        blur="{!c.handleBlur}"
+                    />
+                </aura:if>
 
-            <!-- DOUBLE or INTEGER -->
-            <aura:if isTrue="{!or(v.displayType == 'DOUBLE', v.displayType == 'INTEGER')}">
-                 <ui:inputNumber value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input"
-                    blur="{!c.handleBlur}"
-                />
-            </aura:if>
+                <!-- ENCRYPTEDSTRING -->
+                <aura:if isTrue="{!v.displayType == 'ENCRYPTEDSTRING'}">
+                    <ui:inputSecret aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
+                        blur="{!c.handleBlur}"
+                    />
+                </aura:if>
 
-            <!-- EMAIL -->
-            <aura:if isTrue="{!v.displayType == 'EMAIL'}">
-                <ui:inputEmail value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
-                    blur="{!c.handleBlur}"
-                />
-            </aura:if>
+                <!-- MULTIPICKLIST or PICKLIST -->
+                <aura:if isTrue="{!or(v.displayType == 'MULTIPICKLIST', v.displayType == 'PICKLIST')}">
+                    <ui:inputSelect aura:id="inputField" required="{!v.required}" disabled="{!v.disabled}" class="{!'slds-select ' + v.styleClass}"
+                        blur="{!c.handleBlur}" multiple="{!v.displayType == 'MULTIPICKLIST'}" change="{!c.handleFieldValueChanged}"
+                    >
+                        <aura:iteration items="{!v.picklistOptions}" var="picklistOption">
+                            <ui:inputSelectOption label="{!picklistOption.label}" text="{!picklistOption.value}" value="{!picklistOption.value == v.fieldValue}" />
+                        </aura:iteration>
+                    </ui:inputSelect>
+                </aura:if>
 
-            <!-- ENCRYPTEDSTRING -->
-            <aura:if isTrue="{!v.displayType == 'ENCRYPTEDSTRING'}">
-                <ui:inputSecret value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
-                    blur="{!c.handleBlur}"
-                />
-            </aura:if>
+                <!-- PHONE -->
+                <aura:if isTrue="{!v.displayType == 'PHONE'}">
+                    <ui:inputPhone aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
+                        blur="{!c.handleBlur}"
+                    />
+                </aura:if>
 
-            <!-- MULTIPICKLIST or PICKLIST -->
-            <aura:if isTrue="{!or(v.displayType == 'MULTIPICKLIST', v.displayType == 'PICKLIST')}">
-                <ui:inputSelect aura:id="auraId" required="{!v.required}" disabled="{!v.disabled}" class="{!'slds-select ' + v.styleClass}"
-                    blur="{!c.handleBlur}" multiple="{!v.displayType == 'MULTIPICKLIST'}" change="{!c.handleFieldValueChanged}"
-                >
-                    <aura:iteration items="{!v.picklistOptions}" var="picklistOption">
-                        <ui:inputSelectOption label="{!picklistOption.label}" text="{!picklistOption.value}" value="{!picklistOption.value == v.fieldValue}" />
-                    </aura:iteration>
-                </ui:inputSelect>
-            </aura:if>
+                <!-- STRING -->
+                <aura:if isTrue="{!v.displayType == 'STRING'}">
+                    <ui:inputText aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
+                        blur="{!c.handleBlur}"
+                    />
+                </aura:if>
 
-            <!-- PHONE -->
-            <aura:if isTrue="{!v.displayType == 'PHONE'}">
-                <ui:inputPhone value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
-                    blur="{!c.handleBlur}"
-                />
-            </aura:if>
+                <!-- TEXTAREA -->
+                <aura:if isTrue="{!v.displayType == 'TEXTAREA'}">
+                    <ui:inputTextArea aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
+                        blur="{!c.handleBlur}"
+                    />
+                </aura:if>
 
-            <!-- STRING -->
-            <aura:if isTrue="{!v.displayType == 'STRING'}">
-                <ui:inputText value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
-                    blur="{!c.handleBlur}"
-                />
-            </aura:if>
-
-            <!-- TEXTAREA -->
-            <aura:if isTrue="{!v.displayType == 'TEXTAREA'}">
-                <ui:inputTextArea value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
-                    blur="{!c.handleBlur}"
-                />
-            </aura:if>
-
-            <!-- URL -->
-            <aura:if isTrue="{!v.displayType == 'URL'}">
-                <ui:inputURL value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
-                    blur="{!c.handleBlur}"
-                />
-            </aura:if>
+                <!-- URL -->
+                <aura:if isTrue="{!v.displayType == 'URL'}">
+                    <ui:inputURL aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxLength="{!v.fieldMetadata.maxLength}"
+                        blur="{!c.handleBlur}"
+                    />
+                </aura:if>
+            </div>
         </div>
-    </div>
+    </aura:if>
 
 </aura:component>
