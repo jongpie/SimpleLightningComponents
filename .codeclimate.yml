@@ -1,14 +1,14 @@
 engines:
     apexmetrics:
-        enabled: true
-	duplication:
-		enabled: true
-	eslint:
-		enabled: true
-		checks:
-		  no-unused-expressions:
-			enabled: false
+        enabled:  true
+    duplication:
+        enabled:  true
+    eslint:
+        enabled:  true
+        checks:
+            no-unused-expressions:
+                enabled:  false
 ratings:
     paths:
-        - "**.cls"
-        - "**.trigger"
+        -  "**.cls"
+        -  "**.trigger"
