@@ -1,6 +1,11 @@
 # Lightning Components
 A collection of custom Salesforce Lightning components that streamline developing in Lightning by automatically applying sobject-level security, field-level security, field types and more.
 
+<a href="https://githubsfdeploy.herokuapp.com" target="_blank">
+  <img alt="Deploy to Salesforce"
+       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
+</a>
+
 ## inputField.cmp
 * Provides a simple way to display an SObject's field as an input (editable) that automatically determines sobject-level security, field-level security, the field type, field label, etc. Attributes can be overridden to allow control over the field when needed
 
