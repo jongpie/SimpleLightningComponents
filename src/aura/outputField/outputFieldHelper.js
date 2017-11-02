@@ -14,7 +14,6 @@
                 if(component.get('v.displayType') === undefined) {
                     component.set('v.displayType', fieldMetadata.displayType);
                 }
-                this.parsePicklistOptions(component, event);
             } else {
                 console.log(response.getError().length + ' ERRORS');
                 for(var i = 0; i < response.getError().length; i++) {
@@ -27,24 +26,11 @@
     parseFieldValue : function(component, event) {
         var record = component.get('v.record');
         var fieldName = component.get('v.fieldName');
-        if(record == null) return;
 
+        if(record == null) return;
         if(record.hasOwnProperty(fieldName)) {
             component.set('v.fieldValue', record[fieldName]);
         }
-    },
-    parsePicklistOptions : function(component, event) {
-        var fieldValue = component.get('v.fieldValue');
-        var picklistOptions = component.get('v.picklistOptions');
-
-        if(picklistOptions == null || picklistOptions.length == 0) {
-            var fieldMetadata = component.get('v.fieldMetadata');
-
-            if(fieldMetadata == null) return;
-
-            picklistOptions = fieldMetadata.picklistOptions;
-        }
-        component.set('v.picklistOptions', picklistOptions);
     },
     handleFieldValueChanged : function(component, event) {
         var changedField  = component.get('v.fieldName');
@@ -63,16 +49,6 @@
             }
             record[changedField] = newFieldValue;
             component.set('v.record', record);
-            this.parsePicklistOptions(component, event);
         }
-    },
-    validateFieldValue : function(component, event) {
-        var fieldRequired   = component.get('v.required');
-        var fieldValue = component.get('v.fieldValue');
-
-        var fieldValueMissing = fieldValue == null || fieldValue == '' || fieldValue == undefined;
-        var errorMessage = (fieldRequired && fieldValueMissing) ? [{message:'This field is required'}] : null;
-        var inputField = component.find('inputField');
-        if(inputField) inputField.set('v.errors', errorMessage);
     }
 })

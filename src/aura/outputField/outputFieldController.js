@@ -11,8 +11,5 @@
     },
     handleFieldValueChanged : function(component, event, helper) {
         helper.handleFieldValueChanged(component, event);
-    },
-    handleBlur : function(component, event, helper) {
-        helper.validateFieldValue(component, event)
     }
 })
