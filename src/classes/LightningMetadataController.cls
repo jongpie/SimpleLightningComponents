@@ -6,7 +6,7 @@ public with sharing class LightningMetadataController {
         try {
             return new SObjectMetadata(sobjectName);
         } catch(Exception ex) {
-            throw new AuraHandledException('An error has occurred: ' + ex.getMessage());
+            throw new AuraHandledException(ex.getMessage());
         }
     }
 
@@ -16,7 +16,7 @@ public with sharing class LightningMetadataController {
         try {
             return new FieldMetadata(sobjectName, fieldName);
         } catch(Exception ex) {
-            throw new AuraHandledException('An error has occurred: ' + ex.getMessage());
+            throw new AuraHandledException(ex.getMessage());
         }
     }
 
