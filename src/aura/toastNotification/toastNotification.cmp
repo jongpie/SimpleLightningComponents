@@ -1,0 +1,40 @@
+<aura:component >
+
+    <!-- Public attributes -->
+    <aura:attribute name="errorMessage" type="String" />
+    <aura:attribute name="errorDetails" type="String[]" />
+    <aura:attribute name="type" type="String" description="Supported values are: error, warning, success, or info" />
+
+    <!-- Handlers -->
+
+    <!-- Markup -->
+    <div class="demo-only" style="height: 4rem;">
+        <div class="slds-notify_container slds-is-relative">
+            <div class="{! 'slds-notify slds-notify_toast slds-theme_' + v.type }" role="alert">
+                <span class="slds-assistive-text">{!v.type}</span>
+                <span class="{! 'slds-icon_container slds-icon-utility-' + v.type + 'slds-m-right_small slds-no-flex slds-align-top' }" title="Description of icon when needed">
+                    <lightning:icon iconName="{! 'utility:' + v.type }" variant="inverse" />
+                    <!-- <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#error" />
+                    </svg> -->
+                </span>
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small">You've encountered an {!v.type}</h2>
+                    <p>{!v.errorMessage}</p>
+                    <ul>
+                        <aura:iteration items="{!v.errorDetails}" var="errorDetail">
+                            <li>{!errorDetail}</li>
+                        </aura:iteration>
+                    </ul>
+                </div>
+                <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse" title="Close" onclick="{!c.closeNotification}">
+                   <!--  <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close" />
+                    </svg> -->
+                    <lightning:icon iconName="utility:close" variant="inverse" />
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</aura:component>

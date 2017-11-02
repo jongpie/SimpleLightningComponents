@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="Event template">
+    <aura:attribute name="errorMessage" type="String" required="true" />
+    <aura:attribute name="errorDetails" type="String[]" />
+</aura:event>
