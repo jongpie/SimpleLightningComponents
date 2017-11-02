@@ -43,7 +43,6 @@
                 <!-- COMBOBOX - TODO -->
                 <!-- DATACATEGORYGROUPREFERENCE - TODO -->
                 <!-- ID - TODO -->
-                <!-- PERCENT - TODO -->
                 <!-- REFERENCE - TODO -->
                 <!-- TIME - TODO -->
 
@@ -113,6 +112,13 @@
                             <ui:inputSelectOption label="{!picklistOption.label}" text="{!picklistOption.value}" value="{!picklistOption.value == v.fieldValue}" />
                         </aura:iteration>
                     </ui:inputSelect>
+                </aura:if>
+
+                <!-- PERCENT -->
+                <aura:if isTrue="{!v.displayType == 'PERCENT'}">
+                     <ui:inputNumber aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input"
+                        blur="{!c.handleBlur}"
+                    />
                 </aura:if>
 
                 <!-- PHONE -->
