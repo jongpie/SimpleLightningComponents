@@ -3,15 +3,21 @@ public with sharing class LightningMetadataController {
     @AuraEnabled
     public static SObjectMetadata getSObjectMetadata(String sobjectName) {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getSObjectMetadata(\'' + sobjectName + '\')');
-
-        return new SObjectMetadata(sobjectName);
+        try {
+            return new SObjectMetadata(sobjectName);
+        } catch(Exception ex) {
+            throw new AuraHandledException('An error has occurred: ' + ex.getMessage());
+        }
     }
 
     @AuraEnabled
     public static FieldMetadata getFieldMetadata(String sobjectName, String fieldName) {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadata(\'' + sobjectName + '\', \'' + fieldName + '\')');
-
-        return new FieldMetadata(sobjectName, fieldName);
+        try {
+            return new FieldMetadata(sobjectName, fieldName);
+        } catch(Exception ex) {
+            throw new AuraHandledException('An error has occurred: ' + ex.getMessage());
+        }
     }
 
     @AuraEnabled
