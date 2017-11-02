@@ -1,0 +1,109 @@
+<aura:component controller="LightningMetadataController" implements="flexipage:availableForAllPageTypes">
+
+    <!-- Public Attributes -->
+    <aura:attribute name="sobjectName" type="String" required="true" />
+    <aura:attribute name="fieldName" type="String" required="true" />
+    <aura:attribute name="record" type="SObject" required="true" />
+    <aura:attribute name="displayType" type="String" />
+    <aura:attribute name="picklistOptions" type="Object[]" />
+    <aura:attribute name="showLabel" type="Boolean" default="true" />
+    <aura:attribute name="render" type="Boolean" default="true" />
+    <aura:attribute name="disabled" type="Boolean" default="false" />
+    <aura:attribute name="required" type="Boolean" default="false" />
+
+    <!-- Private Attributes -->
+    <aura:attribute name="fieldMetadata" type="Object" access="private" />
+    <aura:attribute name="fieldValue" type="Object" access="private" />
+
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.record}" action="{!c.handleRecordChanged}" />
+    <aura:handler name="change" value="{!v.fieldValue}" action="{!c.handleFieldValueChanged}" />
+    <aura:handler name="change" value="{!v.handleBlur}" action="{!c.handleFieldValueChanged}" />
+
+    <!-- Markup -->
+    <aura:if isTrue="{!and(v.fieldMetadata.sobjectMetadata.isAccessible, v.fieldMetadata.isAccessible, v.render)}">
+        <div class="slds-form-element">
+            <aura:if isTrue="{!v.showLabel}">
+                <label class="slds-form-element__label" for="{!v.auraId}">
+                    <aura:if isTrue="{!and(v.required, v.displayType != 'BOOLEAN')}">
+                        <abbr class="slds-required" title="required">*</abbr>
+                    </aura:if>
+                    <c:fieldLabel sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" showHelpText="{!v.fieldMetadata.inlineHelpText != null}" />
+                </label>
+            </aura:if>
+
+            <div class="slds-form-element__control">
+                <!--
+                    Input type is determined based on the field's display type
+                    More info: https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_enum_Schema_DisplayType.htm
+                -->
+                <!-- ADDRESS - TODO -->
+                <!-- BASE64 - TODO -->
+                <!-- COMBOBOX - TODO -->
+                <!-- DATACATEGORYGROUPREFERENCE - TODO -->
+                <!-- ENCRYPTEDSTRING - TODO -->
+                <!-- ID - TODO -->
+                <!-- PERCENT - TODO -->
+                <!-- REFERENCE - TODO -->
+                <!-- TIME - TODO -->
+
+                <!-- BOOLEAN -->
+                <aura:if isTrue="{!v.displayType == 'BOOLEAN'}">
+                    <ui:outputCheckbox value="{!v.fieldValue}" class="slds-checkbox" />
+                </aura:if>
+
+                <!-- CURRENCY -->
+                <aura:if isTrue="{!v.displayType == 'CURRENCY'}">
+                    <ui:outputCurrency aura:id="inputField" value="{!v.fieldValue}" />
+                </aura:if>
+
+                <!-- DATE -->
+                <aura:if isTrue="{!v.displayType == 'DATE'}">
+                    <ui:outputDate aura:id="inputField" value="{!v.fieldValue}" />
+                </aura:if>
+
+                <!-- DATETIME -->
+                <aura:if isTrue="{!v.displayType == 'DATETIME'}">
+                    <ui:outputDatetime aura:id="inputField" value="{!v.fieldValue}" />
+                </aura:if>
+
+                <!-- DOUBLE or INTEGER -->
+                <aura:if isTrue="{!or(v.displayType == 'DOUBLE', v.displayType == 'INTEGER')}">
+                     <ui:outputNumber aura:id="inputField" value="{!v.fieldValue}" />
+                </aura:if>
+
+                <!-- EMAIL -->
+                <aura:if isTrue="{!v.displayType == 'EMAIL'}">
+                    <ui:outputEmail aura:id="inputField" value="{!v.fieldValue}" />
+                </aura:if>
+
+                <!-- MULTIPICKLIST or PICKLIST -->
+                <aura:if isTrue="{!or(v.displayType == 'MULTIPICKLIST', v.displayType == 'PICKLIST')}">
+                    <ui:outputText aura:id="inputField" value="{!v.fieldValue}" />
+                </aura:if>
+
+                <!-- PHONE -->
+                <aura:if isTrue="{!v.displayType == 'PHONE'}">
+                    <ui:outputPhone aura:id="inputField" value="{!v.fieldValue}" />
+                </aura:if>
+
+                <!-- STRING -->
+                <aura:if isTrue="{!v.displayType == 'STRING'}">
+                    <ui:outputText aura:id="inputField" value="{!v.fieldValue}" />
+                </aura:if>
+
+                <!-- TEXTAREA -->
+                <aura:if isTrue="{!v.displayType == 'TEXTAREA'}">
+                    <ui:outputTextArea aura:id="inputField" value="{!v.fieldValue}" />
+                </aura:if>
+
+                <!-- URL -->
+                <aura:if isTrue="{!v.displayType == 'URL'}">
+                    <ui:outputURL aura:id="inputField" value="{!v.fieldValue}" />
+                </aura:if>
+            </div>
+        </div>
+    </aura:if>
+
+</aura:component>
