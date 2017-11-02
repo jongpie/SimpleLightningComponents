@@ -7,10 +7,10 @@
         });
         action.setStorable();
         action.setCallback(this, function(response) {
-            if(response.getState() == 'SUCCESS') {
+            if(response.getState() === 'SUCCESS') {
                 component.set('v.fieldMetadata', response.getReturnValue());
                 component.set('v.label', response.getReturnValue().label);
-            } else if(response.getState() == 'ERROR') {
+            } else if(response.getState() === 'ERROR') {
                 console.log('ERROR');
                 for(var i=0; i < response.getError().length; i++) {
                    console.log(response.getError()[i]);
