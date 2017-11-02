@@ -52,7 +52,7 @@
                     <div class="slds-form-element">
                         <label class="slds-checkbox_toggle slds-grid">
                         <!-- <span class="slds-form-element__label slds-m-bottom_none">Toggle Label</span> -->
-                        <ui:inputCheckbox value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input slds-checkbox uiInput--checkbox" />
+                        <ui:inputCheckbox value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input slds-checkbox uiInput--checkbox" />
                         <span id="toggle-desc" class="slds-checkbox_faux_container" aria-live="assertive">
                             <span class="slds-checkbox_faux"></span>
                             <!-- <span class="slds-checkbox_on">Enabled</span>
@@ -64,49 +64,49 @@
 
                 <!-- CURRENCY -->
                 <aura:if isTrue="{!v.displayType == 'CURRENCY'}">
-                    <ui:inputCurrency aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input"
+                    <ui:inputCurrency aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input"
                         blur="{!c.handleBlur}"
                     />
                 </aura:if>
 
                 <!-- DATE -->
                 <aura:if isTrue="{!v.displayType == 'DATE'}">
-                    <ui:inputDate aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" displayDatePicker="true"
+                    <ui:inputDate aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input" displayDatePicker="true"
                         blur="{!c.handleBlur}"
                     />
                 </aura:if>
 
                 <!-- DATETIME -->
                 <aura:if isTrue="{!v.displayType == 'DATETIME'}">
-                    <ui:inputDatetime aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" displayDatePicker="true"
+                    <ui:inputDatetime aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input" displayDatePicker="true"
                         blur="{!c.handleBlur}"
                     />
                 </aura:if>
 
                 <!-- DOUBLE or INTEGER -->
                 <aura:if isTrue="{!or(v.displayType == 'DOUBLE', v.displayType == 'INTEGER')}">
-                     <ui:inputNumber aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input"
+                     <ui:inputNumber aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input"
                         blur="{!c.handleBlur}"
                     />
                 </aura:if>
 
                 <!-- EMAIL -->
                 <aura:if isTrue="{!v.displayType == 'EMAIL'}">
-                    <ui:inputEmail aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
+                    <ui:inputEmail aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
                         blur="{!c.handleBlur}"
                     />
                 </aura:if>
 
                 <!-- ENCRYPTEDSTRING -->
                 <aura:if isTrue="{!v.displayType == 'ENCRYPTEDSTRING'}">
-                    <ui:inputSecret aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
+                    <ui:inputSecret aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
                         blur="{!c.handleBlur}"
                     />
                 </aura:if>
 
                 <!-- MULTIPICKLIST or PICKLIST -->
                 <aura:if isTrue="{!or(v.displayType == 'MULTIPICKLIST', v.displayType == 'PICKLIST')}">
-                    <ui:inputSelect aura:id="inputField" required="{!v.required}" disabled="{!v.disabled}" class="{!'slds-select ' + v.styleClass}"
+                    <ui:inputSelect aura:id="inputField" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="{!'slds-select ' + v.styleClass}"
                         blur="{!c.handleBlur}" multiple="{!v.displayType == 'MULTIPICKLIST'}" change="{!c.handleFieldValueChanged}"
                     >
                         <aura:iteration items="{!v.picklistOptions}" var="picklistOption">
@@ -117,28 +117,28 @@
 
                 <!-- PHONE -->
                 <aura:if isTrue="{!v.displayType == 'PHONE'}">
-                    <ui:inputPhone aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
+                    <ui:inputPhone aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
                         blur="{!c.handleBlur}"
                     />
                 </aura:if>
 
                 <!-- STRING -->
                 <aura:if isTrue="{!v.displayType == 'STRING'}">
-                    <ui:inputText aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
+                    <ui:inputText aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
                         blur="{!c.handleBlur}"
                     />
                 </aura:if>
 
                 <!-- TEXTAREA -->
                 <aura:if isTrue="{!v.displayType == 'TEXTAREA'}">
-                    <ui:inputTextArea aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
+                    <ui:inputTextArea aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
                         blur="{!c.handleBlur}"
                     />
                 </aura:if>
 
                 <!-- URL -->
                 <aura:if isTrue="{!v.displayType == 'URL'}">
-                    <ui:inputURL aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!v.disabled}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
+                    <ui:inputURL aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
                         blur="{!c.handleBlur}"
                     />
                 </aura:if>
