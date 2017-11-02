@@ -1,23 +1,4 @@
 ({
-    fetchSObjectMetadata : function(component, event) {
-        var action = component.get('c.getSObjectMetadata');
-        action.setParams({
-            'sobjectName': component.get('v.sobjectName')
-        });
-        action.setStorable();
-        action.setCallback(this, function(response) {
-            if(response.getState() === 'SUCCESS') {
-                var sobjectMetadata = response.getReturnValue();
-                component.set('v.sobjectMetadata', sobjectMetadata);
-            } else {
-                console.log(response.getError().length + ' ERRORS');
-                for(var i = 0; i < response.getError().length; i++) {
-                   console.log(response.getError()[i]);
-                }
-            }
-        });
-        $A.enqueueAction(action);
-    },
     fetchFieldMetadata : function(component, event) {
         var action = component.get('c.getFieldMetadata');
         action.setParams({
@@ -86,14 +67,12 @@
         }
     },
     validateFieldValue : function(component, event) {
-        if(component.get('v.required') == false) return;
-
-        var fieldValue    = component.get('v.fieldValue');
+        var fieldRequired   = component.get('v.required');
+        var fieldValue = component.get('v.fieldValue');
 
         var fieldValueMissing = fieldValue == null || fieldValue == '' || fieldValue == undefined;
-        if(fieldValueMissing) {
-            var inputField = component.find('inputField');
-            if(inputField) inputField.set('v.errors', [{message:'This field is required'}]);
-        }
+        var errorMessage = (fieldRequired && fieldValueMissing) ? [{message:'This field is required'}] : null;
+        var inputField = component.find('inputField');
+        if(inputField) inputField.set('v.errors', errorMessage);
     }
 })

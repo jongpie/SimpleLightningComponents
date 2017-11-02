@@ -1,9 +1,7 @@
 ({
     doInit : function(component, event, helper) {
-        helper.fetchSObjectMetadata(component, event);
         helper.fetchFieldMetadata(component, event);
         helper.parseFieldValue(component, event);
-        helper.parsePicklistOptions(component, event);
     },
     handleRecordChanged : function(component, event, helper) {
         var record     = component.get('v.record');

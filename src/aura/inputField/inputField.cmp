@@ -12,7 +12,6 @@
     <aura:attribute name="required" type="Boolean" default="false" />
 
     <!-- Private Attributes -->
-    <aura:attribute name="sobjectMetadata" type="Object" access="private" />
     <aura:attribute name="fieldMetadata" type="Object" access="private" />
     <aura:attribute name="fieldValue" type="Object" access="private" />
 
@@ -23,7 +22,7 @@
     <aura:handler name="change" value="{!v.handleBlur}" action="{!c.handleFieldValueChanged}" />
 
     <!-- Markup -->
-    <aura:if isTrue="{!and(v.sobjectMetadata.sobjectLevelSecurity.isAccessible, v.fieldMetadata.fieldLevelSecurity.isAccessible, v.render)}">
+    <aura:if isTrue="{!and(v.fieldMetadata.sobjectMetadata.isAccessible, v.fieldMetadata.isAccessible, v.render)}">
         <div class="slds-form-element">
             <aura:if isTrue="{!v.showLabel}">
                 <label class="slds-form-element__label" for="{!v.auraId}">
