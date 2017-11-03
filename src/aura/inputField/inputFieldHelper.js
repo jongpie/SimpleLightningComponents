@@ -14,6 +14,14 @@
                 if(component.get('v.displayType') === undefined) {
                     component.set('v.displayType', fieldMetadata.displayType);
                 }
+                if(component.get('v.disabled') === undefined) {
+                    component.set('v.disabled', fieldMetadata.isUpdateable == false);
+                }
+                if(component.get('v.required') === undefined) {
+                    var isUpdateableRequired = fieldMetadata.isUpdateable && fieldMetadata.required;
+                    var isUpdateableNameField = fieldMetadata.isUpdateable && fieldMetadata.isNameField;
+                    component.set('v.required', isUpdateableRequired || isUpdateableNameField);
+                }
                 this.parsePicklistOptions(component, event);
             } else {
                 console.log(response.getError().length + ' ERRORS');

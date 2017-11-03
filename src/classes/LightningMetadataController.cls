@@ -94,6 +94,7 @@ public with sharing class LightningMetadataController {
         @AuraEnabled public Boolean isCreateable                        {get;private set;}
         @AuraEnabled public Boolean isDefaultedOnCreate                 {get;private set;}
         @AuraEnabled public Boolean isFilterable                        {get;private set;}
+        @AuraEnabled public Boolean isNameField                         {get;private set;}
         @AuraEnabled public Boolean isSortable                          {get;private set;}
         @AuraEnabled public Boolean isUpdateable                        {get;private set;}
         @AuraEnabled public String label                                {get;private set;}
@@ -116,6 +117,7 @@ public with sharing class LightningMetadataController {
             this.inlineHelpText      = this.fieldDescribe.getInlineHelpText();
             this.isDefaultedOnCreate = this.fieldDescribe.isDefaultedOnCreate();
             this.isFilterable        = this.fieldDescribe.isFilterable();
+            this.isNameField         = this.fieldDescribe.isNameField();
             this.isSortable          = this.fieldDescribe.isSortable();
             this.label               = this.fieldDescribe.getLabel();
             this.maxLength           = this.fieldDescribe.getLength();
