@@ -45,7 +45,7 @@
         var fieldValue = component.get('v.fieldValue');
         var picklistOptions = component.get('v.picklistOptions');
 
-        if(picklistOptions === null || picklistOptions.length === 0) {
+        if(picklistOptions === undefined || picklistOptions === null || picklistOptions.length === 0) {
             var fieldMetadata = component.get('v.fieldMetadata');
 
             if(fieldMetadata === null) return;
