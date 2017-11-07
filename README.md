@@ -1,5 +1,5 @@
 # Lightning Components
-A collection of custom Salesforce Lightning components that streamline developing in Lightning by automatically applying sobject-level security, field-level security, field types and more.
+A library of lightweight Salesforce Lightning components that streamline developing by automatically applying sobject-level security, field-level security, field types and more.
 
 <a href="https://githubsfdeploy.herokuapp.com" target="_blank">
   <img alt="Deploy to Salesforce"

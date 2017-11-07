@@ -27,7 +27,7 @@
         var record = component.get('v.record');
         var fieldName = component.get('v.fieldName');
 
-        if(record == null) return;
+        if(record === null) return;
         if(record.hasOwnProperty(fieldName)) {
             component.set('v.fieldValue', record[fieldName]);
         }
@@ -39,12 +39,12 @@
         var fieldMetadata = component.get('v.fieldMetadata');
         var fieldType     = component.get('v.fieldType');
 
-        var newFieldValue = event.getParam('value') != undefined ? event.getParam('value') : event.getSource().get('v.value');
-        if(typeof newFieldValue == 'undefined') newFieldValue = '';
-        var oldFieldValue = event.getParam('oldValue') != undefined ? event.getParam('oldValue') : event.getSource().get('v.oldValue');
+        var newFieldValue = event.getParam('value') !== undefined ? event.getParam('value') : event.getSource().get('v.value');
+        if(typeof newFieldValue === 'undefined') newFieldValue = '';
+        var oldFieldValue = event.getParam('oldValue') !== undefined ? event.getParam('oldValue') : event.getSource().get('v.oldValue');
 
-        if(newFieldValue != oldFieldValue) {
-            if(fieldMetadata != null && fieldType != fieldMetadata.fieldType && typeof fieldType == 'string') {
+        if(newFieldValue !== oldFieldValue) {
+            if(fieldMetadata !== null && fieldType !== fieldMetadata.fieldType && typeof fieldType === 'string') {
                 newFieldValue = newFieldValue.toString();
             }
             record[changedField] = newFieldValue;

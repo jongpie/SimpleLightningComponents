@@ -6,10 +6,10 @@
     <aura:attribute name="record" type="SObject" required="true" />
     <aura:attribute name="displayType" type="String" />
     <aura:attribute name="picklistOptions" type="Object[]" />
-    <aura:attribute name="showLabel" type="Boolean" default="true" />
+    <aura:attribute name="variant" type="String" default="form" description="Options: form (default) and bare" />
     <aura:attribute name="render" type="Boolean" default="true" />
-    <aura:attribute name="disabled" type="Boolean" default="false" />
-    <aura:attribute name="required" type="Boolean" default="false" />
+    <aura:attribute name="disabled" type="Boolean" />
+    <aura:attribute name="required" type="Boolean" />
 
     <!-- Private Attributes -->
     <aura:attribute name="fieldMetadata" type="Object" access="private" />
@@ -24,7 +24,7 @@
     <!-- Markup -->
     <aura:if isTrue="{!and(v.fieldMetadata.sobjectMetadata.isAccessible, v.fieldMetadata.isAccessible, v.render)}">
         <div class="slds-form-element">
-            <aura:if isTrue="{!v.showLabel}">
+            <aura:if isTrue="{!v.variant == 'form'}">
                 <label class="slds-form-element__label" for="{!v.auraId}">
                     <aura:if isTrue="{!and(v.required, v.displayType != 'BOOLEAN')}">
                         <abbr class="slds-required" title="required">*</abbr>
