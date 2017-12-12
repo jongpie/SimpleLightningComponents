@@ -1,0 +1,17 @@
+<aura:component extensible="true" abstract="true" controller="LightningMetadataController">
+
+    <!-- Public Attributes -->
+    <aura:attribute name="sobjectName" type="String" required="true" />
+    <aura:attribute name="fieldName" type="String" required="true" />
+
+    <!-- Private Attributes -->
+    <aura:attribute name="fieldMetadata" type="Object" access="public" />
+
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.sobjectName}" action="{!c.doInit}" />
+
+    <!-- Markup -->
+    {!v.body}
+
+</aura:component>

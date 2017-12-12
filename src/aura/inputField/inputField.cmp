@@ -1,22 +1,20 @@
-<aura:component controller="LightningMetadataController" implements="flexipage:availableForAllPageTypes">
+<aura:component extends="fieldMetadata">
 
     <!-- Public Attributes -->
-    <aura:attribute name="sobjectName" type="String" required="true" />
-    <aura:attribute name="fieldName" type="String" required="true" />
-    <aura:attribute name="record" type="SObject" required="true" />
+    <aura:attribute name="record" type="SObject" default="{}" />
     <aura:attribute name="displayType" type="String" />
-    <aura:attribute name="picklistOptions" type="Object[]" />
+    <aura:attribute name="picklistOptions" type="Object[]" description="(Optional) List of picklist options, used when displayType == 'PICKLIST'" />
     <aura:attribute name="variant" type="String" default="form" description="Options: form (default) and bare" />
-    <aura:attribute name="render" type="Boolean" default="true" />
-    <aura:attribute name="disabled" type="Boolean" />
-    <aura:attribute name="required" type="Boolean" />
+    <aura:attribute name="render" type="Boolean" default="true" description="(Optional) Controls if the component is rendered. Default is true." />
+    <aura:attribute name="disabled" type="Boolean" description="(Optional) Disables the input field" />
+    <aura:attribute name="required" type="Boolean" description="(Optional) Marks the field as required (true) or optional (false)" />
 
     <!-- Private Attributes -->
-    <aura:attribute name="fieldMetadata" type="Object" access="private" />
     <aura:attribute name="fieldValue" type="Object" access="private" />
 
     <!-- Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.handleFieldMetadataChanged}" />
     <aura:handler name="change" value="{!v.record}" action="{!c.handleRecordChanged}" />
     <aura:handler name="change" value="{!v.fieldValue}" action="{!c.handleFieldValueChanged}" />
     <aura:handler name="change" value="{!v.handleBlur}" action="{!c.handleFieldValueChanged}" />
