@@ -1,5 +1,10 @@
 ({
     fetchFieldMetadata : function(component, event) {
+        var sobjectName = component.get('v.sobjectName');
+        var fieldName = component.get('v.fieldName');
+
+        if(!sobjectName || !fieldName) return;
+
         var action = component.get('c.getFieldMetadata');
         action.setParams({
             'sobjectName': component.get('v.sobjectName'),
@@ -11,12 +16,15 @@
                 component.set('v.fieldMetadata', response.getReturnValue());
                 component.set('v.label', response.getReturnValue().label);
             } else if(response.getState() === 'ERROR') {
-                console.log('ERROR');
-                for(var i=0; i < response.getError().length; i++) {
-                   console.log(response.getError()[i]);
-                }
+                this.processCallbackErrors(response);
             }
         });
         $A.enqueueAction(action);
+    },
+    processCallbackErrors : function(response) {
+        console.log('ERROR');
+        for(var i=0; i < response.getError().length; i++) {
+           console.log(response.getError()[i]);
+        }
     }
 })

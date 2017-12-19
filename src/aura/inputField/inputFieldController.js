@@ -1,7 +1,9 @@
 ({
     doInit : function(component, event, helper) {
-        helper.fetchFieldMetadata(component, event);
         helper.parseFieldValue(component, event);
+    },
+    handleFieldMetadataChanged : function(component, event, helper) {
+        helper.setFieldMetadataAttributes(component, event);
     },
     handleRecordChanged : function(component, event, helper) {
         var record     = component.get('v.record');

@@ -38,7 +38,6 @@ public with sharing class LightningMetadataController {
     }
 
     public class SObjectMetadata {
-        @AuraEnabled public String name           {get;private set;}
         @AuraEnabled public Boolean isAccessible  {get;private set;}
         @AuraEnabled public Boolean isCreateable  {get;private set;}
         @AuraEnabled public Boolean isDeletable   {get;private set;}
@@ -49,9 +48,14 @@ public with sharing class LightningMetadataController {
         @AuraEnabled public Boolean isUpdateable  {get;private set;}
         @AuraEnabled public String label          {get;private set;}
         @AuraEnabled public String labelPlural    {get;private set;}
+        @AuraEnabled public String name           {get;private set;}
         @AuraEnabled public String nameField      {get;private set;}
 
         public Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
+
+        public SObjectMetadata(Schema.SObjectType sobjectType) {
+            this(sobjectType.getDescribe().getName());
+        }
 
         public SObjectMetadata(String sobjectName) {
             this.name            = sobjectName;
@@ -75,21 +79,15 @@ public with sharing class LightningMetadataController {
             for(Schema.SObjectField field : this.sobjectDescribe.fields.getMap().values()) {
                 Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
 
-                if(fieldDescribe.isNameField()) {
-                    this.nameField = fieldDescribe.getName();
-                    break;
-                }
+                if(!fieldDescribe.isNameField()) continue;
+
+                this.nameField = fieldDescribe.getName();
+                break;
             }
         }
     }
 
     public class FieldMetadata {
-        @AuraEnabled public String name                                 {get;private set;}
-        @AuraEnabled public String sobjectName                          {get;private set;}
-        @AuraEnabled public SObjectMetadata sobjectMetadata             {get;private set;}
-        @AuraEnabled public Object defaultValue                         {get;private set;}
-        @AuraEnabled public String displayType                          {get;private set;}
-        @AuraEnabled public String inlineHelpText                       {get;private set;}
         @AuraEnabled public Boolean isAccessible                        {get;private set;}
         @AuraEnabled public Boolean isCreateable                        {get;private set;}
         @AuraEnabled public Boolean isDefaultedOnCreate                 {get;private set;}
@@ -97,10 +95,18 @@ public with sharing class LightningMetadataController {
         @AuraEnabled public Boolean isNameField                         {get;private set;}
         @AuraEnabled public Boolean isSortable                          {get;private set;}
         @AuraEnabled public Boolean isUpdateable                        {get;private set;}
-        @AuraEnabled public String label                                {get;private set;}
-        @AuraEnabled public Integer maxLength                           {get;private set;}
         @AuraEnabled public Boolean required                            {get;private set;}
+        @AuraEnabled public Integer maxLength                           {get;private set;}
         @AuraEnabled public List<PicklistEntryMetadata> picklistOptions {get;private set;}
+        @AuraEnabled public Object defaultValue                         {get;private set;}
+        @AuraEnabled public SObjectMetadata sobjectMetadata             {get;private set;}
+        @AuraEnabled public String displayType                          {get;private set;}
+        @AuraEnabled public String inlineHelpText                       {get;private set;}
+        @AuraEnabled public String label                                {get;private set;}
+        @AuraEnabled public String name                                 {get;private set;}
+        @AuraEnabled public String relationshipName                     {get;private set;}
+        @AuraEnabled public String relationshipNameField                {get;private set;}
+        @AuraEnabled public String sobjectName                          {get;private set;}
 
         public Schema.DescribeFieldResult fieldDescribe {get;private set;}
 
@@ -112,19 +118,21 @@ public with sharing class LightningMetadataController {
 
             this.fieldDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName).getDescribe();
 
-            this.defaultValue        = this.fieldDescribe.getDefaultValue();
-            this.displayType         = this.fieldDescribe.getType().name();
-            this.inlineHelpText      = this.fieldDescribe.getInlineHelpText();
-            this.isDefaultedOnCreate = this.fieldDescribe.isDefaultedOnCreate();
-            this.isFilterable        = this.fieldDescribe.isFilterable();
-            this.isNameField         = this.fieldDescribe.isNameField();
-            this.isSortable          = this.fieldDescribe.isSortable();
-            this.label               = this.fieldDescribe.getLabel();
-            this.maxLength           = this.fieldDescribe.getLength();
-            this.required            = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
-            this.isAccessible        = this.fieldDescribe.isAccessible();
-            this.isCreateable        = this.fieldDescribe.isCreateable();
-            this.isUpdateable        = this.fieldDescribe.isUpdateable();
+            this.defaultValue            = this.fieldDescribe.getDefaultValue();
+            this.displayType             = this.fieldDescribe.getType().name();
+            this.inlineHelpText          = this.fieldDescribe.getInlineHelpText();
+            this.isAccessible            = this.fieldDescribe.isAccessible();
+            this.isCreateable            = this.fieldDescribe.isCreateable();
+            this.isDefaultedOnCreate     = this.fieldDescribe.isDefaultedOnCreate();
+            this.isFilterable            = this.fieldDescribe.isFilterable();
+            this.isNameField             = this.fieldDescribe.isNameField();
+            this.isSortable              = this.fieldDescribe.isSortable();
+            this.isUpdateable            = this.fieldDescribe.isUpdateable();
+            this.label                   = this.fieldDescribe.getLabel();
+            this.maxLength               = this.fieldDescribe.getLength();
+            this.relationshipName        = this.fieldDescribe.getRelationshipName();
+            this.relationshipNameField   = this.fieldDescribe.getReferenceTo() != null && !this.fieldDescribe.getReferenceTo().isEmpty() ? new SObjectMetadata(this.fieldDescribe.getReferenceTo()[0]).nameField : null;
+            this.required                = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
 
             this.setPicklistOptions();
         }
