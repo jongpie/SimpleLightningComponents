@@ -2,6 +2,7 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>LightningMetadataController</members>
+        <members>LightningMetadataController_Tests</members>
         <name>ApexClass</name>
     </types>
     <types>
