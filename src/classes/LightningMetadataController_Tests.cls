@@ -2,7 +2,7 @@
 private class LightningMetadataController_Tests {
 
     @isTest
-    static void getSObjectMetadataTest() {
+    static void it_should_return_sobject_metadata() {
         String sobjectName = 'Account';
         DescribeSObjectResult sobjectDescribe = Schema.Account.SObjectType.getDescribe();
 
@@ -16,7 +16,7 @@ private class LightningMetadataController_Tests {
     }
 
     @isTest
-    static void getFieldMetadataTest() {
+    static void it_should_return_field_metadata() {
         String sobjectName = 'Account';
         String fieldName = 'Type';
         DescribeSObjectResult sobjectDescribe = Schema.Account.SObjectType.getDescribe();
