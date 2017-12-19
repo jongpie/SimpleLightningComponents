@@ -1,5 +1,10 @@
 ({
     fetchFieldMetadata : function(component, event) {
+        var sobjectName = component.get('v.sobjectName');
+        var fieldName = component.get('v.fieldName');
+
+        if(!sobjectName || !fieldName) return;
+
         var action = component.get('c.getFieldMetadata');
         action.setParams({
             'sobjectName': component.get('v.sobjectName'),
