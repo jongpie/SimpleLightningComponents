@@ -1,37 +1,5 @@
 ({
     cachedResults : {},
-    /*fetchFieldMetadata : function(component, event) {
-        var sobjectName = component.get('v.sobjectName');
-        var fieldName = component.get('v.fieldName');
-        var cacheKey = sobjectName + fieldName;
-
-        if(this.cachedResults.hasOwnProperty(cacheKey)) {
-            var fieldMetadata = this.cachedResults[cacheKey];
-            component.set('v.fieldMetadata', fieldMetadata);
-            this.setFieldMetadataAttributes(component, event, fieldMetadata);
-        } else {
-            var action = component.get('c.getFieldMetadata');
-            action.setParams({
-                'sobjectName': component.get('v.sobjectName'),
-                'fieldName': component.get('v.fieldName')
-            });
-            action.setStorable();
-            action.setCallback(this, function(response) {
-                if(response.getState() === 'SUCCESS') {
-                    var fieldMetadata = response.getReturnValue();
-                    component.set('v.fieldMetadata', fieldMetadata);
-                    this.cachedResults[cacheKey] = fieldMetadata;
-                    this.setFieldMetadataAttributes(component, event, fieldMetadata);
-                } else {
-                    console.log(response.getError().length + ' ERRORS');
-                    for(var i = 0; i < response.getError().length; i++) {
-                       console.log(response.getError()[i]);
-                    }
-                }
-            });
-            $A.enqueueAction(action);
-        }
-    },*/
     setFieldMetadataAttributes : function(component, event) {
         var fieldMetadata = component.get('v.fieldMetadata');
 
