@@ -1,4 +1,4 @@
-<aura:component extends="fieldMetadata">
+<aura:component extends="c.fieldMetadata">
 
     <!-- Public Attributes -->
     <aura:attribute name="label" type="String" />
