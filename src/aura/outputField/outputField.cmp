@@ -1,30 +1,26 @@
-<aura:component controller="LightningMetadataController" implements="flexipage:availableForAllPageTypes">
+<aura:component extends="fieldMetadata">
 
     <!-- Public Attributes -->
-    <aura:attribute name="sobjectName" type="String" required="true" />
-    <aura:attribute name="fieldName" type="String" required="true" />
-    <aura:attribute name="record" type="SObject" required="true" />
+    <aura:attribute name="record" type="SObject" default="{}" />
     <aura:attribute name="displayType" type="String" />
-    <aura:attribute name="picklistOptions" type="Object[]" />
-    <aura:attribute name="showLabel" type="Boolean" default="true" />
+    <aura:attribute name="variant" type="String" default="form" description="Options: form (default) and bare" />
     <aura:attribute name="render" type="Boolean" default="true" />
-    <aura:attribute name="disabled" type="Boolean" default="false" />
-    <aura:attribute name="required" type="Boolean" default="false" />
 
     <!-- Private Attributes -->
-    <aura:attribute name="fieldMetadata" type="Object" access="private" />
     <aura:attribute name="fieldValue" type="Object" access="private" />
+    <aura:attribute name="relationshipNameField" type="String" access="private" />
+    <aura:attribute name="parentRecordName" type="String" access="private" />
 
     <!-- Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.handleFieldMetadataChanged}" />
     <aura:handler name="change" value="{!v.record}" action="{!c.handleRecordChanged}" />
     <aura:handler name="change" value="{!v.fieldValue}" action="{!c.handleFieldValueChanged}" />
-    <aura:handler name="change" value="{!v.handleBlur}" action="{!c.handleFieldValueChanged}" />
 
     <!-- Markup -->
     <aura:if isTrue="{!and(v.fieldMetadata.sobjectMetadata.isAccessible, v.fieldMetadata.isAccessible, v.render)}">
         <div class="slds-form-element">
-            <aura:if isTrue="{!v.showLabel}">
+            <aura:if isTrue="{!v.variant == 'form'}">
                 <label class="slds-form-element__label" for="{!v.auraId}">
                     <aura:if isTrue="{!and(v.required, v.displayType != 'BOOLEAN')}">
                         <abbr class="slds-required" title="required">*</abbr>
@@ -43,10 +39,12 @@
                 <!-- COMBOBOX - TODO -->
                 <!-- DATACATEGORYGROUPREFERENCE - TODO -->
                 <!-- ENCRYPTEDSTRING - TODO -->
-                <!-- ID - TODO -->
-                <!-- PERCENT - TODO -->
-                <!-- REFERENCE - TODO -->
                 <!-- TIME - TODO -->
+
+                <!-- FALLBACK/DEFAULT -->
+                <aura:if isTrue="{!empty(v.displayType)}">
+                    {!v.fieldValue}
+                </aura:if>
 
                 <!-- BOOLEAN -->
                 <aura:if isTrue="{!v.displayType == 'BOOLEAN'}">
@@ -55,52 +53,62 @@
 
                 <!-- CURRENCY -->
                 <aura:if isTrue="{!v.displayType == 'CURRENCY'}">
-                    <ui:outputCurrency aura:id="inputField" value="{!v.fieldValue}" />
+                    <ui:outputCurrency aura:id="outputField" value="{!v.fieldValue}" />
                 </aura:if>
 
                 <!-- DATE -->
                 <aura:if isTrue="{!v.displayType == 'DATE'}">
-                    <ui:outputDate aura:id="inputField" value="{!v.fieldValue}" />
+                    <ui:outputDate aura:id="outputField" value="{!v.fieldValue}" />
                 </aura:if>
 
                 <!-- DATETIME -->
                 <aura:if isTrue="{!v.displayType == 'DATETIME'}">
-                    <ui:outputDatetime aura:id="inputField" value="{!v.fieldValue}" />
+                    <ui:outputDatetime aura:id="outputField" value="{!v.fieldValue}" />
                 </aura:if>
 
                 <!-- DOUBLE or INTEGER -->
                 <aura:if isTrue="{!or(v.displayType == 'DOUBLE', v.displayType == 'INTEGER')}">
-                     <ui:outputNumber aura:id="inputField" value="{!v.fieldValue}" />
+                     <ui:outputNumber aura:id="outputField" value="{!v.fieldValue}" />
                 </aura:if>
 
                 <!-- EMAIL -->
                 <aura:if isTrue="{!v.displayType == 'EMAIL'}">
-                    <ui:outputEmail aura:id="inputField" value="{!v.fieldValue}" />
+                    <ui:outputEmail aura:id="outputField" value="{!v.fieldValue}" />
+                </aura:if>
+
+                <!-- ID or REFERENCE -->
+                <aura:if isTrue="{!or(v.displayType == 'ID', v.displayType == 'REFERENCE')}">
+                    <ui:outputURL aura:id="outputField" value="{! '/' + v.fieldValue}" label="{!v.parentRecordName}" />
                 </aura:if>
 
                 <!-- MULTIPICKLIST or PICKLIST -->
                 <aura:if isTrue="{!or(v.displayType == 'MULTIPICKLIST', v.displayType == 'PICKLIST')}">
-                    <ui:outputText aura:id="inputField" value="{!v.fieldValue}" />
+                    <ui:outputText aura:id="outputField" value="{!v.fieldValue}" />
+                </aura:if>
+
+                <!-- PERCENT -->
+                <aura:if isTrue="{!v.displayType == 'PERCENT'}">
+                     <ui:outputNumber aura:id="outputField" value="{!v.fieldValue}" class="slds-input" />
                 </aura:if>
 
                 <!-- PHONE -->
                 <aura:if isTrue="{!v.displayType == 'PHONE'}">
-                    <ui:outputPhone aura:id="inputField" value="{!v.fieldValue}" />
+                    <ui:outputPhone aura:id="outputField" value="{!v.fieldValue}" />
                 </aura:if>
 
                 <!-- STRING -->
                 <aura:if isTrue="{!v.displayType == 'STRING'}">
-                    <ui:outputText aura:id="inputField" value="{!v.fieldValue}" />
+                    <ui:outputText aura:id="outputField" value="{!v.fieldValue}" />
                 </aura:if>
 
                 <!-- TEXTAREA -->
                 <aura:if isTrue="{!v.displayType == 'TEXTAREA'}">
-                    <ui:outputTextArea aura:id="inputField" value="{!v.fieldValue}" />
+                    <ui:outputTextArea aura:id="outputField" value="{!v.fieldValue}" />
                 </aura:if>
 
                 <!-- URL -->
                 <aura:if isTrue="{!v.displayType == 'URL'}">
-                    <ui:outputURL aura:id="inputField" value="{!v.fieldValue}" />
+                    <ui:outputURL aura:id="outputField" value="{!v.fieldValue}" />
                 </aura:if>
             </div>
         </div>
