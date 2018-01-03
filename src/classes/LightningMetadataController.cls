@@ -50,6 +50,7 @@ public with sharing class LightningMetadataController {
         @AuraEnabled public String labelPlural    {get;private set;}
         @AuraEnabled public String name           {get;private set;}
         @AuraEnabled public String nameField      {get;private set;}
+        @AuraEnabled public String tabIcon        {get;private set;}
 
         public Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
 
@@ -73,6 +74,7 @@ public with sharing class LightningMetadataController {
             this.labelPlural   = this.sobjectDescribe.getLabelPlural();
 
             this.setNameField();
+            this.setTabIcon();
         }
 
         private void setNameField() {
@@ -83,6 +85,24 @@ public with sharing class LightningMetadataController {
 
                 this.nameField = fieldDescribe.getName();
                 break;
+            }
+        }
+
+        private void setTabIcon() {
+            for(Schema.DescribeTabSetResult tabSetResult : Schema.describeTabs()) {
+                for(Schema.DescribeTabResult tabResult : tabSetResult.getTabs()) {
+                    if(tabResult.getSObjectName() != this.name) continue;
+
+                    String iconType = tabResult.isCustom() ? 'custom' : 'standard';
+                    String svgIconName;
+                    for(Schema.DescribeIconResult icon : tabResult.getIcons()) {
+                        if(icon.getContentType() == 'image/svg+xml') {
+                            svgIconName = icon.getUrl().substringAfterLast('/').replace('.svg', '');
+                        }
+                    }
+                    this.tabIcon = iconType + ':' + svgIconName;
+                    break;
+                }
             }
         }
     }
