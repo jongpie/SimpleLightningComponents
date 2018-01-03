@@ -11,21 +11,20 @@
             //Search only when space character entered
 
             var sobjectName = component.get('v.sobjectName');
-            var field_API_text = component.get('v.field_API_text');
-            var fieldName = component.get('v.fieldName');
-            var field_API_search = component.get('v.field_API_search');
+            var displayTextFieldName = component.get('v.displayTextFieldName');
+            //var fieldName = component.get('v.fieldName');
+            var searchFieldName = component.get('v.searchFieldName');
             var limit = component.get('v.limit');
 
             var action = component.get('c.search');
             action.setStorable();
 
             action.setParams({
-                sobjectName : sobjectName,
-                fld_API_Text : field_API_text,
-                fld_API_Val : fieldName,
-                limitCount : limit,
-                fld_API_Search : field_API_search,
-                searchText : searchText
+                sobjectName          : sobjectName,
+                searchFieldName      : searchFieldName,
+                searchText           : searchText,
+                displayTextFieldName : displayTextFieldName,
+                limitCount           : limit
             });
 
             action.setCallback(this,function(a) {

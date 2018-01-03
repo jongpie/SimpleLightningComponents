@@ -1,31 +1,34 @@
 <aura:component extends="c.fieldMetadata" controller="LookupController">
 
     <!-- Public Config Attributes -->
-    <aura:attribute name="sobjectName" type="String" description="Name of Object to be searched" />
-    <aura:attribute name="fieldName" type="String" default="Id" description="API Name of field, to be returned from component" />
-    <aura:attribute name="field_API_text" type="String" default="{!v.fieldMetadata.sobjectMetadata.nameField}" description="Field of text shown to users in the search results" />
-    <aura:attribute name="field_API_search" type="String" default="{!v.fieldMetadata.sobjectMetadata.nameField}" description="API Name of field to be searched" />
-    <aura:attribute name="limit" type="Integer" default="5" description="Total number of record to be returned" />
+    <aura:attribute name="sobjectName" type="String" description="SObject type to be searched" />
+    <aura:attribute name="displayTextFieldName" type="String" default="{!v.fieldMetadata.sobjectMetadata.nameField}" description="Field shown to users in the search results" />
+    <aura:attribute name="searchFieldName" type="String" default="{!v.fieldMetadata.sobjectMetadata.nameField}" description="Field to be searched" />
+    <aura:attribute name="limit" type="Integer" default="5" description="Total number of records to return" />
     <aura:attribute name="record" type="SObject" default="{}" />
+
+    <!-- Private Selected Record Attributes -->
+    <aura:attribute Name="selectedRecord" type="SObject" access="public" description="This attribute can be used by parent component to read selected record" />
+    <aura:attribute Name="selectedRecordId" type="Id" access="public" description="This attribute can be used by parent component to read selected record" />
 
     <!-- Public UI Attributes -->
     <aura:attribute name="lookupIcon" type="String" default="{!v.fieldMetadata.sobjectMetadata.tabIcon}" />
     <aura:attribute name="placeholder" type="String" default="{! 'Search ' + v.fieldMetadata.sobjectMetadata.labelPlural }" />
 
     <!-- Private Search Result Attributes -->
-    <aura:attribute Name="selectedRecord" type="SObject" access="public" description="This attribute can be used by parent component to read selected record" />
-    <aura:attribute Name="selectedRecordId" type="Id" access="public" description="This attribute can be used by parent component to read selected record" />
-    <aura:attribute Name="searchResults" type="object[]" access="private" />
+    <aura:attribute Name="searchResults" type="Object[]" access="private" />
 
     <!-- Private Cached Search Attributes -->
     <aura:attribute name="last_SearchText" type="String" access="private" />
-    <aura:attribute name="last_ServerResult" type="object[]" access="private" />
+    <aura:attribute name="last_ServerResult" type="Object[]" access="private" />
 
+    <!-- Private Inherited Attributes -->
+    <aura:attribute name="fieldName" type="String" access="private" default="Id" />
 [nameField = {!v.fieldMetadata.sobjectMetadata.nameField}]
 [tabIcon = {!v.fieldMetadata.sobjectMetadata.tabIcon}]
 [fieldName = {!v.fieldName}]
-[field_API_text = {!v.field_API_text}]
-[field_API_search = {!v.field_API_search}]
+[displayTextFieldName = {!v.displayTextFieldName}]
+[searchFieldName = {!v.searchFieldName}]
 <br />
 [selectedRecord.recordId = {!v.selectedRecord.recordId}]
 [last_SearchText = {!v.last_SearchText}]
@@ -38,23 +41,23 @@
                     <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
                         <div>
                             <aura:if isTrue="{!empty(v.selectedRecord)}">
-                                    <input type="text" class="slds-input slds-combobox__input" id="combobox-unique-id"
-                                            aria-activedescendant="listbox-option-unique-id-01" aria-autocomplete="list"
-                                            aria-controls="listbox-unique-id" autocomplete="off" role="combobox"
-                                            placeholder="{!v.placeholder}"
-                                            onkeyup="{!c.fetchSearchResults}" />
-                                    <aura:set attribute="else">
-                                        <span class="slds-pill slds-pill_link fullWidth">
-                                            <a href="javascript:void(0);" class="slds-pill__action slds-p-left_x-small" title="{#v.selectedRecord.displayText}">
-                                                <lightning:icon iconName="{#v.lookupIcon}" size="x-small" />
-                                                <span class="slds-pill__label slds-p-left_x-small">{#v.selectedRecord.displayText}</span>
-                                            </a>
-                                            <button onclick="{!c.clearSelection}" class="slds-button slds-button_icon slds-button_icon slds-pill__remove" title="Remove">
-                                                <lightning:icon iconName="utility:close" size="small" alternativeText="Press delete or backspace to remove" />
-                                                <span class="slds-assistive-text">Remove</span>
-                                            </button>
-                                        </span>
-                                    </aura:set>
+                                <input type="text" class="slds-input slds-combobox__input" id="combobox-unique-id"
+                                    aria-activedescendant="listbox-option-unique-id-01" aria-autocomplete="list"
+                                    aria-controls="listbox-unique-id" autocomplete="off" role="combobox"
+                                    placeholder="{!v.placeholder}" onkeyup="{!c.fetchSearchResults}"
+                                />
+                                <aura:set attribute="else">
+                                    <span class="slds-pill slds-pill_link fullWidth">
+                                        <a href="javascript:void(0);" class="slds-pill__action slds-p-left_x-small" title="{#v.selectedRecord.displayText}">
+                                            <lightning:icon iconName="{#v.lookupIcon}" size="x-small" />
+                                            <span class="slds-pill__label slds-p-left_x-small">{#v.selectedRecord.displayText}</span>
+                                        </a>
+                                        <button onclick="{!c.clearSelection}" class="slds-button slds-button_icon slds-button_icon slds-pill__remove" title="Remove">
+                                            <lightning:icon iconName="utility:close" size="small" alternativeText="Press delete or backspace to remove" />
+                                            <span class="slds-assistive-text">Remove</span>
+                                        </button>
+                                    </span>
+                                </aura:set>
                             </aura:if>
                        	</div>
                     </div>
@@ -65,8 +68,8 @@
                                 <aura:iteration items="{!v.searchResults}" var="matchingRecord" indexVar="i">
                                     <li role="presentation" class="slds-listbox__item" data-selectedIndex="{#i}" onclick="{!c.itemSelected}">
                                         <span id="{# 'listbox-option-unique-id-' + i + 1}"
-                                              class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
-                                              role="option">
+                                            class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                            role="option">
                                             <span class="slds-media__figure optionIcon">
                                                 <span class="slds-icon_container" >
                                                     <lightning:icon iconName="{#v.lookupIcon}" size="small" />

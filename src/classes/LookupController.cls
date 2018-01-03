@@ -1,12 +1,12 @@
 public with sharing class LookupController {
 
     @AuraEnabled
-    public static String search(String sobjectName, String fld_API_Text, String fld_API_Val, Integer limitCount, String fld_API_Search, String searchText) {
+    public static String search(String sobjectName, String searchFieldName, String searchText, String displayTextFieldName, Integer limitCount) {
         searchText = '\'%' + String.escapeSingleQuotes(searchText.trim()) + '%\'';
 
-        String query = 'SELECT ' + fld_API_Text + ', ' + fld_API_Val
+        String query = 'SELECT Id, ' + displayTextFieldName // + ', ' + fieldName
             + ' FROM ' + sobjectName
-            + ' WHERE ' + fld_API_Search + ' LIKE ' + searchText
+            + ' WHERE ' + searchFieldName + ' LIKE ' + searchText
             + ' ORDER BY LastViewedDate'
             + ' LIMIT ' + limitCount;
         System.debug('query=' + query);
@@ -14,9 +14,9 @@ public with sharing class LookupController {
         List<MatchingRecord> searchResults = new List<MatchingRecord>();
         for(SObject record : Database.query(query)) {
             MatchingRecord matchingRecord = new MatchingRecord();
-            matchingRecord.displayText = String.valueOf(record.get(fld_API_Text));
+            matchingRecord.displayText = String.valueOf(record.get(displayTextFieldName));
             matchingRecord.record      = record;
-            matchingRecord.recordId    = String.valueOf(record.get(fld_API_Val));
+            matchingRecord.recordId    = String.valueOf(record.get('Id'));
             matchingRecord.sobjectName = sobjectName;
             searchResults.add(matchingRecord);
         }
