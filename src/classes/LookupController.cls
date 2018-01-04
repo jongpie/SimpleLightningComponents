@@ -1,14 +1,18 @@
 public with sharing class LookupController {
 
     @AuraEnabled
-    public static String search(String sobjectName, String searchFieldName, String searchText, String displayTextFieldName, Integer limitCount) {
-        searchText = '\'%' + String.escapeSingleQuotes(searchText.trim()) + '%\'';
+    public static String search(String parentSObjectName, String searchFieldName, String searchText, String displayTextFieldName, Integer limitCount) {
+        String query = 'SELECT Id, ' + displayTextFieldName
+            + ' FROM ' + parentSObjectName;
 
-        String query = 'SELECT Id, ' + displayTextFieldName // + ', ' + fieldName
-            + ' FROM ' + sobjectName
-            + ' WHERE ' + searchFieldName + ' LIKE ' + searchText
-            + ' ORDER BY LastViewedDate'
+        if(searchText != null) {
+            searchText = '\'%' + String.escapeSingleQuotes(searchText.trim()) + '%\'';
+            query += ' WHERE ' + searchFieldName + ' LIKE ' + searchText;
+        }
+
+        query += ' ORDER BY LastViewedDate'
             + ' LIMIT ' + limitCount;
+
         System.debug('query=' + query);
 
         List<MatchingRecord> searchResults = new List<MatchingRecord>();
@@ -16,18 +20,17 @@ public with sharing class LookupController {
             MatchingRecord matchingRecord = new MatchingRecord();
             matchingRecord.displayText = String.valueOf(record.get(displayTextFieldName));
             matchingRecord.record      = record;
-            matchingRecord.recordId    = String.valueOf(record.get('Id'));
-            matchingRecord.sobjectName = sobjectName;
+            matchingRecord.sobjectName = parentSObjectName;
             searchResults.add(matchingRecord);
         }
 
+        System.debug(JSON.serialize(searchResults));
         return JSON.serialize(searchResults);
     }
 
     public class MatchingRecord {
         public SObject record     {get;set;}
         public String displayText {get;set;}
-        public String recordId    {get;set;}
         public String sobjectName {get;set;}
     }
 

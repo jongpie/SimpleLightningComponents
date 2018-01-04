@@ -1,11 +1,12 @@
 <aura:component extends="c.fieldMetadata" controller="LookupController">
 
     <!-- Public Config Attributes -->
-    <aura:attribute name="sobjectName" type="String" description="SObject type to be searched" />
+    <aura:attribute name="parentSObjectName" type="String" description="SObject type to be searched" />
     <aura:attribute name="displayTextFieldName" type="String" default="{!v.fieldMetadata.sobjectMetadata.nameField}" description="Field shown to users in the search results" />
     <aura:attribute name="searchFieldName" type="String" default="{!v.fieldMetadata.sobjectMetadata.nameField}" description="Field to be searched" />
-    <aura:attribute name="limit" type="Integer" default="5" description="Total number of records to return" />
-    <aura:attribute name="record" type="SObject" default="{}" />
+    <aura:attribute name="limitCount" type="Integer" default="5" description="Total number of records to return" />
+    <aura:attribute name="childRecordLookupFieldName" type="String" required="true" description="The lookup field on the child SObject" />
+    <aura:attribute name="childRecord" type="SObject" default="{}" />
 
     <!-- Private Selected Record Attributes -->
     <aura:attribute Name="selectedRecord" type="SObject" access="public" description="This attribute can be used by parent component to read selected record" />
@@ -13,25 +14,27 @@
 
     <!-- Public UI Attributes -->
     <aura:attribute name="lookupIcon" type="String" default="{!v.fieldMetadata.sobjectMetadata.tabIcon}" />
+    <aura:attribute name="searchText" type="String" />
     <aura:attribute name="placeholder" type="String" default="{! 'Search ' + v.fieldMetadata.sobjectMetadata.labelPlural }" />
 
     <!-- Private Search Result Attributes -->
+    <aura:attribute Name="showSearchResults" type="Boolean" access="private" default="false" />
     <aura:attribute Name="searchResults" type="Object[]" access="private" />
-
-    <!-- Private Cached Search Attributes -->
-    <aura:attribute name="last_SearchText" type="String" access="private" />
-    <aura:attribute name="last_ServerResult" type="Object[]" access="private" />
+    <aura:attribute Name="recentlyViewRecords" type="Object[]" access="private" />
 
     <!-- Private Inherited Attributes -->
+    <aura:attribute name="sobjectName" type="String" access="private" default="{!v.parentSObjectName}" />
     <aura:attribute name="fieldName" type="String" access="private" default="Id" />
+    [relationshipReferences = {!v.fieldMetadata.relationshipReferences}]
 [nameField = {!v.fieldMetadata.sobjectMetadata.nameField}]
 [tabIcon = {!v.fieldMetadata.sobjectMetadata.tabIcon}]
 [fieldName = {!v.fieldName}]
 [displayTextFieldName = {!v.displayTextFieldName}]
 [searchFieldName = {!v.searchFieldName}]
 <br />
-[selectedRecord.recordId = {!v.selectedRecord.recordId}]
-[last_SearchText = {!v.last_SearchText}]
+[selectedRecordId = {!v.selectedRecordId}]
+<br />
+[childRecord.AccountId = {!v.childRecord.AccountId}]
 
     <div class="slds-form-element">
         <div class="slds-form-element__control">
@@ -44,8 +47,11 @@
                                 <input type="text" class="slds-input slds-combobox__input" id="combobox-unique-id"
                                     aria-activedescendant="listbox-option-unique-id-01" aria-autocomplete="list"
                                     aria-controls="listbox-unique-id" autocomplete="off" role="combobox"
-                                    placeholder="{!v.placeholder}" onkeyup="{!c.fetchSearchResults}"
+                                    placeholder="{!v.placeholder}"
+                                    onkeyup="{!c.fetchSearchResults}" onfocus="{!c.fetchSearchResults}"
+                                    value="{#v.searchText}"
                                 />
+                                <!-- onblur="{!c.hideSearchResults}" -->
                                 <aura:set attribute="else">
                                     <span class="slds-pill slds-pill_link fullWidth">
                                         <a href="javascript:void(0);" class="slds-pill__action slds-p-left_x-small" title="{#v.selectedRecord.displayText}">
@@ -61,7 +67,7 @@
                             </aura:if>
                        	</div>
                     </div>
-                    <aura:if isTrue="{!greaterthanorequal(v.searchResults.length, 1)}">
+                    <aura:if isTrue="{!and(v.showSearchResults, greaterthan(v.searchResults.length, 0))}">
                         <div id="listbox-unique-id" role="listbox">
                             <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid" role="presentation"
                                 style="display:block; min-width:auto; max-width:100%; width:100%;">
