@@ -1,16 +1,29 @@
 ({
     fetchSearchResults : function(component, event, helper) {
         var searchText = event && event.target ? event.target.value : null;
+
+        var fieldMetadata = component.get('v.fieldMetadata');
+        var parentSObjectName = fieldMetadata.relationshipReferences[0];
+
         //Escape button pressed
         if(event.keyCode == 27) {
             helper.clearSelection(component, event, helper);
         } else {
+            /*var parentSObjectMetadata = component.get('v.parentSObjectMetadata');
+
+            if(!parentSObjectMetadata) return;*/
+var parentSObjectMetadataComponent = component.find('parentSObjectMetadataCmp');
+parentSObjectMetadataComponent.set('v.sobjectName', parentSObjectName);
+
+//var parentSObjectMetadata =  component.find('parentSObjectMetadataCmp').get('v.sobjectMetadata');
+//var parentSObjectMetadata = component.get('v.parentSObjectMetadata');
+var parentSObjectMetadata = parentSObjectMetadataComponent.get('v.sobjectMetadata');
             var action = component.get('c.search');
             action.setParams({
-                parentSObjectName    : component.get('v.parentSObjectName'),
-                searchFieldName      : component.get('v.searchFieldName'),
+                parentSObjectName    : parentSObjectMetadata.name,
+                searchFieldName      : parentSObjectMetadata.nameField,
                 searchText           : searchText,
-                displayTextFieldName : component.get('v.displayTextFieldName'),
+                displayTextFieldName : parentSObjectMetadata.nameField,
                 limitCount           : component.get('v.limitCount')
             });
             action.setStorable();

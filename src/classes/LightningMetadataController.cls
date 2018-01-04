@@ -125,6 +125,7 @@ public with sharing class LightningMetadataController {
         @AuraEnabled public String label                                {get;private set;}
         @AuraEnabled public String name                                 {get;private set;}
         @AuraEnabled public String relationshipName                     {get;private set;}
+        @AuraEnabled public List<String> relationshipReferences         {get;private set;}
         @AuraEnabled public String relationshipNameField                {get;private set;}
         @AuraEnabled public String sobjectName                          {get;private set;}
 
@@ -155,6 +156,7 @@ public with sharing class LightningMetadataController {
             this.required                = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
 
             this.setPicklistOptions();
+            this.setRelationshipReferences();
         }
 
         private void setPicklistOptions() {
@@ -164,6 +166,13 @@ public with sharing class LightningMetadataController {
             this.picklistOptions.add(new PicklistEntryMetadata()); // Empty picklist value
             for(Schema.PicklistEntry picklistEntry : this.fieldDescribe.getPickListValues()) {
                 this.picklistOptions.add(new PicklistEntryMetadata(picklistEntry));
+            }
+        }
+
+        private void setRelationshipReferences() {
+            this.relationshipReferences = new List<String>();
+            for(Schema.SObjectType sobjectType : this.fieldDescribe.getReferenceTo()) {
+                this.relationshipReferences.add(String.valueOf(sobjectType));
             }
         }
     }

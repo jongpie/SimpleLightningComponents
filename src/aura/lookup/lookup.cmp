@@ -1,11 +1,17 @@
+
+
+
+
+
+<!-- http://biswajeetsamal.com/blog/salesforce-generic-sobject-lightning-lookup-component/ -->
 <aura:component extends="c.fieldMetadata" controller="LookupController">
 
     <!-- Public Config Attributes -->
-    <aura:attribute name="parentSObjectName" type="String" description="SObject type to be searched" />
+    <!-- <aura:attribute name="parentSObjectName" type="String" description="SObject type to be searched" />
     <aura:attribute name="displayTextFieldName" type="String" default="{!v.fieldMetadata.sobjectMetadata.nameField}" description="Field shown to users in the search results" />
     <aura:attribute name="searchFieldName" type="String" default="{!v.fieldMetadata.sobjectMetadata.nameField}" description="Field to be searched" />
+    <aura:attribute name="childRecordLookupFieldName" type="String" required="false" description="The lookup field on the child SObject" /> -->
     <aura:attribute name="limitCount" type="Integer" default="5" description="Total number of records to return" />
-    <aura:attribute name="childRecordLookupFieldName" type="String" required="true" description="The lookup field on the child SObject" />
     <aura:attribute name="childRecord" type="SObject" default="{}" />
 
     <!-- Private Selected Record Attributes -->
@@ -20,17 +26,32 @@
     <!-- Private Search Result Attributes -->
     <aura:attribute Name="showSearchResults" type="Boolean" access="private" default="false" />
     <aura:attribute Name="searchResults" type="Object[]" access="private" />
-    <aura:attribute Name="recentlyViewRecords" type="Object[]" access="private" />
+    <!-- <aura:attribute Name="recentlyViewRecords" type="Object[]" access="private" /> -->
 
+
+<aura:attribute name="parentSObjectMetadata" type="Object" access="private" />
     <!-- Private Inherited Attributes -->
-    <aura:attribute name="sobjectName" type="String" access="private" default="{!v.parentSObjectName}" />
-    <aura:attribute name="fieldName" type="String" access="private" default="Id" />
-    [relationshipReferences = {!v.fieldMetadata.relationshipReferences}]
-[nameField = {!v.fieldMetadata.sobjectMetadata.nameField}]
+    <!-- <aura:attribute name="sobjectName" type="String" access="private" default="{!v.parentSObjectName}" />
+    <aura:attribute name="fieldName" type="String" access="private" default="Id" /> -->
+
+    <!-- Handlers -->
+    <!-- <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> -->
+    <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.doInit}" />
+<!-- [parentSObjectMetadata nameField = {!v.parentSObjectMetadata.nameField}] -->
+<c:sobjectMetadata sobjectName="" aura:id="parentSObjectMetadataCmp" />
+<div style="border:1px solid red">
+    {!v.parentSObjectMetadata.name}
+    </div>
+<!-- relationship test [{!v.fieldMetadata.relationshipReferences.length}] -->
+    <aura:iteration items="{!v.fieldMetadata.relationshipReferences}" var="relationship">
+        [{!relationship}]
+    </aura:iteration>
+    <!-- [relationshipReferences = {!v.fieldMetadata.relationshipReferences}] -->
+<!-- [nameField = {!v.fieldMetadata.sobjectMetadata.nameField}]
 [tabIcon = {!v.fieldMetadata.sobjectMetadata.tabIcon}]
 [fieldName = {!v.fieldName}]
 [displayTextFieldName = {!v.displayTextFieldName}]
-[searchFieldName = {!v.searchFieldName}]
+[searchFieldName = {!v.searchFieldName}] -->
 <br />
 [selectedRecordId = {!v.selectedRecordId}]
 <br />
@@ -41,6 +62,7 @@
             <div class="slds-combobox_container slds-has-inline-listbox">
                 <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open"
                     aria-expanded="true" aria-haspopup="listbox" role="combobox" style="width:95%">
+
                     <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
                         <div>
                             <aura:if isTrue="{!empty(v.selectedRecord)}">
@@ -52,6 +74,9 @@
                                     value="{#v.searchText}"
                                 />
                                 <!-- onblur="{!c.hideSearchResults}" -->
+                                <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                    <lightning:icon iconName="utility:search" size="x-small" />
+                                </span>
                                 <aura:set attribute="else">
                                     <span class="slds-pill slds-pill_link fullWidth">
                                         <a href="javascript:void(0);" class="slds-pill__action slds-p-left_x-small" title="{#v.selectedRecord.displayText}">
