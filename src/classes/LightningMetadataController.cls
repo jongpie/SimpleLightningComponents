@@ -20,7 +20,8 @@ public with sharing class LightningMetadataController {
         }
     }
 
-    @AuraEnabled
+    // TODO finish implementing and uncomment
+    /*@AuraEnabled
     public static List<FieldMetadata> getFieldSetMetadata(String sobjectName, String fieldSetName) {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldSetMetadata(\'' + sobjectName + '\', \'' + fieldSetName + '\')');
 
@@ -35,7 +36,7 @@ public with sharing class LightningMetadataController {
             fieldSetMetadata.add(fieldMetadata);
         }
         return fieldSetMetadata;
-    }
+    }*/
 
     public class SObjectMetadata {
         @AuraEnabled public Boolean isAccessible  {get;private set;}
@@ -139,21 +140,21 @@ public with sharing class LightningMetadataController {
 
             this.fieldDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName).getDescribe();
 
-            this.defaultValue            = this.fieldDescribe.getDefaultValue();
-            this.displayType             = this.fieldDescribe.getType().name();
-            this.inlineHelpText          = this.fieldDescribe.getInlineHelpText();
-            this.isAccessible            = this.fieldDescribe.isAccessible();
-            this.isCreateable            = this.fieldDescribe.isCreateable();
-            this.isDefaultedOnCreate     = this.fieldDescribe.isDefaultedOnCreate();
-            this.isFilterable            = this.fieldDescribe.isFilterable();
-            this.isNameField             = this.fieldDescribe.isNameField();
-            this.isSortable              = this.fieldDescribe.isSortable();
-            this.isUpdateable            = this.fieldDescribe.isUpdateable();
-            this.label                   = this.fieldDescribe.getLabel();
-            this.maxLength               = this.fieldDescribe.getLength();
-            this.relationshipName        = this.fieldDescribe.getRelationshipName();
-            this.relationshipNameField   = this.fieldDescribe.getReferenceTo() != null && !this.fieldDescribe.getReferenceTo().isEmpty() ? new SObjectMetadata(this.fieldDescribe.getReferenceTo()[0]).nameField : null;
-            this.required                = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
+            this.defaultValue          = this.fieldDescribe.getDefaultValue();
+            this.displayType           = this.fieldDescribe.getType().name();
+            this.inlineHelpText        = this.fieldDescribe.getInlineHelpText();
+            this.isAccessible          = this.fieldDescribe.isAccessible();
+            this.isCreateable          = this.fieldDescribe.isCreateable();
+            this.isDefaultedOnCreate   = this.fieldDescribe.isDefaultedOnCreate();
+            this.isFilterable          = this.fieldDescribe.isFilterable();
+            this.isNameField           = this.fieldDescribe.isNameField();
+            this.isSortable            = this.fieldDescribe.isSortable();
+            this.isUpdateable          = this.fieldDescribe.isUpdateable();
+            this.label                 = this.fieldDescribe.getLabel();
+            this.maxLength             = this.fieldDescribe.getLength();
+            this.relationshipName      = this.fieldDescribe.getRelationshipName();
+            this.relationshipNameField = this.fieldDescribe.getReferenceTo() != null && !this.fieldDescribe.getReferenceTo().isEmpty() ? new SObjectMetadata(this.fieldDescribe.getReferenceTo()[0]).nameField : null;
+            this.required              = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
 
             this.setPicklistOptions();
             this.setRelationshipReferences();
@@ -172,6 +173,7 @@ public with sharing class LightningMetadataController {
         private void setRelationshipReferences() {
             this.relationshipReferences = new List<String>();
             for(Schema.SObjectType sobjectType : this.fieldDescribe.getReferenceTo()) {
+                // TODO convert to instances of SObjectMetadata instead of strings
                 this.relationshipReferences.add(String.valueOf(sobjectType));
             }
         }
