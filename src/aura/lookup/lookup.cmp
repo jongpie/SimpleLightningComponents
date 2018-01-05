@@ -8,11 +8,6 @@
     <aura:attribute Name="selectedRecord" type="SObject" access="public" description="This attribute can be used by parent component to read selected record" />
     <aura:attribute Name="selectedRecordId" type="Id" access="public" description="This attribute can be used by parent component to read selected record" />
 
-    <!-- Public UI Attributes -->
-    <!-- <aura:attribute name="lookupIcon" type="String" default="{!v.parentSObjectMetadata.tabIcon}" /> -->
-    <aura:attribute name="searchText" type="String" />
-    <aura:attribute name="placeholder" type="String" default="{! 'Search ' + v.parentSObjectMetadata.labelPlural }" />
-
     <!-- Private Search Result Attributes -->
     <aura:attribute Name="showSearchResults" type="Boolean" access="private" default="false" />
     <aura:attribute Name="searchResults" type="Object[]" access="private" />
@@ -38,9 +33,9 @@
                                 <input type="text" class="slds-input slds-combobox__input" id="combobox-unique-id"
                                     aria-activedescendant="listbox-option-unique-id-01" aria-autocomplete="list"
                                     aria-controls="listbox-unique-id" autocomplete="off" role="combobox"
-                                    placeholder="{! 'Search ' + v.parentSObjectMetadata.labelPlural }"
+                                    placeholder="{! if(empty(v.parentSObjectMetadata), '', 'Search ' + v.parentSObjectMetadata.labelPlural) }"
                                     onkeyup="{!c.fetchSearchResults}" onfocus="{!c.fetchSearchResults}"
-                                    value="{#v.searchText}"
+                                    disabled="{!empty(v.parentSObjectMetadata)}"
                                 />
                                 <!-- onblur="{!c.hideSearchResults}" -->
                                 <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
