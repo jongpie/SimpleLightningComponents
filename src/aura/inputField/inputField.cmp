@@ -41,7 +41,6 @@
                 <!-- COMBOBOX - TODO -->
                 <!-- DATACATEGORYGROUPREFERENCE - TODO -->
                 <!-- ID - TODO -->
-                <!-- REFERENCE - TODO -->
                 <!-- TIME - TODO -->
 
                 <!-- BOOLEAN -->
@@ -124,6 +123,11 @@
                     <ui:inputPhone aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
                         blur="{!c.handleBlur}"
                     />
+                </aura:if>
+
+                <!-- REFERENCE -->
+                <aura:if isTrue="{!v.displayType == 'REFERENCE'}">
+                    <c:lookup sobjectName="Account" fieldName="{!v.fieldName}" />
                 </aura:if>
 
                 <!-- STRING -->
