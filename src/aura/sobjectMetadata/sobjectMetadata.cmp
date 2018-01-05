@@ -13,4 +13,7 @@
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     <aura:handler name="change" value="{!v.sobjectName}" action="{!c.clearCachedMetadata}" />
 
+    <!-- Markup -->
+    {!v.body}
+
 </aura:component>
