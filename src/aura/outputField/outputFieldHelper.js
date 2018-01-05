@@ -8,7 +8,8 @@
 
         // Parent record name (used for REFERENCE fields)
         var relationshipName = fieldMetadata.relationshipName;// + '.' + fieldMetadata.relationshipNameField;
-        var relationshipNameField = fieldMetadata.relationshipNameField;
+        var relationshipReferences = fieldMetadata.relationshipReferences;
+        var relationshipNameField = relationshipReferences[Object.keys(relationshipReferences)[0]].name;
 
         if(record && record.hasOwnProperty(relationshipName)) {
             var parentRecord = record[relationshipName];

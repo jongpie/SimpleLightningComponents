@@ -5,7 +5,8 @@
 
         if(!fieldMetadata) return;
 
-        var defaultParentSObjectName = fieldMetadata.relationshipReferences[0];
+        var relationshipReferences = fieldMetadata.relationshipReferences;
+        var defaultParentSObjectName = relationshipReferences[Object.keys(relationshipReferences)[1]].name;
 
         var sobjectMetadataService = component.find('sobjectMetadataService');
         sobjectMetadataService.set('v.sobjectName', defaultParentSObjectName);
