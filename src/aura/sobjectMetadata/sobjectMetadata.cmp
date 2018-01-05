@@ -1,14 +1,16 @@
-<aura:component extensible="true" abstract="false" controller="LightningMetadataController">
+<aura:component extensible="true" controller="LightningMetadataController">
 
     <!-- Public Attributes -->
-    <aura:attribute name="sobjectName" type="String" required="true" />
-    <aura:attribute name="sobjectMetadata" type="Object" />
+    <aura:attribute name="sobjectName" type="String" />
+    <aura:method name="fetch" action="{!c.doInit}">
+        <aura:attribute name="callback" type="function"/>
+    </aura:method>
+
+    <!-- Private Attributes -->
+    <aura:attribute name="sobjectMetadata" type="Object" access="private" />
 
     <!-- Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-    <aura:handler name="change" value="{!v.sobjectName}" action="{!c.doInit}" />
-
-    <!-- Markup -->
-    {!v.body}
+    <aura:handler name="change" value="{!v.sobjectName}" action="{!c.clearCachedMetadata}" />
 
 </aura:component>

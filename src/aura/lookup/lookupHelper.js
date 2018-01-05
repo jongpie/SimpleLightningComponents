@@ -5,19 +5,12 @@
         var fieldMetadata = component.get('v.fieldMetadata');
         var parentSObjectName = fieldMetadata.relationshipReferences[0];
 
-        //Escape button pressed
-        if(event.keyCode == 27) {
+        // Escape button pressed
+        var escapeKeyCode = 27;
+        if(event.keyCode == escapeKeyCode) {
             helper.clearSelection(component, event, helper);
         } else {
-            /*var parentSObjectMetadata = component.get('v.parentSObjectMetadata');
-
-            if(!parentSObjectMetadata) return;*/
-var parentSObjectMetadataComponent = component.find('parentSObjectMetadataCmp');
-parentSObjectMetadataComponent.set('v.sobjectName', parentSObjectName);
-
-//var parentSObjectMetadata =  component.find('parentSObjectMetadataCmp').get('v.sobjectMetadata');
-//var parentSObjectMetadata = component.get('v.parentSObjectMetadata');
-var parentSObjectMetadata = parentSObjectMetadataComponent.get('v.sobjectMetadata');
+            var parentSObjectMetadata = component.get('v.parentSObjectMetadata');
             var action = component.get('c.search');
             action.setParams({
                 parentSObjectName    : parentSObjectMetadata.name,
@@ -42,8 +35,7 @@ var parentSObjectMetadata = parentSObjectMetadataComponent.get('v.sobjectMetadat
             var childRecord = component.get('v.childRecord');
             var childRecordLookupFieldName = component.get('v.childRecordLookupFieldName');
             var selectedRecord = serverResult[selectedRecordIndex];
-            console.log('selectedRecord');
-            console.log(selectedRecord);
+
             if(selectedRecord.record) {
                 childRecord[childRecordLookupFieldName] = selectedRecord.record.Id;
                 component.set('v.selectedRecord', selectedRecord);

@@ -1,16 +1,6 @@
-
-
-
-
-
-<!-- http://biswajeetsamal.com/blog/salesforce-generic-sobject-lightning-lookup-component/ -->
 <aura:component extends="c.fieldMetadata" controller="LookupController">
 
     <!-- Public Config Attributes -->
-    <!-- <aura:attribute name="parentSObjectName" type="String" description="SObject type to be searched" />
-    <aura:attribute name="displayTextFieldName" type="String" default="{!v.fieldMetadata.sobjectMetadata.nameField}" description="Field shown to users in the search results" />
-    <aura:attribute name="searchFieldName" type="String" default="{!v.fieldMetadata.sobjectMetadata.nameField}" description="Field to be searched" />
-    <aura:attribute name="childRecordLookupFieldName" type="String" required="false" description="The lookup field on the child SObject" /> -->
     <aura:attribute name="limitCount" type="Integer" default="5" description="Total number of records to return" />
     <aura:attribute name="childRecord" type="SObject" default="{}" />
 
@@ -19,43 +9,22 @@
     <aura:attribute Name="selectedRecordId" type="Id" access="public" description="This attribute can be used by parent component to read selected record" />
 
     <!-- Public UI Attributes -->
-    <aura:attribute name="lookupIcon" type="String" default="{!v.fieldMetadata.sobjectMetadata.tabIcon}" />
+    <!-- <aura:attribute name="lookupIcon" type="String" default="{!v.parentSObjectMetadata.tabIcon}" /> -->
     <aura:attribute name="searchText" type="String" />
-    <aura:attribute name="placeholder" type="String" default="{! 'Search ' + v.fieldMetadata.sobjectMetadata.labelPlural }" />
+    <aura:attribute name="placeholder" type="String" default="{! 'Search ' + v.parentSObjectMetadata.labelPlural }" />
 
     <!-- Private Search Result Attributes -->
     <aura:attribute Name="showSearchResults" type="Boolean" access="private" default="false" />
     <aura:attribute Name="searchResults" type="Object[]" access="private" />
-    <!-- <aura:attribute Name="recentlyViewRecords" type="Object[]" access="private" /> -->
 
-
-<aura:attribute name="parentSObjectMetadata" type="Object" access="private" />
-    <!-- Private Inherited Attributes -->
-    <!-- <aura:attribute name="sobjectName" type="String" access="private" default="{!v.parentSObjectName}" />
-    <aura:attribute name="fieldName" type="String" access="private" default="Id" /> -->
+    <!-- Private Metadata Attributes -->
+    <aura:attribute name="parentSObjectMetadata" type="Object" access="private" />
 
     <!-- Handlers -->
-    <!-- <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> -->
     <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.doInit}" />
-<!-- [parentSObjectMetadata nameField = {!v.parentSObjectMetadata.nameField}] -->
-<c:sobjectMetadata sobjectName="" aura:id="parentSObjectMetadataCmp" />
-<div style="border:1px solid red">
-    {!v.parentSObjectMetadata.name}
-    </div>
-<!-- relationship test [{!v.fieldMetadata.relationshipReferences.length}] -->
-    <aura:iteration items="{!v.fieldMetadata.relationshipReferences}" var="relationship">
-        [{!relationship}]
-    </aura:iteration>
-    <!-- [relationshipReferences = {!v.fieldMetadata.relationshipReferences}] -->
-<!-- [nameField = {!v.fieldMetadata.sobjectMetadata.nameField}]
-[tabIcon = {!v.fieldMetadata.sobjectMetadata.tabIcon}]
-[fieldName = {!v.fieldName}]
-[displayTextFieldName = {!v.displayTextFieldName}]
-[searchFieldName = {!v.searchFieldName}] -->
-<br />
-[selectedRecordId = {!v.selectedRecordId}]
-<br />
-[childRecord.AccountId = {!v.childRecord.AccountId}]
+
+    <!-- Markup -->
+    <c:sobjectMetadata aura:id="sobjectMetadataService" />
 
     <div class="slds-form-element">
         <div class="slds-form-element__control">
@@ -69,7 +38,7 @@
                                 <input type="text" class="slds-input slds-combobox__input" id="combobox-unique-id"
                                     aria-activedescendant="listbox-option-unique-id-01" aria-autocomplete="list"
                                     aria-controls="listbox-unique-id" autocomplete="off" role="combobox"
-                                    placeholder="{!v.placeholder}"
+                                    placeholder="{! 'Search ' + v.parentSObjectMetadata.labelPlural }"
                                     onkeyup="{!c.fetchSearchResults}" onfocus="{!c.fetchSearchResults}"
                                     value="{#v.searchText}"
                                 />
@@ -80,7 +49,7 @@
                                 <aura:set attribute="else">
                                     <span class="slds-pill slds-pill_link fullWidth">
                                         <a href="javascript:void(0);" class="slds-pill__action slds-p-left_x-small" title="{#v.selectedRecord.displayText}">
-                                            <lightning:icon iconName="{#v.lookupIcon}" size="x-small" />
+                                            <lightning:icon iconName="{!v.parentSObjectMetadata.tabIcon}" size="x-small" />
                                             <span class="slds-pill__label slds-p-left_x-small">{#v.selectedRecord.displayText}</span>
                                         </a>
                                         <button onclick="{!c.clearSelection}" class="slds-button slds-button_icon slds-button_icon slds-pill__remove" title="Remove">
@@ -103,8 +72,8 @@
                                             role="option">
                                             <span class="slds-media__figure optionIcon">
                                                 <span class="slds-icon_container" >
-                                                    <lightning:icon iconName="{#v.lookupIcon}" size="small" />
-                                                    <span class="slds-assistive-text">{#v.sobjectName}</span>
+                                                    <lightning:icon iconName="{#v.parentSObjectMetadata.tabIcon}" size="small" />
+                                                    <span class="slds-assistive-text">{#v.parentSObjectMetadata.label}</span>
                                                 </span>
                                             </span>
                                             <span class="slds-media__body singleRow">
