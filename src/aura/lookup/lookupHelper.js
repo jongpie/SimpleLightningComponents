@@ -2,10 +2,6 @@
     fetchSearchResults : function(component, event, helper) {
         var searchText = event && event.target ? event.target.value : null;
 
-        var fieldMetadata = component.get('v.fieldMetadata');
-        var parentSObjectName = fieldMetadata.relationshipReferences[0];
-
-        // Escape button pressed
         var escapeKeyCode = 27;
         if(event.keyCode == escapeKeyCode) {
             helper.clearSelection(component, event, helper);
@@ -47,11 +43,11 @@
     },
     handleResponse : function (response,component,helper) {
         if(response.getState() === 'SUCCESS') {
-            var retObj = JSON.parse(response.getReturnValue());
-            if(retObj.length <= 0) {
+            var searchResults = JSON.parse(response.getReturnValue());
+            if(searchResults.length === 0) {
                 component.set('v.searchResults', null);
             } else {
-                component.set('v.searchResults', retObj);
+                component.set('v.searchResults', searchResults);
             }
         } else if(response.getState() === 'ERROR') {
             var errors = response.getError();
@@ -61,7 +57,7 @@
         }
     },
     getIndexFrmParent : function(target, helper, attributeToFind) {
-        //User can click on any child element, so traverse till intended parent found
+        // User can click on any child element, so traverse till intended parent found
         var selectedRecordIndex = target.getAttribute(attributeToFind);
         while(!selectedRecordIndex) {
             target = target.parentNode;
