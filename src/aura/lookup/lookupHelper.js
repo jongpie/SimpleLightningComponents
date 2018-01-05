@@ -23,8 +23,6 @@
             action.setCallback(this, function(response) {
                 this.handleResponse(response, component, helper);
             });
-
-            console.log('Server call made');
             $A.enqueueAction(action);
         }
     },
