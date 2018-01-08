@@ -7,7 +7,7 @@
         component.set('v.displayType', fieldMetadata.displayType);
 
         // Parent record name (used for REFERENCE fields)
-        var relationshipName = fieldMetadata.relationshipName;// + '.' + fieldMetadata.relationshipNameField;
+        var relationshipName = fieldMetadata.relationshipName;
         var relationshipReferences = fieldMetadata.relationshipReferences;
         var relationshipNameField = relationshipReferences[0].nameField;
 
@@ -25,6 +25,7 @@
         var fieldName = component.get('v.fieldName');
 
         if(record === null) return;
+
         if(record.hasOwnProperty(fieldName)) {
             component.set('v.fieldValue', record[fieldName]);
         }
