@@ -127,7 +127,7 @@
 
                 <!-- REFERENCE -->
                 <aura:if isTrue="{!v.displayType == 'REFERENCE'}">
-                    <c:lookup sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" />
+                    <c:lookup sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" />
                 </aura:if>
 
                 <!-- STRING -->
