@@ -4,6 +4,7 @@
 		<members>LightningMetadataController</members>
 		<members>LightningMetadataController_Tests</members>
 		<members>LookupController</members>
+		<members>LookupController_Tests</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
