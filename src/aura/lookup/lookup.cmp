@@ -106,7 +106,7 @@
                                                     <span class="slds-assistive-text">{#v.parentSObjectMetadata.label}</span>
                                                 </span>
                                             </span>
-                                            <span class="slds-media__body singleRow">
+                                            <span class="slds-media__body">
                                                 <span class="slds-listbox__option-text slds-listbox__option-text_entity">{#matchingRecord.displayText}</span>
                                             </span>
                                         </span>
