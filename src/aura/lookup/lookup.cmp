@@ -1,8 +1,10 @@
 <aura:component extends="c.fieldMetadata" controller="LookupController">
 
     <!-- Public Config Attributes -->
-    <aura:attribute name="limitCount" type="Integer" default="5" description="Total number of records to return" />
     <aura:attribute name="childRecord" type="SObject" default="{}" />
+    <aura:attribute name="disabled" type="Boolean" description="(Optional) Disables the input field" />
+    <aura:attribute name="required" type="Boolean" description="(Optional) Marks the field as required (true) or optional (false)" />
+    <aura:attribute name="limitCount" type="Integer" default="5" description="Total number of records to return" />
 
     <!-- Private Selected Record Attributes -->
     <aura:attribute Name="selectedRecord" type="SObject" access="public" description="This attribute can be used by parent component to read selected record" />
@@ -34,10 +36,11 @@
                                     aria-activedescendant="listbox-option-unique-id-01" aria-autocomplete="list"
                                     aria-controls="listbox-unique-id" autocomplete="off" role="combobox"
                                     placeholder="{! if(empty(v.parentSObjectMetadata), '', 'Search ' + v.parentSObjectMetadata.labelPlural) }"
+                                    required="{!or(v.required, v.fieldMetadata.required)}"
+                                    disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled, empty(v.parentSObjectMetadata))}"
                                     onkeyup="{!c.fetchSearchResults}" onfocus="{!c.fetchSearchResults}"
-                                    disabled="{!empty(v.parentSObjectMetadata)}"
                                 />
-                                <!-- onblur="{!c.hideSearchResults}" -->
+                                <!-- onblur="{!c.hideSearchResults}" --> <!--TODO fix hiding onblur-->
                                 <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
                                     <lightning:icon iconName="utility:search" size="x-small" />
                                 </span>
