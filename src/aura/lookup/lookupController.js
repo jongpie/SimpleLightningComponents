@@ -5,10 +5,25 @@
 
         if(!fieldMetadata) return;
 
-        var defaultParentSObjectName = fieldMetadata.relationshipReferences[0].name;
+        component.set('v.parentSObjectName', fieldMetadata.relationshipReferences[0].name);
+    },
+    toggleParentSObjectSelector : function(component, event, helper) {
+        console.log('lookup toggleSObjectSelector');
+        component.set('v.showSObjectSelector', !component.get('v.showSObjectSelector'));
+        component.set('v.showSearchResults', !component.get('v.showSearchResults'));
+    },
+    selectParentSObject : function(component, event, helper) {
+        console.log('lookup selectParentSObject');
+        var parentSObjectName = event.currentTarget.dataset.sobjectname;
+        console.log('parentSObjectName=' + parentSObjectName);
+        component.set('v.parentSObjectName', parentSObjectName);
+        component.set('v.showSObjectSelector', false);
+    },
+    fetchParentSObjectMetadata :  function(component, event, helper) {
+        var parentSObjectName = component.get('v.parentSObjectName');
 
         var sobjectMetadataService = component.find('sobjectMetadataService');
-        sobjectMetadataService.set('v.sobjectName', defaultParentSObjectName);
+        sobjectMetadataService.set('v.sobjectName', parentSObjectName);
         sobjectMetadataService.fetch(function(error, data) {
             component.set('v.parentSObjectMetadata', data);
         });
