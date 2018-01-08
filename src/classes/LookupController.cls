@@ -2,6 +2,9 @@ public with sharing class LookupController {
 
     @AuraEnabled
     public static String search(String parentSObjectName, String searchFieldName, String searchText, String displayTextFieldName, Integer limitCount) {
+        Schema.DescribeSObjectResult parentSObjectDescribe = Schema.getGlobalDescribe().get(parentSObjectName).getDescribe();
+        LightningMetadataController.SObjectMetadata parentSObjectMetadata = new LightningMetadataController.SObjectMetadata(parentSObjectName);
+
         String query = 'SELECT Id, ' + displayTextFieldName
             + ' FROM ' + parentSObjectName;
 
@@ -10,7 +13,8 @@ public with sharing class LookupController {
             query += ' WHERE ' + searchFieldName + ' LIKE ' + searchText;
         }
 
-        query += ' ORDER BY LastViewedDate'
+        String sortByField = parentSObjectDescribe.fields.getMap().containsKey('LastViewedDate') ? 'LastViewedDate' : parentSObjectMetadata.nameField;
+        query += ' ORDER BY ' + sortByField
             + ' LIMIT ' + limitCount;
 
         System.debug('query=' + query);
