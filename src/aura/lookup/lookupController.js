@@ -21,10 +21,10 @@
     selectParentSObject : function(component, event, helper) {
         var parentSObjectName = event.currentTarget.dataset.sobjectname;
         component.set('v.parentSObjectName', parentSObjectName);
+        component.set('v.showSObjectSelector', false);
     },
     loadParentSObjectMetadata : function(component, event, helper) {
         component.set('v.searchResults', null);
-        component.set('v.showSObjectSelector', false);
 
         var fieldMetadata = component.get('v.fieldMetadata');
         var parentSObjectName = component.get('v.parentSObjectName');
