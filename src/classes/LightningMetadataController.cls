@@ -109,25 +109,25 @@ public with sharing class LightningMetadataController {
     }
 
     public class FieldMetadata {
-        @AuraEnabled public Boolean isAccessible                                {get;private set;}
-        @AuraEnabled public Boolean isCreateable                                {get;private set;}
-        @AuraEnabled public Boolean isDefaultedOnCreate                         {get;private set;}
-        @AuraEnabled public Boolean isFilterable                                {get;private set;}
-        @AuraEnabled public Boolean isNameField                                 {get;private set;}
-        @AuraEnabled public Boolean isSortable                                  {get;private set;}
-        @AuraEnabled public Boolean isUpdateable                                {get;private set;}
-        @AuraEnabled public Boolean required                                    {get;private set;}
-        @AuraEnabled public Integer maxLength                                   {get;private set;}
-        @AuraEnabled public List<PicklistEntryMetadata> picklistOptions         {get;private set;}
-        @AuraEnabled public Object defaultValue                                 {get;private set;}
-        @AuraEnabled public SObjectMetadata sobjectMetadata                     {get;private set;}
-        @AuraEnabled public String displayType                                  {get;private set;}
-        @AuraEnabled public String inlineHelpText                               {get;private set;}
-        @AuraEnabled public String label                                        {get;private set;}
-        @AuraEnabled public String name                                         {get;private set;}
-        @AuraEnabled public String relationshipName                             {get;private set;}
-        @AuraEnabled public Map<String, SObjectMetadata> relationshipReferences {get;private set;}
-        @AuraEnabled public String sobjectName                                  {get;private set;}
+        @AuraEnabled public Boolean isAccessible                         {get;private set;}
+        @AuraEnabled public Boolean isCreateable                         {get;private set;}
+        @AuraEnabled public Boolean isDefaultedOnCreate                  {get;private set;}
+        @AuraEnabled public Boolean isFilterable                         {get;private set;}
+        @AuraEnabled public Boolean isNameField                          {get;private set;}
+        @AuraEnabled public Boolean isSortable                           {get;private set;}
+        @AuraEnabled public Boolean isUpdateable                         {get;private set;}
+        @AuraEnabled public Boolean required                             {get;private set;}
+        @AuraEnabled public Integer maxLength                            {get;private set;}
+        @AuraEnabled public List<PicklistEntryMetadata> picklistOptions  {get;private set;}
+        @AuraEnabled public Object defaultValue                          {get;private set;}
+        @AuraEnabled public SObjectMetadata sobjectMetadata              {get;private set;}
+        @AuraEnabled public String displayType                           {get;private set;}
+        @AuraEnabled public String inlineHelpText                        {get;private set;}
+        @AuraEnabled public String label                                 {get;private set;}
+        @AuraEnabled public String name                                  {get;private set;}
+        @AuraEnabled public String relationshipName                      {get;private set;}
+        @AuraEnabled public List<SObjectMetadata> relationshipReferences {get;private set;}
+        @AuraEnabled public String sobjectName                           {get;private set;}
 
         public Schema.DescribeFieldResult fieldDescribe {get;private set;}
 
@@ -169,9 +169,9 @@ public with sharing class LightningMetadataController {
         }
 
         private void setRelationshipReferences() {
-            this.relationshipReferences = new Map<String, SObjectMetadata>();
+            this.relationshipReferences = new List<SObjectMetadata>();
             for(Schema.SObjectType sobjectType : this.fieldDescribe.getReferenceTo()) {
-                this.relationshipReferences.put(String.valueOf(sobjectType), new SObjectMetadata(sobjectType));
+                this.relationshipReferences.add(new SObjectMetadata(sobjectType));
             }
         }
     }
