@@ -96,18 +96,15 @@
                                 style="display:block; min-width:auto; max-width:100%; width:100%;">
                                 <aura:iteration items="{!v.searchResults}" var="matchingRecord" indexVar="i">
                                     <li role="presentation" class="slds-listbox__item" data-selectedIndex="{#i}" onclick="{!c.itemSelected}">
-                                        <span id="{# 'listbox-option-unique-id-' + i + 1}"
-                                            class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
-                                            role="option"
-                                        >
+                                        <span role="option" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta">
                                             <span class="slds-media__figure optionIcon">
                                                 <span class="slds-icon_container" >
                                                     <lightning:icon iconName="{#v.parentSObjectMetadata.tabIcon}" size="small" />
-                                                    <span class="slds-assistive-text">{#v.parentSObjectMetadata.label}</span>
+                                                    <span class="slds-assistive-text">{!v.parentSObjectMetadata.label}</span>
                                                 </span>
                                             </span>
                                             <span class="slds-media__body">
-                                                <span class="slds-listbox__option-text slds-listbox__option-text_entity">{#matchingRecord.displayText}</span>
+                                                <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!matchingRecord.displayText}</span>
                                             </span>
                                         </span>
                                     </li>
