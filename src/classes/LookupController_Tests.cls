@@ -22,7 +22,7 @@ private class LookupController_Tests {
 
         String sobjectName          = 'User';
         String searchFieldName      = 'Name';
-        String searchText           = currentUser.FirstName;
+        String searchText           = currentUser.LastName;
         String displayTextFieldName = 'Name';
         Integer limitCount          = 10;
 
