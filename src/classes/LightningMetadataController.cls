@@ -41,6 +41,7 @@ public with sharing class LightningMetadataController {
     public class SObjectMetadata {
         @AuraEnabled public Boolean isAccessible  {get;private set;}
         @AuraEnabled public Boolean isCreateable  {get;private set;}
+        @AuraEnabled public Boolean isCustom      {get;private set;}
         @AuraEnabled public Boolean isDeletable   {get;private set;}
         @AuraEnabled public Boolean isMergeable   {get;private set;}
         @AuraEnabled public Boolean isQueryable   {get;private set;}
@@ -65,6 +66,7 @@ public with sharing class LightningMetadataController {
 
             this.isAccessible  = this.sobjectDescribe.isAccessible();
             this.isCreateable  = this.sobjectDescribe.isCreateable();
+            this.isCustom      = this.sobjectDescribe.isCustom();
             this.isDeletable   = this.sobjectDescribe.isDeletable();
             this.isMergeable   = this.sobjectDescribe.isMergeable();
             this.isQueryable   = this.sobjectDescribe.isQueryable();
@@ -97,12 +99,12 @@ public with sharing class LightningMetadataController {
                     String iconType = tabResult.isCustom() ? 'custom' : 'standard';
                     String svgIconName;
                     for(Schema.DescribeIconResult icon : tabResult.getIcons()) {
-                        if(icon.getContentType() == 'image/svg+xml') {
-                            svgIconName = icon.getUrl().substringAfterLast('/').replace('.svg', '');
-                        }
+                        if(icon.getContentType() != 'image/svg+xml') continue;
+
+                        svgIconName = icon.getUrl().substringAfterLast('/').replace('.svg', '');
+                        this.tabIcon = iconType + ':' + svgIconName;
+                        break;
                     }
-                    this.tabIcon = iconType + ':' + svgIconName;
-                    break;
                 }
             }
         }
@@ -111,6 +113,7 @@ public with sharing class LightningMetadataController {
     public class FieldMetadata {
         @AuraEnabled public Boolean isAccessible                         {get;private set;}
         @AuraEnabled public Boolean isCreateable                         {get;private set;}
+        @AuraEnabled public Boolean isCustom                             {get;private set;}
         @AuraEnabled public Boolean isDefaultedOnCreate                  {get;private set;}
         @AuraEnabled public Boolean isFilterable                         {get;private set;}
         @AuraEnabled public Boolean isNameField                          {get;private set;}
@@ -139,20 +142,21 @@ public with sharing class LightningMetadataController {
 
             this.fieldDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName).getDescribe();
 
-            this.defaultValue          = this.fieldDescribe.getDefaultValue();
-            this.displayType           = this.fieldDescribe.getType().name();
-            this.inlineHelpText        = this.fieldDescribe.getInlineHelpText();
-            this.isAccessible          = this.fieldDescribe.isAccessible();
-            this.isCreateable          = this.fieldDescribe.isCreateable();
-            this.isDefaultedOnCreate   = this.fieldDescribe.isDefaultedOnCreate();
-            this.isFilterable          = this.fieldDescribe.isFilterable();
-            this.isNameField           = this.fieldDescribe.isNameField();
-            this.isSortable            = this.fieldDescribe.isSortable();
-            this.isUpdateable          = this.fieldDescribe.isUpdateable();
-            this.label                 = this.fieldDescribe.getLabel();
-            this.maxLength             = this.fieldDescribe.getLength();
-            this.relationshipName      = this.fieldDescribe.getRelationshipName();
-            this.required              = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
+            this.defaultValue        = this.fieldDescribe.getDefaultValue();
+            this.displayType         = this.fieldDescribe.getType().name();
+            this.inlineHelpText      = this.fieldDescribe.getInlineHelpText();
+            this.isAccessible        = this.fieldDescribe.isAccessible();
+            this.isCreateable        = this.fieldDescribe.isCreateable();
+            this.isCustom            = this.fieldDescribe.isCustom();
+            this.isDefaultedOnCreate = this.fieldDescribe.isDefaultedOnCreate();
+            this.isFilterable        = this.fieldDescribe.isFilterable();
+            this.isNameField         = this.fieldDescribe.isNameField();
+            this.isSortable          = this.fieldDescribe.isSortable();
+            this.isUpdateable        = this.fieldDescribe.isUpdateable();
+            this.label               = this.fieldDescribe.getLabel();
+            this.maxLength           = this.fieldDescribe.getLength();
+            this.relationshipName    = this.fieldDescribe.getRelationshipName();
+            this.required            = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
 
             this.setPicklistOptions();
             this.setRelationshipReferences();
