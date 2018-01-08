@@ -65,7 +65,7 @@
                                 aria-controls="listbox-unique-id"
                                 autocomplete="off"
                                 class="slds-input slds-combobox__input"
-                                disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled, empty(v.parentSObjectMetadata))}"
+                                disabled="{!or(empty(v.parentSObjectMetadata), v.fieldMetadata.isUpdateable == false, v.disabled)}"
                                 id="combobox-unique-id"
                                 onfocus="{!c.fetchSearchResults}"
                                 onkeyup="{!c.fetchSearchResults}"

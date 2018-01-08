@@ -16,6 +16,7 @@
         console.log('lookup selectParentSObject');
         var parentSObjectName = event.currentTarget.dataset.sobjectname;
         console.log('parentSObjectName=' + parentSObjectName);
+        component.set('v.parentSObjectMetadata', null);
         component.set('v.parentSObjectName', parentSObjectName);
         component.set('v.showSObjectSelector', false);
     },
