@@ -21,11 +21,9 @@
 
     <!-- Handlers -->
     <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.doInit}" />
-    <aura:handler name="change" value="{!v.parentSObjectName}" action="{!c.fetchParentSObjectMetadata}" />
+    <aura:handler name="change" value="{!v.parentSObjectName}" action="{!c.loadParentSObjectMetadata}" />
 
     <!-- Markup -->
-    <c:sobjectMetadata aura:id="sobjectMetadataService" />
-
     <div class="slds-form-element">
         <div class="slds-form-element__control">
             <div class="slds-combobox_container slds-has-object-switcher">
