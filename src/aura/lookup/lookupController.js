@@ -23,7 +23,7 @@
         component.set('v.parentSObjectName', parentSObjectName);
     },
     loadParentSObjectMetadata : function(component, event, helper) {
-        component.set('v.showSearchResults', null);
+        component.set('v.searchResults', null);
         component.set('v.showSObjectSelector', false);
 
         var fieldMetadata = component.get('v.fieldMetadata');
