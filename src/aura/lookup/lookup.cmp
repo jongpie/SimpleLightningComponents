@@ -92,8 +92,7 @@
                     <!-- Search Results -->
                     <aura:if isTrue="{!and(v.showSearchResults, greaterthan(v.searchResults.length, 0))}">
                         <div id="listbox-unique-id" role="listbox">
-                            <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid" role="presentation"
-                                style="display:block; min-width:auto; max-width:100%; width:100%;">
+                            <ul role="presentation" class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-is-open" style="display:block; min-width:auto; max-width:100%; width:100%;">
                                 <aura:iteration items="{!v.searchResults}" var="matchingRecord" indexVar="i">
                                     <li role="presentation" class="slds-listbox__item" data-selectedIndex="{#i}" onclick="{!c.itemSelected}">
                                         <span role="option" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta">

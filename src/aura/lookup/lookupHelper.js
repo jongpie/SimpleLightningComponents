@@ -25,13 +25,13 @@
     itemSelected : function(component, event, helper) {
         var selectedRecordIndex = helper.getIndexFrmParent(event.target, helper, 'data-selectedIndex');
         if(selectedRecordIndex) {
-            var serverResult = component.get('v.searchResults');
+            var searchResults = component.get('v.searchResults');
             var childRecord = component.get('v.childRecord');
-            var childRecordLookupFieldName = component.get('v.childRecordLookupFieldName');
-            var selectedRecord = serverResult[selectedRecordIndex];
+            var fieldName = component.get('v.fieldName');
+            var selectedRecord = searchResults[selectedRecordIndex];
 
             if(selectedRecord.record) {
-                childRecord[childRecordLookupFieldName] = selectedRecord.record.Id;
+                childRecord[fieldName] = selectedRecord.record.Id;
                 component.set('v.selectedRecord', selectedRecord);
             }
             component.set('v.searchResults', null);
