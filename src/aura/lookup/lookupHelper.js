@@ -23,22 +23,22 @@
         }
     },
     itemSelected : function(component, event, helper) {
-        var selectedRecordIndex = helper.getIndexFrmParent(event.target, helper, 'data-selectedIndex');
-        if(selectedRecordIndex) {
+        var selectedParentRecordIndex = helper.getIndexFrmParent(event.target, helper, 'data-selectedIndex');
+        if(selectedParentRecordIndex) {
             var searchResults = component.get('v.searchResults');
             var record = component.get('v.record');
             var fieldName = component.get('v.fieldName');
-            var selectedRecord = searchResults[selectedRecordIndex];
+            var selectedParentRecord = searchResults[selectedParentRecordIndex];
 
-            if(selectedRecord.record) {
-                record[fieldName] = selectedRecord.record.Id;
-                component.set('v.selectedRecord', selectedRecord);
+            if(selectedParentRecord.record) {
+                record[fieldName] = selectedParentRecord.record.Id;
+                component.set('v.selectedParentRecord', selectedParentRecord);
             }
             component.set('v.searchResults', null);
         }
     },
     clearSelection: function(component, event, helper) {
-        component.set('v.selectedRecord', null);
+        component.set('v.selectedParentRecord', null);
         component.set('v.searchResults', null);
     },
     handleResponse : function (response,component,helper) {
@@ -58,11 +58,11 @@
     },
     getIndexFrmParent : function(target, helper, attributeToFind) {
         // User can click on any child element, so traverse till intended parent found
-        var selectedRecordIndex = target.getAttribute(attributeToFind);
-        while(!selectedRecordIndex) {
+        var selectedParentRecordIndex = target.getAttribute(attributeToFind);
+        while(!selectedParentRecordIndex) {
             target = target.parentNode;
-            selectedRecordIndex = helper.getIndexFrmParent(target, helper, attributeToFind);
+            selectedParentRecordIndex = helper.getIndexFrmParent(target, helper, attributeToFind);
         }
-        return selectedRecordIndex;
+        return selectedParentRecordIndex;
     }
 })
