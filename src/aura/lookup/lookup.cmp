@@ -1,7 +1,7 @@
 <aura:component extends="c.fieldMetadata" controller="LookupController">
 
     <!-- Public Config Attributes -->
-    <aura:attribute name="childRecord" type="SObject" default="{}" />
+    <aura:attribute name="record" type="SObject" default="{}" />
     <aura:attribute name="disabled" type="Boolean" description="(Optional) Disables the input field" />
     <aura:attribute name="required" type="Boolean" description="(Optional) Marks the field as required (true) or optional (false)" />
     <aura:attribute name="limitCount" type="Integer" default="5" description="Total number of records to return" />
