@@ -39,22 +39,25 @@ public with sharing class LightningMetadataController {
     }*/
 
     public class SObjectMetadata {
-        @AuraEnabled public Boolean isAccessible  {get;private set;}
-        @AuraEnabled public Boolean isCreateable  {get;private set;}
-        @AuraEnabled public Boolean isCustom      {get;private set;}
-        @AuraEnabled public Boolean isDeletable   {get;private set;}
-        @AuraEnabled public Boolean isMergeable   {get;private set;}
-        @AuraEnabled public Boolean isQueryable   {get;private set;}
-        @AuraEnabled public Boolean isSearchable  {get;private set;}
-        @AuraEnabled public Boolean isUndeletable {get;private set;}
-        @AuraEnabled public Boolean isUpdateable  {get;private set;}
-        @AuraEnabled public String label          {get;private set;}
-        @AuraEnabled public String labelPlural    {get;private set;}
-        @AuraEnabled public String name           {get;private set;}
-        @AuraEnabled public String nameField      {get;private set;}
-        @AuraEnabled public String tabIcon        {get;private set;}
+        @AuraEnabled public Boolean isAccessible    {get;private set;}
+        @AuraEnabled public Boolean isCreateable    {get;private set;}
+        @AuraEnabled public Boolean isCustom        {get;private set;}
+        @AuraEnabled public Boolean isCustomSetting {get;private set;}
+        @AuraEnabled public Boolean isDeletable     {get;private set;}
+        @AuraEnabled public Boolean isMergeable     {get;private set;}
+        @AuraEnabled public Boolean isQueryable     {get;private set;}
+        @AuraEnabled public Boolean isSearchable    {get;private set;}
+        @AuraEnabled public Boolean isUndeletable   {get;private set;}
+        @AuraEnabled public Boolean isUpdateable    {get;private set;}
+        @AuraEnabled public String keyPrefix        {get;private set;}
+        @AuraEnabled public String label            {get;private set;}
+        @AuraEnabled public String labelPlural      {get;private set;}
+        @AuraEnabled public String localName        {get;private set;}
+        @AuraEnabled public String name             {get;private set;}
+        @AuraEnabled public String nameField        {get;private set;}
+        @AuraEnabled public String tabIcon          {get;private set;}
 
-        public Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
+        private Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
 
         public SObjectMetadata(Schema.SObjectType sobjectType) {
             this(sobjectType.getDescribe().getName());
@@ -64,17 +67,20 @@ public with sharing class LightningMetadataController {
             this.name            = sobjectName;
             this.sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
 
-            this.isAccessible  = this.sobjectDescribe.isAccessible();
-            this.isCreateable  = this.sobjectDescribe.isCreateable();
-            this.isCustom      = this.sobjectDescribe.isCustom();
-            this.isDeletable   = this.sobjectDescribe.isDeletable();
-            this.isMergeable   = this.sobjectDescribe.isMergeable();
-            this.isQueryable   = this.sobjectDescribe.isQueryable();
-            this.isSearchable  = this.sobjectDescribe.isSearchable();
-            this.isUndeletable = this.sobjectDescribe.isUndeletable();
-            this.isUpdateable  = this.sobjectDescribe.isUpdateable();
-            this.label         = this.sobjectDescribe.getLabel();
-            this.labelPlural   = this.sobjectDescribe.getLabelPlural();
+            this.isAccessible    = this.sobjectDescribe.isAccessible();
+            this.isCreateable    = this.sobjectDescribe.isCreateable();
+            this.isCustom        = this.sobjectDescribe.isCustom();
+            this.isCustomSetting = this.sobjectDescribe.isCustomSetting();
+            this.isDeletable     = this.sobjectDescribe.isDeletable();
+            this.isMergeable     = this.sobjectDescribe.isMergeable();
+            this.isQueryable     = this.sobjectDescribe.isQueryable();
+            this.isSearchable    = this.sobjectDescribe.isSearchable();
+            this.isUndeletable   = this.sobjectDescribe.isUndeletable();
+            this.isUpdateable    = this.sobjectDescribe.isUpdateable();
+            this.keyPrefix       = this.sobjectDescribe.getKeyPrefix();
+            this.label           = this.sobjectDescribe.getLabel();
+            this.labelPlural     = this.sobjectDescribe.getLabelPlural();
+            this.localName       = this.sobjectDescribe.getLocalName();
 
             this.setNameField();
             this.setTabIcon();
@@ -112,10 +118,12 @@ public with sharing class LightningMetadataController {
 
     public class FieldMetadata {
         @AuraEnabled public Boolean isAccessible                         {get;private set;}
+        @AuraEnabled public Boolean isCalculated                         {get;private set;}
         @AuraEnabled public Boolean isCreateable                         {get;private set;}
         @AuraEnabled public Boolean isCustom                             {get;private set;}
         @AuraEnabled public Boolean isDefaultedOnCreate                  {get;private set;}
         @AuraEnabled public Boolean isFilterable                         {get;private set;}
+        @AuraEnabled public Boolean isGroupable                          {get;private set;}
         @AuraEnabled public Boolean isNameField                          {get;private set;}
         @AuraEnabled public Boolean isSortable                           {get;private set;}
         @AuraEnabled public Boolean isUpdateable                         {get;private set;}
@@ -132,7 +140,7 @@ public with sharing class LightningMetadataController {
         @AuraEnabled public List<SObjectMetadata> relationshipReferences {get;private set;}
         @AuraEnabled public String sobjectName                           {get;private set;}
 
-        public Schema.DescribeFieldResult fieldDescribe {get;private set;}
+        private Schema.DescribeFieldResult fieldDescribe {get;private set;}
 
         public FieldMetadata(String sobjectName, String fieldName) {
             this.sobjectName     = sobjectName;
@@ -146,10 +154,12 @@ public with sharing class LightningMetadataController {
             this.displayType         = this.fieldDescribe.getType().name();
             this.inlineHelpText      = this.fieldDescribe.getInlineHelpText();
             this.isAccessible        = this.fieldDescribe.isAccessible();
+            this.isCalculated        = this.fieldDescribe.isCalculated();
             this.isCreateable        = this.fieldDescribe.isCreateable();
             this.isCustom            = this.fieldDescribe.isCustom();
             this.isDefaultedOnCreate = this.fieldDescribe.isDefaultedOnCreate();
             this.isFilterable        = this.fieldDescribe.isFilterable();
+            this.isGroupable         = this.fieldDescribe.isGroupable();
             this.isNameField         = this.fieldDescribe.isNameField();
             this.isSortable          = this.fieldDescribe.isSortable();
             this.isUpdateable        = this.fieldDescribe.isUpdateable();
@@ -180,7 +190,7 @@ public with sharing class LightningMetadataController {
         }
     }
 
-    private class PicklistEntryMetadata {
+    public class PicklistEntryMetadata {
         @AuraEnabled public String label           {get;private set;}
         @AuraEnabled public String value           {get;private set;}
         @AuraEnabled public Boolean isDefaultValue {get;private set;}
