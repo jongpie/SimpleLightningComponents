@@ -24,7 +24,14 @@ A library of lightweight Salesforce Lightning components that streamline develop
 ## lookup.cmp
 * Provides lookup functionality that Salesforce does not provide for developers in LEX. This component is used by inputField.cmp for lookup fields.
 
+    Users can search for the record or choose one of the recently viewed records automatically displayed on focus
     `<c:lookup sobjectName="Contact" fieldName="AccountId" record="{!v.myContact}" />`
+
+    Polymorphic fields, like Task.WhoId, automatically display an SObject Switcher.
+    SObject-level permissions are automatically applied - only objects that the user has permission to view are displayed in the SObject Switcher.
+    `<c:lookup sobjectName="Task" fieldName="WhoId" record="{!v.myTask}" />`
+    ![lookup-task-whoid](https://user-images.githubusercontent.com/1267157/34769563-6f5b8374-f5fe-11e7-88c7-98e6fbb0ec75.gif)
+
 
 ## outputField.cmp
 * Provides a simple way to display an SObject's field as an output (read-only) that automatically determines sobject-level security, field-level security, the field type, field label, etc. Attributes can be overridden to allow control over the field when needed
