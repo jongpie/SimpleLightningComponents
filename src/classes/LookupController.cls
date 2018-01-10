@@ -10,12 +10,12 @@ public with sharing class LookupController {
             String query = 'SELECT Id, ' + displayTextFieldName
                 + ' FROM ' + parentSObjectName;
 
-            if(searchText != null) {
+            if(!String.isEmpty(searchText)) {
                 searchText = '\'%' + String.escapeSingleQuotes(searchText.trim()) + '%\'';
                 query += ' WHERE ' + searchFieldName + ' LIKE ' + searchText;
             }
 
-            String sortByField = parentSObjectDescribe.fields.getMap().containsKey('LastViewedDate') ? 'LastViewedDate' : parentSObjectMetadata.nameField;
+            String sortByField = parentSObjectDescribe.fields.getMap().containsKey('LastViewedDate') ? 'LastViewedDate DESC NULLS LAST' : parentSObjectMetadata.nameField;
             query += ' ORDER BY ' + sortByField
                 + ' LIMIT ' + limitCount;
 
