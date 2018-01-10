@@ -7,8 +7,15 @@
         });
         action.setStorable();
         action.setCallback(this, function(response) {
-            component.set('v.selectedParentRecord', response.getReturnValue());
-            component.set('v.parentSObjectName', response.getReturnValue().sobjectName);
+            if(response.getState() === 'SUCCESS') {
+                component.set('v.selectedParentRecord', response.getReturnValue());
+                component.set('v.parentSObjectName', response.getReturnValue().sobjectName);
+            } else if(response.getState() === 'ERROR') {
+                var errors = response.getError();
+                if(errors && errors[0] && errors[0].message) {
+                    alert(errors[0].message);
+                }
+            }
         });
         $A.enqueueAction(action);
     },
@@ -30,12 +37,19 @@
             });
             action.setStorable();
             action.setCallback(this, function(response) {
-                this.handleResponse(response, component, helper);
+                if(response.getState() === 'SUCCESS') {
+                    component.set('v.searchResults', response.getReturnValue());
+                } else if(response.getState() === 'ERROR') {
+                    var errors = response.getError();
+                    if(errors && errors[0] && errors[0].message) {
+                        alert(errors[0].message);
+                    }
+                }
             });
             $A.enqueueAction(action);
         }
     },
-    itemSelected : function(component, event, helper) {
+    parentRecordSelected : function(component, event, helper) {
         var selectedParentRecordIndex = helper.getIndexFrmParent(event.target, helper, 'data-selectedIndex');
         if(selectedParentRecordIndex) {
             var searchResults = component.get('v.searchResults');
@@ -53,21 +67,6 @@
     clearSelection: function(component, event, helper) {
         component.set('v.selectedParentRecord', null);
         component.set('v.searchResults', null);
-    },
-    handleResponse : function (response,component,helper) {
-        if(response.getState() === 'SUCCESS') {
-            var searchResults = response.getReturnValue();
-            if(searchResults.length === 0) {
-                component.set('v.searchResults', null);
-            } else {
-                component.set('v.searchResults', searchResults);
-            }
-        } else if(response.getState() === 'ERROR') {
-            var errors = response.getError();
-            if(errors && errors[0] && errors[0].message) {
-                alert(errors[0].message);
-            }
-        }
     },
     getIndexFrmParent : function(target, helper, attributeToFind) {
         // User can click on any child element, so traverse till intended parent found

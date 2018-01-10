@@ -67,8 +67,8 @@
     hideSearchResults : function(component, event, helper) {
         component.set('v.showSearchResults', false);
     },
-    itemSelected : function(component, event, helper) {
-        helper.itemSelected(component, event, helper);
+    parentRecordSelected : function(component, event, helper) {
+        helper.parentRecordSelected(component, event, helper);
     },
     clearSelection : function(component, event, helper) {
         helper.clearSelection(component, event, helper);
