@@ -1,4 +1,17 @@
 ({
+    fetchSelectedParentRecord : function(component, event, helper) {
+        var parentSObjectMetadata = component.get('v.parentSObjectMetadata');
+        var action = component.get('c.getRecord');
+        action.setParams({
+            recordId : component.get('v.selectedParentRecordId')
+        });
+        action.setStorable();
+        action.setCallback(this, function(response) {
+            component.set('v.selectedParentRecord', response.getReturnValue());
+            component.set('v.parentSObjectName', response.getReturnValue().sobjectName);
+        });
+        $A.enqueueAction(action);
+    },
     fetchSearchResults : function(component, event, helper) {
         var searchText = event && event.target ? event.target.value : null;
 
@@ -43,7 +56,7 @@
     },
     handleResponse : function (response,component,helper) {
         if(response.getState() === 'SUCCESS') {
-            var searchResults = JSON.parse(response.getReturnValue());
+            var searchResults = response.getReturnValue();
             if(searchResults.length === 0) {
                 component.set('v.searchResults', null);
             } else {

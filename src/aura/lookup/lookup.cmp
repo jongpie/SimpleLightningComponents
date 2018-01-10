@@ -7,19 +7,22 @@
     <aura:attribute name="limitCount" type="Integer" default="5" description="Total number of records to return" />
 
     <!-- Private Selected Record Attributes -->
-    <aura:attribute Name="selectedParentRecord" type="SObject" access="private" />
+    <aura:attribute name="selectedParentRecordId" type="Id" access="private" />
+    <aura:attribute name="selectedParentRecord" type="SObject" access="private" />
 
     <!-- Private SObject Selector Attributes -->
-    <aura:attribute Name="showSObjectSelector" type="Boolean" access="private" default="false" />
+    <aura:attribute name="showSObjectSelector" type="Boolean" access="private" default="false" />
     <aura:attribute name="parentSObjectName" type="String" access="private" />
     <aura:attribute name="parentSObjectMetadata" type="Object" access="private" />
 
     <!-- Private Search Result Attributes -->
-    <aura:attribute Name="showSearchResults" type="Boolean" access="private" default="false" />
-    <aura:attribute Name="searchResults" type="Object[]" access="private" />
+    <aura:attribute name="showSearchResults" type="Boolean" access="private" default="false" />
+    <aura:attribute name="searchResults" type="Object[]" access="private" />
 
     <!-- Handlers -->
-    <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.parseFieldMetadata}" />
+    <aura:handler name="change" value="{!v.selectedParentRecordId}" action="{!c.loadSelectedParentRecord}" />
     <aura:handler name="change" value="{!v.parentSObjectName}" action="{!c.loadParentSObjectMetadata}" />
 
     <!-- Markup -->

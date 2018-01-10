@@ -10,9 +10,8 @@ private class LookupController_Tests {
         Integer limitCount          = 10;
 
         Test.startTest();
-        String searchResultString = LookupController.search(sobjectName, searchFieldName, searchText, displayTextFieldName, limitCount);
-        List<LookupController.MatchingRecord> userResults = (List<LookupController.MatchingRecord>)JSON.deserialize(searchResultString, List<LookupController.MatchingRecord>.class);
-        System.assert(userResults.size() <= limitCount);
+        List<LookupController.MatchingRecord> searchResults = LookupController.search(sobjectName, searchFieldName, searchText, displayTextFieldName, limitCount);
+        System.assert(searchResults.size() <= limitCount);
         Test.stopTest();
     }
 
@@ -27,10 +26,9 @@ private class LookupController_Tests {
         Integer limitCount          = 10;
 
         Test.startTest();
-        String searchResultString = LookupController.search(sobjectName, searchFieldName, searchText, displayTextFieldName, limitCount);
-        List<LookupController.MatchingRecord> userResults = (List<LookupController.MatchingRecord>)JSON.deserialize(searchResultString, List<LookupController.MatchingRecord>.class);
-        System.assert(userResults.size() <= limitCount);
-        for(LookupController.MatchingRecord matchingRecord : userResults) {
+        List<LookupController.MatchingRecord> searchResults = LookupController.search(sobjectName, searchFieldName, searchText, displayTextFieldName, limitCount);
+        System.assert(searchResults.size() <= limitCount);
+        for(LookupController.MatchingRecord matchingRecord : searchResults) {
             String recordName = (String)matchingRecord.record.get('Name');
             System.assert(recordName.contains(searchText));
         }
@@ -47,11 +45,29 @@ private class LookupController_Tests {
 
         Test.startTest();
         try {
-            String searchResultString = LookupController.search(sobjectName, searchFieldName, searchText, displayTextFieldName, limitCount);
+            List<LookupController.MatchingRecord> searchResults = LookupController.search(sobjectName, searchFieldName, searchText, displayTextFieldName, limitCount);
             System.assert(false, 'Exception expected here');
         } catch(Exception ex) {
             System.assert(ex instanceOf AuraHandledException);
         }
+        Test.stopTest();
+    }
+
+    @isTest
+    static void it_should_return_record_based_on_record_id() {
+        Id myUserId = UserInfo.getUserId();
+
+        Test.startTest();
+        LookupController.MatchingRecord recordMatch = LookupController.getRecord(myUserId);
+        System.assertEquals(myUserId, recordMatch.record.Id);
+        Test.stopTest();
+    }
+
+    @isTest
+    static void it_should_return_null_when_record_id_is_null() {
+        Test.startTest();
+        LookupController.MatchingRecord recordMatch = LookupController.getRecord(null);
+        System.assertEquals(null, recordMatch);
         Test.stopTest();
     }
 

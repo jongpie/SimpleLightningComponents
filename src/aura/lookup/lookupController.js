@@ -1,5 +1,12 @@
 ({
     doInit :  function(component, event, helper) {
+        var record = component.get('v.record');
+        var fieldName = component.get('v.fieldName');
+        if(record.hasOwnProperty(fieldName)) {
+            component.set('v.selectedParentRecordId', record[fieldName]);
+        }
+    },
+    parseFieldMetadata :  function(component, event, helper) {
         var fieldMetadata = component.get('v.fieldMetadata');
 
         if(!fieldMetadata) return;
@@ -39,6 +46,19 @@
             break;
         }
         component.set('v.parentSObjectMetadata', selectedSObjectMetadata);
+    },
+    loadSelectedParentRecord :  function(component, event, helper) {
+        var selectedParentRecordId = component.get('v.selectedParentRecordId');
+        var selectedParentRecord   = component.get('v.selectedParentRecord');
+
+        // If no record ID, then there's nothing to load
+        if(selectedParentRecordId === null) return;
+
+        // If we already have the parent record loaded, don't query again
+        if(selectedParentRecord !== null && selectedParentRecordId === selectedParentRecord.Id) return;
+
+        // Query for the parent record
+        helper.fetchSelectedParentRecord(component, event, helper);
     },
     fetchSearchResults :  function(component, event, helper) {
         helper.fetchSearchResults(component, event, helper);

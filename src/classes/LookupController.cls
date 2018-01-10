@@ -1,7 +1,8 @@
+
 public with sharing class LookupController {
 
     @AuraEnabled
-    public static String search(String parentSObjectName, String searchFieldName, String searchText, String displayTextFieldName, Integer limitCount) {
+    public static List<MatchingRecord> search(String parentSObjectName, String searchFieldName, String searchText, String displayTextFieldName, Integer limitCount) {
         try {
             Schema.DescribeSObjectResult parentSObjectDescribe = Schema.getGlobalDescribe().get(parentSObjectName).getDescribe();
             LightningMetadataController.SObjectMetadata parentSObjectMetadata = new LightningMetadataController.SObjectMetadata(parentSObjectName);
@@ -22,24 +23,45 @@ public with sharing class LookupController {
 
             List<MatchingRecord> searchResults = new List<MatchingRecord>();
             for(SObject record : Database.query(query)) {
-                MatchingRecord matchingRecord = new MatchingRecord();
-                matchingRecord.displayText = String.valueOf(record.get(displayTextFieldName));
-                matchingRecord.record      = record;
-                matchingRecord.sobjectName = parentSObjectName;
+                MatchingRecord matchingRecord = new MatchingRecord(record);
                 searchResults.add(matchingRecord);
             }
 
-            System.debug(JSON.serialize(searchResults));
-            return JSON.serialize(searchResults);
+            //System.debug(JSON.serialize(searchResults));
+            return searchResults;
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }
     }
 
+    @AuraEnabled
+    public static MatchingRecord getRecord(Id recordId) {
+        if(recordId == null) return null;
+
+        Schema.SObjectType sobjectType = recordId.getSObjectType();
+        LightningMetadataController.SObjectMetadata sobjectMetadata = new LightningMetadataController.SObjectMetadata(sobjectType);
+        List<String> fields = new List<String>{'Id', sobjectMetadata.nameField};
+
+        String query = 'SELECT ' + String.join(fields, ', ')
+            + ' FROM ' + sobjectMetadata.name
+            + ' WHERE Id = \'' + recordId + '\'';
+
+        SObject record = Database.query(query);
+        return new MatchingRecord(record);
+    }
+
     public class MatchingRecord {
-        public SObject record     {get;set;}
-        public String displayText {get;set;}
-        public String sobjectName {get;set;}
+        @AuraEnabled public SObject record     {get;private set;}
+        @AuraEnabled public String displayText {get;private set;}
+        @AuraEnabled public String sobjectName {get;private set;}
+
+        public MatchingRecord(SObject record) {
+            this.record = record;
+
+            LightningMetadataController.SObjectMetadata sobjectMetadata = new LightningMetadataController.SObjectMetadata(record.getSObjectType());
+            this.sobjectName = sobjectMetadata.name;
+            this.displayText = (String)record.get(sobjectMetadata.nameField);
+        }
     }
 
 }
