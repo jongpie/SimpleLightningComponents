@@ -5,6 +5,8 @@
 
         if(!sobjectName || !fieldName) return;
 
+        var params = event.getParam('arguments');
+
         var action = component.get('c.getFieldMetadata');
         action.setParams({
             'sobjectName': component.get('v.sobjectName'),
@@ -13,8 +15,11 @@
         action.setStorable();
         action.setCallback(this, function(response) {
             if(response.getState() === 'SUCCESS') {
-                component.set('v.fieldMetadata', response.getReturnValue());
-                component.set('v.label', response.getReturnValue().label);
+                var fieldMetadata = response.getReturnValue();
+                component.set('v.fieldMetadata', fieldMetadata);
+                component.set('v.label', fieldMetadata.label);
+
+                if(params) params.callback(null, fieldMetadata);
             } else if(response.getState() === 'ERROR') {
                 this.processCallbackErrors(response);
             }

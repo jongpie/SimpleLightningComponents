@@ -1,0 +1,7 @@
+.THIS {
+    width: 100%;
+}
+.THIS .slds-pill_link {
+    margin: 4px;
+    width: calc(100% - 8px);
+}

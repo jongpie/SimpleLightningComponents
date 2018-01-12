@@ -1,0 +1,120 @@
+<aura:component extends="c.fieldMetadata" controller="LookupController">
+
+    <!-- Public Config Attributes -->
+    <aura:attribute name="record" type="SObject" default="{}" />
+    <aura:attribute name="disabled" type="Boolean" description="(Optional) Disables the input field" />
+    <aura:attribute name="required" type="Boolean" description="(Optional) Marks the field as required (true) or optional (false)" />
+    <aura:attribute name="limitCount" type="Integer" default="5" description="Total number of records to return" />
+
+    <!-- Private Selected Record Attributes -->
+    <aura:attribute name="selectedParentRecordId" type="Id" access="private" />
+    <aura:attribute name="selectedParentRecord" type="SObject" access="private" />
+
+    <!-- Private SObject Selector Attributes -->
+    <aura:attribute name="showSObjectSelector" type="Boolean" access="private" default="false" />
+    <aura:attribute name="parentSObjectName" type="String" access="private" />
+    <aura:attribute name="parentSObjectMetadata" type="Object" access="private" />
+
+    <!-- Private Search Result Attributes -->
+    <aura:attribute name="showSearchResults" type="Boolean" access="private" default="false" />
+    <aura:attribute name="searchResults" type="Object[]" access="private" />
+
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.parseFieldMetadata}" />
+    <aura:handler name="change" value="{!v.selectedParentRecordId}" action="{!c.loadSelectedParentRecord}" />
+    <aura:handler name="change" value="{!v.parentSObjectName}" action="{!c.loadParentSObjectMetadata}" />
+
+    <!-- Markup -->
+    <div class="slds-form-element">
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container slds-has-object-switcher">
+                <!-- SObject Switcher -->
+                <aura:if isTrue="{! and(empty(v.selectedParentRecord), v.fieldMetadata.relationshipReferences.length > 1)}">
+                    <div class="slds-listbox_object-switcher slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+                        <button class="slds-button slds-button_icon" aria-haspopup="true" title="Select object to search in" onclick="{!c.toggleParentSObjectSelector}">
+                            <lightning:icon iconName="{!v.parentSObjectMetadata.tabIcon}" size="small" />
+                            <lightning:icon iconName="utility:down" size="x-small" />
+                        </button>
+                        <aura:if isTrue="{!v.showSObjectSelector}">
+                            <div class="slds-dropdown slds-dropdown_left slds-dropdown_small">
+                                <ul class="slds-dropdown__list" role="menu">
+                                    <aura:iteration items="{!v.fieldMetadata.relationshipReferences}" var="relationshipReference">
+                                        <aura:if isTrue="{!relationshipReference.isAccessible}">
+                                            <li class="slds-dropdown__item slds-is-selected" role="presentation">
+                                                <a href="javascript:void(0);" role="menuitemcheckbox" aria-checked="true" tabindex="0" data-sobjectname="{!relationshipReference.name}" onclick="{!c.selectParentSObject}">
+                                                    <span class="slds-truncate" title="{!relationshipReference.labelPlural}">
+                                                        <lightning:icon iconName="{!relationshipReference.tabIcon}" size="large" />
+                                                        &nbsp;{!relationshipReference.labelPlural}
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </ul>
+                            </div>
+                        </aura:if>
+                    </div>
+                </aura:if>
+                <!-- Search Box -->
+                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                        <aura:if isTrue="{!empty(v.selectedParentRecord)}">
+                            <input
+                                aria-autocomplete="list"
+                                aria-controls="listbox-unique-id"
+                                autocomplete="off"
+                                class="slds-input slds-combobox__input"
+                                disabled="{!or(empty(v.parentSObjectMetadata), v.fieldMetadata.isUpdateable == false, v.disabled)}"
+                                id="combobox-unique-id"
+                                onfocus="{!c.fetchSearchResults}"
+                                onkeyup="{!c.fetchSearchResults}"
+                                placeholder="{! if(empty(v.parentSObjectMetadata), '', 'Search ' + v.parentSObjectMetadata.labelPlural) }"
+                                required="{!or(v.required, v.fieldMetadata.required)}"
+                                role="textbox"
+                                type="text"
+                            />
+                            <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                <lightning:icon iconName="utility:search" size="x-small" />
+                            </span>
+                            <aura:set attribute="else">
+                                <span class="slds-pill slds-pill_link">
+                                    <a href="javascript:void(0);" class="slds-pill__action slds-p-left_x-small" title="{#v.selectedParentRecord.displayText}">
+                                        <lightning:icon iconName="{!v.parentSObjectMetadata.tabIcon}" size="x-small" />
+                                        <span class="slds-pill__label slds-p-left_x-small">{#v.selectedParentRecord.displayText}</span>
+                                    </a>
+                                    <button class="slds-button slds-button_icon slds-button_icon slds-pill__remove" title="Remove" onclick="{!c.clearSelection}" >
+                                        <lightning:icon iconName="utility:close" size="small" />
+                                        <span class="slds-assistive-text">Remove</span>
+                                    </button>
+                                </span>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    <!-- Search Results -->
+                    <aura:if isTrue="{!and(v.showSearchResults, greaterthan(v.searchResults.length, 0))}">
+                        <div id="listbox-unique-id" role="listbox">
+                            <ul role="presentation" class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-is-open" style="display:block; min-width:auto; max-width:100%; width:100%;">
+                                <aura:iteration items="{!v.searchResults}" var="matchingRecord" indexVar="i">
+                                    <li role="presentation" class="slds-listbox__item" data-selectedparentindex="{#i}" onclick="{!c.parentRecordSelected}">
+                                        <span role="option" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta">
+                                            <span class="slds-media__figure optionIcon">
+                                                <span class="slds-icon_container" >
+                                                    <lightning:icon iconName="{#v.parentSObjectMetadata.tabIcon}" size="small" />
+                                                    <span class="slds-assistive-text">{!v.parentSObjectMetadata.label}</span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-media__body">
+                                                <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!matchingRecord.displayText}</span>
+                                            </span>
+                                        </span>
+                                    </li>
+                                </aura:iteration>
+                            </ul>
+                        </div>
+                    </aura:if>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>
