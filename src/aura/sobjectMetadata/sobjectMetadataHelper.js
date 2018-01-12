@@ -18,7 +18,6 @@
         action.setCallback(this, function(response) {
             if(response.getState() === 'SUCCESS') {
                 var sobjectMetadata = response.getReturnValue();
-                console.log(sobjectMetadata);
                 component.set('v.sobjectMetadata', sobjectMetadata);
 
                 if(params) params.callback(null, sobjectMetadata);

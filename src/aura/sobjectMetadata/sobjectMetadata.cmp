@@ -1,8 +1,10 @@
 <aura:component extensible="true" controller="LightningMetadataController">
 
     <!-- Public Attributes -->
-    <aura:attribute name="sobjectName" type="String" />
-    <aura:method name="fetch" action="{!c.doInit}">
+    <aura:attribute name="sobjectName" type="String" description="The API name of the SObject" />
+
+    <!-- Public Methods -->
+    <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the metadata">
         <aura:attribute name="callback" type="function"/>
     </aura:method>
 
