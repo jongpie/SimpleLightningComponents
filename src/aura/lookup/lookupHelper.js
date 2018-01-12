@@ -50,7 +50,7 @@
         }
     },
     parentRecordSelected : function(component, event, helper) {
-        var selectedParentRecordIndex = helper.getIndexFrmParent(event.target, helper, 'data-selectedIndex');
+        var selectedParentRecordIndex = helper.getIndexFromParent(event.target, helper, 'data-selectedparentindex');
         if(selectedParentRecordIndex) {
             var searchResults = component.get('v.searchResults');
             var record = component.get('v.record');
@@ -68,12 +68,11 @@
         component.set('v.selectedParentRecord', null);
         component.set('v.searchResults', null);
     },
-    getIndexFrmParent : function(target, helper, attributeToFind) {
-        // User can click on any child element, so traverse till intended parent found
+    getIndexFromParent : function(target, helper, attributeToFind) {
         var selectedParentRecordIndex = target.getAttribute(attributeToFind);
         while(!selectedParentRecordIndex) {
             target = target.parentNode;
-            selectedParentRecordIndex = helper.getIndexFrmParent(target, helper, attributeToFind);
+            selectedParentRecordIndex = helper.getIndexFromParent(target, helper, attributeToFind);
         }
         return selectedParentRecordIndex;
     }
