@@ -1,4 +1,18 @@
+/*****************************************************************************************************
+* This file is part of the Simple Lightning Components project, released under the MIT License.      *
+* See LICENSE file or go to https://github.com/jongpie/LightningComponents for full license details. *
+*****************************************************************************************************/
 public with sharing class LightningMetadataController {
+
+    @AuraEnabled
+    public static EnvironmentMetadata getEnvironmentMetadata() {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getEnvironmentMetadata()');
+        try {
+            return new EnvironmentMetadata();
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
 
     @AuraEnabled
     public static ExtendedSObjectMetadata getSObjectMetadata(String sobjectName) {
@@ -15,6 +29,16 @@ public with sharing class LightningMetadataController {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadata(\'' + sobjectName + '\', \'' + fieldName + '\')');
         try {
             return new ExtendedFieldMetadata(sobjectName, fieldName);
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static FieldSetMetadata getFieldSetMetadataByName(String sobjectName, String fieldSetName) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldSetMetadataByName(\'' + sobjectName + '\', \'' + fieldSetName + '\')');
+        try {
+            return new FieldSetMetadata(sobjectName, fieldSetName);
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }

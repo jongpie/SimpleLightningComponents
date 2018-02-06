@@ -1,3 +1,7 @@
+/*****************************************************************************************************
+* This file is part of the Simple Lightning Components project, released under the MIT License.      *
+* See LICENSE file or go to https://github.com/jongpie/LightningComponents for full license details. *
+*****************************************************************************************************/
 public with sharing class LookupController {
 
     @AuraEnabled
