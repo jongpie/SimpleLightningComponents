@@ -10,7 +10,7 @@
             component.set('v.disabled', fieldMetadata.isUpdateable == false);
         }
         if(component.get('v.required') === undefined) {
-            var isUpdateableRequired = fieldMetadata.isUpdateable && fieldMetadata.required;
+            var isUpdateableRequired = fieldMetadata.isUpdateable && fieldMetadata.isRequired;
             var isUpdateableNameField = fieldMetadata.isUpdateable && fieldMetadata.isNameField;
             component.set('v.required', isUpdateableRequired || isUpdateableNameField);
         }

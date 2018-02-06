@@ -4,7 +4,7 @@ public with sharing class LookupController {
     public static List<MatchingRecord> search(String parentSObjectName, String searchFieldName, String searchText, String displayTextFieldName, Integer limitCount) {
         try {
             Schema.DescribeSObjectResult parentSObjectDescribe = Schema.getGlobalDescribe().get(parentSObjectName).getDescribe();
-            LightningMetadataController.SObjectMetadata parentSObjectMetadata = new LightningMetadataController.SObjectMetadata(parentSObjectName);
+            SObjectMetadata parentSObjectMetadata = new SObjectMetadata(parentSObjectName);
 
             String query = 'SELECT Id, ' + displayTextFieldName
                 + ' FROM ' + parentSObjectName;
@@ -14,7 +14,7 @@ public with sharing class LookupController {
                 query += ' WHERE ' + searchFieldName + ' LIKE ' + searchText;
             }
 
-            String sortByField = parentSObjectDescribe.fields.getMap().containsKey('LastViewedDate') ? 'LastViewedDate DESC NULLS LAST' : parentSObjectMetadata.nameField;
+            String sortByField = parentSObjectDescribe.fields.getMap().containsKey('LastViewedDate') ? 'LastViewedDate DESC NULLS LAST' : parentSObjectMetadata.displayFieldApiName;
             query += ' ORDER BY ' + sortByField
                 + ' LIMIT ' + limitCount;
 
@@ -38,11 +38,11 @@ public with sharing class LookupController {
         if(recordId == null) return null;
 
         Schema.SObjectType sobjectType = recordId.getSObjectType();
-        LightningMetadataController.SObjectMetadata sobjectMetadata = new LightningMetadataController.SObjectMetadata(sobjectType);
-        List<String> fields = new List<String>{'Id', sobjectMetadata.nameField};
+        SObjectMetadata sobjectMetadata = new SObjectMetadata(sobjectType);
+        List<String> fields = new List<String>{'Id', sobjectMetadata.displayFieldApiName};
 
         String query = 'SELECT ' + String.join(fields, ', ')
-            + ' FROM ' + sobjectMetadata.name
+            + ' FROM ' + sobjectMetadata.apiName
             + ' WHERE Id = \'' + recordId + '\'';
 
         SObject record = Database.query(query);
@@ -57,9 +57,9 @@ public with sharing class LookupController {
         public MatchingRecord(SObject record) {
             this.record = record;
 
-            LightningMetadataController.SObjectMetadata sobjectMetadata = new LightningMetadataController.SObjectMetadata(record.getSObjectType());
-            this.sobjectName = sobjectMetadata.name;
-            this.displayText = (String)record.get(sobjectMetadata.nameField);
+            SObjectMetadata sobjectMetadata = new SObjectMetadata(record.getSObjectType());
+            this.sobjectName = sobjectMetadata.apiName;
+            this.displayText = (String)record.get(sobjectMetadata.displayFieldApiName);
         }
     }
 

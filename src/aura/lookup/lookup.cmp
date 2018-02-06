@@ -42,7 +42,7 @@
                                     <aura:iteration items="{!v.fieldMetadata.relationshipReferences}" var="relationshipReference">
                                         <aura:if isTrue="{!relationshipReference.isAccessible}">
                                             <li class="slds-dropdown__item slds-is-selected" role="presentation">
-                                                <a href="javascript:void(0);" role="menuitemcheckbox" aria-checked="true" tabindex="0" data-sobjectname="{!relationshipReference.name}" onclick="{!c.selectParentSObject}">
+                                                <a href="javascript:void(0);" role="menuitemcheckbox" aria-checked="true" tabindex="0" data-sobjectname="{!relationshipReference.apiName}" onclick="{!c.selectParentSObject}">
                                                     <span class="slds-truncate" title="{!relationshipReference.labelPlural}">
                                                         <lightning:icon iconName="{!relationshipReference.tabIcon}" size="large" />
                                                         &nbsp;{!relationshipReference.labelPlural}

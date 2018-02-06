@@ -1,22 +1,46 @@
 public with sharing class LightningMetadataController {
 
     @AuraEnabled
-    public static SObjectMetadata getSObjectMetadata(String sobjectName) {
+    public static ExtendedSObjectMetadata getSObjectMetadata(String sobjectName) {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getSObjectMetadata(\'' + sobjectName + '\')');
         try {
-            return new SObjectMetadata(sobjectName);
+            return new ExtendedSObjectMetadata(sobjectName);
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }
     }
 
     @AuraEnabled
-    public static FieldMetadata getFieldMetadata(String sobjectName, String fieldName) {
+    public static ExtendedFieldMetadata getFieldMetadata(String sobjectName, String fieldName) {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadata(\'' + sobjectName + '\', \'' + fieldName + '\')');
         try {
-            return new FieldMetadata(sobjectName, fieldName);
+            return new ExtendedFieldMetadata(sobjectName, fieldName);
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    public class ExtendedSObjectMetadata extends SObjectMetadata {
+        @AuraEnabled public final List<RecordTypeMetadata> recordTypes {get; private set;}
+        public ExtendedSObjectMetadata(String sobjectName) {
+            super(sobjectName);
+            //this.recordTypes = this.getRecordTypes();
+        }
+
+        private List<RecordTypeMetadata> getRecordTypes() {
+            List<RecordTypeMetadata> recordTypes = new List<RecordTypeMetadata>();
+            for(String recordTypeApiName : RecordTypeMetadata.getRecordTypeApiNames(this.apiName)) {
+                recordTypes.add(new RecordTypeMetadata(this.apiName, recordTypeApiName));
+            }
+            return recordTypes;
+        }
+    }
+
+    public class ExtendedFieldMetadata extends FieldMetadata {
+        @AuraEnabled public final SObjectMetadata sobjectMetadata {get; private set;}
+        public ExtendedFieldMetadata(String sobjectName, String fieldName) {
+            super(sobjectName, fieldName);
+            this.sobjectMetadata = new SObjectMetadata(sobjectName);
         }
     }
 
@@ -38,178 +62,178 @@ public with sharing class LightningMetadataController {
         return fieldSetMetadata;
     }*/
 
-    public class SObjectMetadata {
-        @AuraEnabled public Boolean isAccessible    {get;private set;}
-        @AuraEnabled public Boolean isCreateable    {get;private set;}
-        @AuraEnabled public Boolean isCustom        {get;private set;}
-        @AuraEnabled public Boolean isCustomSetting {get;private set;}
-        @AuraEnabled public Boolean isDeletable     {get;private set;}
-        @AuraEnabled public Boolean isMergeable     {get;private set;}
-        @AuraEnabled public Boolean isQueryable     {get;private set;}
-        @AuraEnabled public Boolean isSearchable    {get;private set;}
-        @AuraEnabled public Boolean isUndeletable   {get;private set;}
-        @AuraEnabled public Boolean isUpdateable    {get;private set;}
-        @AuraEnabled public String keyPrefix        {get;private set;}
-        @AuraEnabled public String label            {get;private set;}
-        @AuraEnabled public String labelPlural      {get;private set;}
-        @AuraEnabled public String localName        {get;private set;}
-        @AuraEnabled public String name             {get;private set;}
-        @AuraEnabled public String nameField        {get;private set;}
-        @AuraEnabled public String tabIcon          {get;private set;}
-
-        private Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
-
-        public SObjectMetadata(Schema.SObjectType sobjectType) {
-            this(sobjectType.getDescribe().getName());
-        }
-
-        public SObjectMetadata(String sobjectName) {
-            this.name            = sobjectName;
-            this.sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
-
-            this.isAccessible    = this.sobjectDescribe.isAccessible();
-            this.isCreateable    = this.sobjectDescribe.isCreateable();
-            this.isCustom        = this.sobjectDescribe.isCustom();
-            this.isCustomSetting = this.sobjectDescribe.isCustomSetting();
-            this.isDeletable     = this.sobjectDescribe.isDeletable();
-            this.isMergeable     = this.sobjectDescribe.isMergeable();
-            this.isQueryable     = this.sobjectDescribe.isQueryable();
-            this.isSearchable    = this.sobjectDescribe.isSearchable();
-            this.isUndeletable   = this.sobjectDescribe.isUndeletable();
-            this.isUpdateable    = this.sobjectDescribe.isUpdateable();
-            this.keyPrefix       = this.sobjectDescribe.getKeyPrefix();
-            this.label           = this.sobjectDescribe.getLabel();
-            this.labelPlural     = this.sobjectDescribe.getLabelPlural();
-            this.localName       = this.sobjectDescribe.getLocalName();
-
-            this.setNameField();
-            this.setTabIcon();
-        }
-
-        private void setNameField() {
-            for(Schema.SObjectField field : this.sobjectDescribe.fields.getMap().values()) {
-                Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
-
-                if(!fieldDescribe.isNameField()) continue;
-
-                this.nameField = fieldDescribe.getName();
-                break;
-            }
-        }
-
-        private void setTabIcon() {
-            for(Schema.DescribeTabSetResult tabSetResult : Schema.describeTabs()) {
-                for(Schema.DescribeTabResult tabResult : tabSetResult.getTabs()) {
-                    if(tabResult.getSObjectName() != this.name) continue;
-
-                    String iconType = tabResult.isCustom() ? 'custom' : 'standard';
-                    String svgIconName;
-                    for(Schema.DescribeIconResult icon : tabResult.getIcons()) {
-                        if(icon.getContentType() != 'image/svg+xml') continue;
-
-                        svgIconName = icon.getUrl().substringAfterLast('/').replace('.svg', '');
-                        this.tabIcon = iconType + ':' + svgIconName;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    public class FieldMetadata {
-        @AuraEnabled public Boolean isAccessible                         {get;private set;}
-        @AuraEnabled public Boolean isCalculated                         {get;private set;}
-        @AuraEnabled public Boolean isCreateable                         {get;private set;}
-        @AuraEnabled public Boolean isCustom                             {get;private set;}
-        @AuraEnabled public Boolean isDefaultedOnCreate                  {get;private set;}
-        @AuraEnabled public Boolean isFilterable                         {get;private set;}
-        @AuraEnabled public Boolean isGroupable                          {get;private set;}
-        @AuraEnabled public Boolean isNameField                          {get;private set;}
-        @AuraEnabled public Boolean isSortable                           {get;private set;}
-        @AuraEnabled public Boolean isUpdateable                         {get;private set;}
-        @AuraEnabled public Boolean required                             {get;private set;}
-        @AuraEnabled public Integer maxLength                            {get;private set;}
-        @AuraEnabled public List<PicklistEntryMetadata> picklistOptions  {get;private set;}
-        @AuraEnabled public Object defaultValue                          {get;private set;}
-        @AuraEnabled public SObjectMetadata sobjectMetadata              {get;private set;}
-        @AuraEnabled public String displayType                           {get;private set;}
-        @AuraEnabled public String inlineHelpText                        {get;private set;}
-        @AuraEnabled public String label                                 {get;private set;}
-        @AuraEnabled public String name                                  {get;private set;}
-        @AuraEnabled public String relationshipName                      {get;private set;}
-        @AuraEnabled public List<SObjectMetadata> relationshipReferences {get;private set;}
-        @AuraEnabled public String sobjectName                           {get;private set;}
-
-        private Schema.DescribeFieldResult fieldDescribe {get;private set;}
-
-        public FieldMetadata(String sobjectName, String fieldName) {
-            this.sobjectName     = sobjectName;
-            this.name            = fieldName;
-            this.sobjectMetadata = new SObjectMetadata(sobjectName);
-            this.picklistOptions = new List<PicklistEntryMetadata>();
-
-            this.fieldDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName).getDescribe();
-
-            this.defaultValue        = this.fieldDescribe.getDefaultValue();
-            this.displayType         = this.fieldDescribe.getType().name();
-            this.inlineHelpText      = this.fieldDescribe.getInlineHelpText();
-            this.isAccessible        = this.fieldDescribe.isAccessible();
-            this.isCalculated        = this.fieldDescribe.isCalculated();
-            this.isCreateable        = this.fieldDescribe.isCreateable();
-            this.isCustom            = this.fieldDescribe.isCustom();
-            this.isDefaultedOnCreate = this.fieldDescribe.isDefaultedOnCreate();
-            this.isFilterable        = this.fieldDescribe.isFilterable();
-            this.isGroupable         = this.fieldDescribe.isGroupable();
-            this.isNameField         = this.fieldDescribe.isNameField();
-            this.isSortable          = this.fieldDescribe.isSortable();
-            this.isUpdateable        = this.fieldDescribe.isUpdateable();
-            this.label               = this.fieldDescribe.getLabel();
-            this.maxLength           = this.fieldDescribe.getLength();
-            this.relationshipName    = this.fieldDescribe.getRelationshipName();
-            this.required            = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
-
-            this.setPicklistOptions();
-            this.setRelationshipReferences();
-        }
-
-        private void setPicklistOptions() {
-            Schema.DisplayType fieldDisplayType = this.fieldDescribe.getType();
-            if(fieldDisplayType != Schema.DisplayType.Picklist && fieldDisplayType != Schema.DisplayType.MultiPicklist) return;
-
-            this.picklistOptions.add(new PicklistEntryMetadata()); // Empty picklist value
-            for(Schema.PicklistEntry picklistEntry : this.fieldDescribe.getPickListValues()) {
-                this.picklistOptions.add(new PicklistEntryMetadata(picklistEntry));
-            }
-        }
-
-        private void setRelationshipReferences() {
-            this.relationshipReferences = new List<SObjectMetadata>();
-            for(Schema.SObjectType sobjectType : this.fieldDescribe.getReferenceTo()) {
-                this.relationshipReferences.add(new SObjectMetadata(sobjectType));
-            }
-        }
-    }
-
-    public class PicklistEntryMetadata {
-        @AuraEnabled public String label           {get;private set;}
-        @AuraEnabled public String value           {get;private set;}
-        @AuraEnabled public Boolean isDefaultValue {get;private set;}
-
-        private Schema.PicklistEntry picklistEntry;
-
-        public PicklistEntryMetadata() {
-            this.label          = '--None--';
-            this.value          = '';
-            this.isDefaultValue = false;
-        }
-
-        public PicklistEntryMetadata(Schema.PicklistEntry picklistEntry) {
-            this.picklistEntry  = picklistEntry;
-
-            this.label          = picklistEntry.getLabel();
-            this.value          = picklistEntry.getValue();
-            this.isDefaultValue = picklistEntry.isDefaultValue();
-        }
-    }
+//    public class SObjectMetadata {
+//        @AuraEnabled public Boolean isAccessible    {get;private set;}
+//        @AuraEnabled public Boolean isCreateable    {get;private set;}
+//        @AuraEnabled public Boolean isCustom        {get;private set;}
+//        @AuraEnabled public Boolean isCustomSetting {get;private set;}
+//        @AuraEnabled public Boolean isDeletable     {get;private set;}
+//        @AuraEnabled public Boolean isMergeable     {get;private set;}
+//        @AuraEnabled public Boolean isQueryable     {get;private set;}
+//        @AuraEnabled public Boolean isSearchable    {get;private set;}
+//        @AuraEnabled public Boolean isUndeletable   {get;private set;}
+//        @AuraEnabled public Boolean isUpdateable    {get;private set;}
+//        @AuraEnabled public String keyPrefix        {get;private set;}
+//        @AuraEnabled public String label            {get;private set;}
+//        @AuraEnabled public String labelPlural      {get;private set;}
+//        @AuraEnabled public String localName        {get;private set;}
+//        @AuraEnabled public String name             {get;private set;}
+//        @AuraEnabled public String nameField        {get;private set;}
+//        @AuraEnabled public String tabIcon          {get;private set;}
+//
+//        private Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
+//
+//        public SObjectMetadata(Schema.SObjectType sobjectType) {
+//            this(sobjectType.getDescribe().getName());
+//        }
+//
+//        public SObjectMetadata(String sobjectName) {
+//            this.name            = sobjectName;
+//            this.sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
+//
+//            this.isAccessible    = this.sobjectDescribe.isAccessible();
+//            this.isCreateable    = this.sobjectDescribe.isCreateable();
+//            this.isCustom        = this.sobjectDescribe.isCustom();
+//            this.isCustomSetting = this.sobjectDescribe.isCustomSetting();
+//            this.isDeletable     = this.sobjectDescribe.isDeletable();
+//            this.isMergeable     = this.sobjectDescribe.isMergeable();
+//            this.isQueryable     = this.sobjectDescribe.isQueryable();
+//            this.isSearchable    = this.sobjectDescribe.isSearchable();
+//            this.isUndeletable   = this.sobjectDescribe.isUndeletable();
+//            this.isUpdateable    = this.sobjectDescribe.isUpdateable();
+//            this.keyPrefix       = this.sobjectDescribe.getKeyPrefix();
+//            this.label           = this.sobjectDescribe.getLabel();
+//            this.labelPlural     = this.sobjectDescribe.getLabelPlural();
+//            this.localName       = this.sobjectDescribe.getLocalName();
+//
+//            this.setNameField();
+//            this.setTabIcon();
+//        }
+//
+//        private void setNameField() {
+//            for(Schema.SObjectField field : this.sobjectDescribe.fields.getMap().values()) {
+//                Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
+//
+//                if(!fieldDescribe.isNameField()) continue;
+//
+//                this.nameField = fieldDescribe.getName();
+//                break;
+//            }
+//        }
+//
+//        private void setTabIcon() {
+//            for(Schema.DescribeTabSetResult tabSetResult : Schema.describeTabs()) {
+//                for(Schema.DescribeTabResult tabResult : tabSetResult.getTabs()) {
+//                    if(tabResult.getSObjectName() != this.name) continue;
+//
+//                    String iconType = tabResult.isCustom() ? 'custom' : 'standard';
+//                    String svgIconName;
+//                    for(Schema.DescribeIconResult icon : tabResult.getIcons()) {
+//                        if(icon.getContentType() != 'image/svg+xml') continue;
+//
+//                        svgIconName = icon.getUrl().substringAfterLast('/').replace('.svg', '');
+//                        this.tabIcon = iconType + ':' + svgIconName;
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    public class FieldMetadata {
+//        @AuraEnabled public Boolean isAccessible                         {get;private set;}
+//        @AuraEnabled public Boolean isCalculated                         {get;private set;}
+//        @AuraEnabled public Boolean isCreateable                         {get;private set;}
+//        @AuraEnabled public Boolean isCustom                             {get;private set;}
+//        @AuraEnabled public Boolean isDefaultedOnCreate                  {get;private set;}
+//        @AuraEnabled public Boolean isFilterable                         {get;private set;}
+//        @AuraEnabled public Boolean isGroupable                          {get;private set;}
+//        @AuraEnabled public Boolean isNameField                          {get;private set;}
+//        @AuraEnabled public Boolean isSortable                           {get;private set;}
+//        @AuraEnabled public Boolean isUpdateable                         {get;private set;}
+//        @AuraEnabled public Boolean required                             {get;private set;}
+//        @AuraEnabled public Integer maxLength                            {get;private set;}
+//        @AuraEnabled public List<PicklistEntryMetadata> picklistOptions  {get;private set;}
+//        @AuraEnabled public Object defaultValue                          {get;private set;}
+//        @AuraEnabled public SObjectMetadata sobjectMetadata              {get;private set;}
+//        @AuraEnabled public String displayType                           {get;private set;}
+//        @AuraEnabled public String inlineHelpText                        {get;private set;}
+//        @AuraEnabled public String label                                 {get;private set;}
+//        @AuraEnabled public String name                                  {get;private set;}
+//        @AuraEnabled public String relationshipName                      {get;private set;}
+//        @AuraEnabled public List<SObjectMetadata> relationshipReferences {get;private set;}
+//        @AuraEnabled public String sobjectName                           {get;private set;}
+//
+//        private Schema.DescribeFieldResult fieldDescribe {get;private set;}
+//
+//        public FieldMetadata(String sobjectName, String fieldName) {
+//            this.sobjectName     = sobjectName;
+//            this.name            = fieldName;
+//            this.sobjectMetadata = new SObjectMetadata(sobjectName);
+//            this.picklistOptions = new List<PicklistEntryMetadata>();
+//
+//            this.fieldDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName).getDescribe();
+//
+//            this.defaultValue        = this.fieldDescribe.getDefaultValue();
+//            this.displayType         = this.fieldDescribe.getType().name();
+//            this.inlineHelpText      = this.fieldDescribe.getInlineHelpText();
+//            this.isAccessible        = this.fieldDescribe.isAccessible();
+//            this.isCalculated        = this.fieldDescribe.isCalculated();
+//            this.isCreateable        = this.fieldDescribe.isCreateable();
+//            this.isCustom            = this.fieldDescribe.isCustom();
+//            this.isDefaultedOnCreate = this.fieldDescribe.isDefaultedOnCreate();
+//            this.isFilterable        = this.fieldDescribe.isFilterable();
+//            this.isGroupable         = this.fieldDescribe.isGroupable();
+//            this.isNameField         = this.fieldDescribe.isNameField();
+//            this.isSortable          = this.fieldDescribe.isSortable();
+//            this.isUpdateable        = this.fieldDescribe.isUpdateable();
+//            this.label               = this.fieldDescribe.getLabel();
+//            this.maxLength           = this.fieldDescribe.getLength();
+//            this.relationshipName    = this.fieldDescribe.getRelationshipName();
+//            this.required            = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
+//
+//            this.setPicklistOptions();
+//            this.setRelationshipReferences();
+//        }
+//
+//        private void setPicklistOptions() {
+//            Schema.DisplayType fieldDisplayType = this.fieldDescribe.getType();
+//            if(fieldDisplayType != Schema.DisplayType.Picklist && fieldDisplayType != Schema.DisplayType.MultiPicklist) return;
+//
+//            this.picklistOptions.add(new PicklistEntryMetadata()); // Empty picklist value
+//            for(Schema.PicklistEntry picklistEntry : this.fieldDescribe.getPickListValues()) {
+//                this.picklistOptions.add(new PicklistEntryMetadata(picklistEntry));
+//            }
+//        }
+//
+//        private void setRelationshipReferences() {
+//            this.relationshipReferences = new List<SObjectMetadata>();
+//            for(Schema.SObjectType sobjectType : this.fieldDescribe.getReferenceTo()) {
+//                this.relationshipReferences.add(new SObjectMetadata(sobjectType));
+//            }
+//        }
+//    }
+//
+//    public class PicklistEntryMetadata {
+//        @AuraEnabled public String label           {get;private set;}
+//        @AuraEnabled public String value           {get;private set;}
+//        @AuraEnabled public Boolean isDefaultValue {get;private set;}
+//
+//        private Schema.PicklistEntry picklistEntry;
+//
+//        public PicklistEntryMetadata() {
+//            this.label          = '--None--';
+//            this.value          = '';
+//            this.isDefaultValue = false;
+//        }
+//
+//        public PicklistEntryMetadata(Schema.PicklistEntry picklistEntry) {
+//            this.picklistEntry  = picklistEntry;
+//
+//            this.label          = picklistEntry.getLabel();
+//            this.value          = picklistEntry.getValue();
+//            this.isDefaultValue = picklistEntry.isDefaultValue();
+//        }
+//    }
 
 }

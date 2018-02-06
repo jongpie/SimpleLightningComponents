@@ -9,7 +9,7 @@
         action.setCallback(this, function(response) {
             if(response.getState() === 'SUCCESS') {
                 component.set('v.selectedParentRecord', response.getReturnValue());
-                component.set('v.parentSObjectName', response.getReturnValue().sobjectName);
+                component.set('v.parentSObjectName', response.getReturnValue().sobjectApiName);
             } else if(response.getState() === 'ERROR') {
                 var errors = response.getError();
                 if(errors && errors[0] && errors[0].message) {
@@ -29,10 +29,10 @@
             var parentSObjectMetadata = component.get('v.parentSObjectMetadata');
             var action = component.get('c.search');
             action.setParams({
-                parentSObjectName    : parentSObjectMetadata.name,
-                searchFieldName      : parentSObjectMetadata.nameField,
+                parentSObjectName    : parentSObjectMetadata.apiName,
+                searchFieldName      : parentSObjectMetadata.displayFieldApiName,
                 searchText           : searchText,
-                displayTextFieldName : parentSObjectMetadata.nameField,
+                displayTextFieldName : parentSObjectMetadata.displayFieldApiName,
                 limitCount           : component.get('v.limitCount')
             });
             action.setStorable();

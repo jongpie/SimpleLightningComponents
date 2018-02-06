@@ -19,7 +19,7 @@
                 break;
             }
         }
-        component.set('v.parentSObjectName', defaultRelationshipReference.name);
+        component.set('v.parentSObjectName', defaultRelationshipReference.apiName);
     },
     toggleParentSObjectSelector : function(component, event, helper) {
         component.set('v.showSObjectSelector', !component.get('v.showSObjectSelector'));
@@ -40,7 +40,7 @@
         for(var i = 0; i < fieldMetadata.relationshipReferences.length; i++) {
             var relationshipReference = fieldMetadata.relationshipReferences[i];
 
-            if(relationshipReference.name !== parentSObjectName) continue;
+            if(relationshipReference.apiName !== parentSObjectName) continue;
 
             selectedSObjectMetadata = fieldMetadata.relationshipReferences[i];
             break;
