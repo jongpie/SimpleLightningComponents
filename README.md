@@ -1,8 +1,9 @@
-# Lightning Components
-A library of lightweight Salesforce Lightning components that streamline developing by automatically applying:
+# Simple Lightning Components
+A library of lightweight Salesforce Lightning components that simplify developing in Lightning by automatically applying:
 * SObject-level security
 * field-level security
 * field display types, including lookup fields & support for polymorphic fields like Task.WhoId & Task.WhatId
+* translations for SObject labels, field labels and picklist options
 * and more
 
 <a href="https://githubsfdeploy.herokuapp.com" target="_blank">
