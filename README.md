@@ -1,9 +1,12 @@
 # Lightning Components
-A library of lightweight Salesforce Lightning components that streamline developing by automatically applying sobject-level security, field-level security, field types and more.
+A library of lightweight Salesforce Lightning components that streamline developing by automatically applying:
+* SObject-level security
+* field-level security
+* field display types, including lookup fields & support for polymorphic fields like Task.WhoId & Task.WhatId
+* and more
 
 <a href="https://githubsfdeploy.herokuapp.com" target="_blank">
-  <img alt="Deploy to Salesforce"
-       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
+  <img alt="Deploy to Salesforce" src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
 
 ## sobjectMetadata.cmp
