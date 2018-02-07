@@ -17,7 +17,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <!-- Private SObject Selector Attributes -->
     <aura:attribute name="showSObjectSelector" type="Boolean" access="private" default="false" />
     <aura:attribute name="parentSObjectName" type="String" access="private" />
-    <aura:attribute name="parentSObjectMetadata" type="Object" access="private" />
+    <aura:attribute name="parentSObjectMetadata" type="SObjectMetadata" access="private" />
 
     <!-- Private Search Result Attributes -->
     <aura:attribute name="showSearchResults" type="Boolean" access="private" default="false" />

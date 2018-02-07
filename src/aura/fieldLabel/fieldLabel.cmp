@@ -9,9 +9,6 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <aura:attribute name="showHelpText" type="Boolean" default="true" />
     <aura:attribute name="helpText" type="String" />
 
-    <!-- Private Attributes -->
-    <aura:attribute name="fieldMetadata" type="Object" access="private" />
-
     <!-- Markup -->
     <ui:outputText value="{!v.label}" />
     <aura:if isTrue="{!and(v.showHelpText, v.helpText != null)}">

@@ -1,25 +1,24 @@
 ({
-    fetchFieldMetadata : function(component, event) {
+    fetchFieldSetMetadata : function(component, event) {
         var sobjectName = component.get('v.sobjectName');
-        var fieldName = component.get('v.fieldName');
+        var fieldSetName = component.get('v.fieldSetName');
 
-        if(!sobjectName || !fieldName) return;
+        if(!sobjectName || !fieldSetName) return;
 
         var params = event.getParam('arguments');
 
-        var action = component.get('c.getFieldMetadataByName');
+        var action = component.get('c.getFieldSetMetadataByName');
         action.setParams({
             'sobjectName': component.get('v.sobjectName'),
-            'fieldName': component.get('v.fieldName')
+            'fieldSetName': component.get('v.fieldSetName')
         });
         action.setStorable();
         action.setCallback(this, function(response) {
             if(response.getState() === 'SUCCESS') {
-                var fieldMetadata = response.getReturnValue();
-                component.set('v.fieldMetadata', fieldMetadata);
-                component.set('v.label', fieldMetadata.label);
+                var fieldSetMetadata = response.getReturnValue();
+                component.set('v.fieldSetMetadata', fieldSetMetadata);
 
-                if(params) params.callback(null, fieldMetadata);
+                if(params) params.callback(null, fieldSetMetadata);
             } else if(response.getState() === 'ERROR') {
                 this.processCallbackErrors(response);
             }
