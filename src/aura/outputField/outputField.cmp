@@ -22,7 +22,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <aura:handler name="change" value="{!v.fieldValue}" action="{!c.handleFieldValueChanged}" />
 
     <!-- Markup -->
-    <aura:if isTrue="{!and(v.fieldMetadata.sobjectMetadata.isAccessible, v.fieldMetadata.isAccessible, v.render)}">
+    <aura:if isTrue="{!and(v.sobjectMetadata.isAccessible, v.fieldMetadata.isAccessible, v.render)}">
         <div class="slds-form-element">
             <aura:if isTrue="{!v.variant == 'form'}">
                 <label class="slds-form-element__label" for="{!v.auraId}">
