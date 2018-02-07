@@ -4,14 +4,6 @@
     <aura:attribute name="sobjectName" type="String" required="true" />
     <aura:attribute name="variant" type="String" default="label" description="Options: label (default) and labelPlural" />
 
-    <!-- Private Attributes -->
-    <aura:attribute name="sobjectMetadata" type="Object" access="private" />
-<!--     <aura:attribute name="label" type="String" access="private" />
-    <aura:attribute name="labelPlural" type="String" access="private" /> -->
-
-    <!-- Handlers -->
-    <!-- <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> -->
-
     <!-- Markup -->
     <aura:if isTrue="{!v.variant == 'label'}"><ui:outputText value="{!v.sobjectMetadata.label}" /></aura:if>
     <aura:if isTrue="{!v.variant == 'labelPlural'}"><ui:outputText value="{!v.sobjectMetadata.labelPlural}" /></aura:if>
