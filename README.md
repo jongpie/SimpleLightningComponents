@@ -1,4 +1,4 @@
-# Lightning Components
+# Simple Lightning Components
 A library of lightweight Salesforce Lightning components that streamline developing by automatically applying sobject-level security, field-level security, field types and more.
 
 <a href="https://githubsfdeploy.herokuapp.com" target="_blank">
