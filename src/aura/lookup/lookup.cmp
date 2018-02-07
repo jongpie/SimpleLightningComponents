@@ -73,7 +73,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                                 id="combobox-unique-id"
                                 onfocus="{!c.fetchSearchResults}"
                                 onkeyup="{!c.fetchSearchResults}"
-                                placeholder="{! if(empty(v.parentSObjectMetadata), '', 'Search ' + v.parentSObjectMetadata.labelPlural) }"
+                                placeholder="{! if(empty(v.parentSObjectMetadata), '', v.parentSObjectMetadata.labelPlural) }"
                                 required="{!or(v.required, v.fieldMetadata.required)}"
                                 role="textbox"
                                 type="text"
