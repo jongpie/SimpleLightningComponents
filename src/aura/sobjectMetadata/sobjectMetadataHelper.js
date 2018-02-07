@@ -10,7 +10,7 @@
 
         if(!sobjectName) return;
 
-        var action = component.get('c.getSObjectMetadata');
+        var action = component.get('c.getSObjectMetadataByName');
         action.setParams({
             'sobjectName': sobjectName
         });

@@ -1,7 +1,117 @@
 public with sharing class LightningMetadataController {
 
     @AuraEnabled
-    public static ExtendedSObjectMetadata getSObjectMetadata(String sobjectName) {
+    public static User getCurrentUser(List<String> additionalfieldNames) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getCurrentUser(' + additionalfieldNames + ')');
+        try {
+            List<String> userFieldNames = new List<String>{
+                'DefaultCurrency', 'Email', 'FirstName', 'Id', 'Language', 'LastName', 'Locale', 'Name',
+                'ProfileId', 'Username', 'UserRoleId', 'UserType'
+            };
+
+            // If there are additional fields to query, verify that the current user has access to each field
+            // TODO improve this so it handles field paths for parent objects, like 'Manager.Profile.Name'
+            if(additionalfieldNames != null) userFieldNames.addAll(additionalfieldNames);
+
+            DescribeSObjectResult userDescribe = Schema.User.SObjectType.getDescribe();
+            List<String> userFieldNamesToQuery = new List<String>();
+            for(String fieldName : userFieldNames) {
+                SObjectField field = userDescribe.fields.getMap().get(fieldName);
+
+                if(field == null) continue;
+
+                DescribeFieldResult fieldDescribe = field.getDescribe();
+                if(fieldDescribe.isAccessible()) userFieldNamesToQuery.add(fieldName.toLowerCase());
+            }
+
+            // Dedupe the field list
+            userFieldNamesToQuery = new List<String>(new Set<String>(userFieldNamesToQuery));
+
+            String userQuery = 'SELECT ' + String.join(userFieldNamesToQuery, ', ')
+                + ' FROM User WHERE Id = \'' + UserInfo.getUserId() + '\'';
+
+            return (User)Database.query(userQuery);
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static EnvironmentMetadata getEnvironmentMetadata() {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getEnvironmentMetadata()');
+        try {
+            return new EnvironmentMetadata();
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static ExtendedFieldMetadata getFieldMetadataByName(String sobjectName, String fieldName) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadata(\'' + sobjectName + '\', \'' + fieldName + '\')');
+        try {
+            return new ExtendedFieldMetadata(sobjectName, fieldName);
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static List<ExtendedFieldMetadata> getFieldMetadataByNames(String sobjectName, List<String> fieldNames) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadataByNames(\'' + sobjectName + '\', \'' + fieldNames + '\')');
+        try {
+            List<ExtendedFieldMetadata> results = new List<ExtendedFieldMetadata>();
+            for(String fieldName : fieldNames) {
+                results.add(new ExtendedFieldMetadata(sobjectName, fieldName));
+            }
+            return results;
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static FieldSetMetadata getFieldSetMetadataByName(String sobjectName, String fieldSetName) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldSetMetadataByName(\'' + sobjectName + '\', \'' + fieldSetName + '\')');
+        try {
+            return new FieldSetMetadata(sobjectName, fieldSetName);
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static ListViewMetadata getListViewMetadataByName(String sobjectName, String listViewName) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getListViewMetadata(\'' + sobjectName + '\', \'' + listViewName + '\')');
+        try {
+            return new ListViewMetadata(sobjectName, listViewName);
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static QueueMetadata getQueueMetadataById(Id queueId) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getQueueMetadataById(\'' + queueId + '\')');
+        try {
+            return new QueueMetadata(queueId);
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static RecordTypeMetadata getRecordTypeMetadataById(Id recordTypeId) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getRecordTypeMetadataById(\'' + recordTypeId + '\')');
+        try {
+            return new RecordTypeMetadata(recordTypeId);
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static ExtendedSObjectMetadata getSObjectMetadataByName(String sobjectName) {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getSObjectMetadata(\'' + sobjectName + '\')');
         try {
             return new ExtendedSObjectMetadata(sobjectName);
@@ -11,18 +121,23 @@ public with sharing class LightningMetadataController {
     }
 
     @AuraEnabled
-    public static ExtendedFieldMetadata getFieldMetadata(String sobjectName, String fieldName) {
-        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadata(\'' + sobjectName + '\', \'' + fieldName + '\')');
+    public static List<ExtendedSObjectMetadata> getSObjectMetadataByNames(List<String> sobjectNames) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadataByNames(\'' + sobjectNames + '\')');
         try {
-            return new ExtendedFieldMetadata(sobjectName, fieldName);
+            List<ExtendedSObjectMetadata> results = new List<ExtendedSObjectMetadata>();
+            for(String sobjectName : sobjectNames) {
+                results.add(new ExtendedSObjectMetadata(sobjectName));
+            }
+            return results;
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }
     }
 
     public class ExtendedSObjectMetadata extends SObjectMetadata {
-        @AuraEnabled public final List<RecordTypeMetadata> recordTypes {get; private set;}
-        public ExtendedSObjectMetadata(String sobjectName) {
+        // TODO finish implementing
+        //@AuraEnabled public final List<RecordTypeMetadata> recordTypes {get; private set;}
+        private ExtendedSObjectMetadata(String sobjectName) {
             super(sobjectName);
             //this.recordTypes = this.getRecordTypes();
         }
@@ -37,203 +152,12 @@ public with sharing class LightningMetadataController {
     }
 
     public class ExtendedFieldMetadata extends FieldMetadata {
+        // TODO consider moving to SimpleMetadata project instead
         @AuraEnabled public final SObjectMetadata sobjectMetadata {get; private set;}
-        public ExtendedFieldMetadata(String sobjectName, String fieldName) {
+        private ExtendedFieldMetadata(String sobjectName, String fieldName) {
             super(sobjectName, fieldName);
             this.sobjectMetadata = new SObjectMetadata(sobjectName);
         }
     }
-
-    // TODO finish implementing and uncomment
-    /*@AuraEnabled
-    public static List<FieldMetadata> getFieldSetMetadata(String sobjectName, String fieldSetName) {
-        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldSetMetadata(\'' + sobjectName + '\', \'' + fieldSetName + '\')');
-
-        Schema.DescribeSObjectResult sobjectDescribe = new SObjectMetadata(sobjectName).sobjectDescribe;
-        Schema.FieldSet fieldSet = sobjectDescribe.fieldSets.getMap().get(fieldSetName);
-
-        List<FieldMetadata> fieldSetMetadata = new List<FieldMetadata>();
-        for(Schema.FieldSetMember fieldSetMember : fieldSet.getFields()) {
-            FieldMetadata fieldMetadata = new FieldMetadata(sobjectName, fieldSetMember.getFieldPath());
-            fieldMetadata.required = (fieldSetMember.getDBRequired() || fieldSetMember.getRequired());
-
-            fieldSetMetadata.add(fieldMetadata);
-        }
-        return fieldSetMetadata;
-    }*/
-
-//    public class SObjectMetadata {
-//        @AuraEnabled public Boolean isAccessible    {get;private set;}
-//        @AuraEnabled public Boolean isCreateable    {get;private set;}
-//        @AuraEnabled public Boolean isCustom        {get;private set;}
-//        @AuraEnabled public Boolean isCustomSetting {get;private set;}
-//        @AuraEnabled public Boolean isDeletable     {get;private set;}
-//        @AuraEnabled public Boolean isMergeable     {get;private set;}
-//        @AuraEnabled public Boolean isQueryable     {get;private set;}
-//        @AuraEnabled public Boolean isSearchable    {get;private set;}
-//        @AuraEnabled public Boolean isUndeletable   {get;private set;}
-//        @AuraEnabled public Boolean isUpdateable    {get;private set;}
-//        @AuraEnabled public String keyPrefix        {get;private set;}
-//        @AuraEnabled public String label            {get;private set;}
-//        @AuraEnabled public String labelPlural      {get;private set;}
-//        @AuraEnabled public String localName        {get;private set;}
-//        @AuraEnabled public String name             {get;private set;}
-//        @AuraEnabled public String nameField        {get;private set;}
-//        @AuraEnabled public String tabIcon          {get;private set;}
-//
-//        private Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
-//
-//        public SObjectMetadata(Schema.SObjectType sobjectType) {
-//            this(sobjectType.getDescribe().getName());
-//        }
-//
-//        public SObjectMetadata(String sobjectName) {
-//            this.name            = sobjectName;
-//            this.sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
-//
-//            this.isAccessible    = this.sobjectDescribe.isAccessible();
-//            this.isCreateable    = this.sobjectDescribe.isCreateable();
-//            this.isCustom        = this.sobjectDescribe.isCustom();
-//            this.isCustomSetting = this.sobjectDescribe.isCustomSetting();
-//            this.isDeletable     = this.sobjectDescribe.isDeletable();
-//            this.isMergeable     = this.sobjectDescribe.isMergeable();
-//            this.isQueryable     = this.sobjectDescribe.isQueryable();
-//            this.isSearchable    = this.sobjectDescribe.isSearchable();
-//            this.isUndeletable   = this.sobjectDescribe.isUndeletable();
-//            this.isUpdateable    = this.sobjectDescribe.isUpdateable();
-//            this.keyPrefix       = this.sobjectDescribe.getKeyPrefix();
-//            this.label           = this.sobjectDescribe.getLabel();
-//            this.labelPlural     = this.sobjectDescribe.getLabelPlural();
-//            this.localName       = this.sobjectDescribe.getLocalName();
-//
-//            this.setNameField();
-//            this.setTabIcon();
-//        }
-//
-//        private void setNameField() {
-//            for(Schema.SObjectField field : this.sobjectDescribe.fields.getMap().values()) {
-//                Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
-//
-//                if(!fieldDescribe.isNameField()) continue;
-//
-//                this.nameField = fieldDescribe.getName();
-//                break;
-//            }
-//        }
-//
-//        private void setTabIcon() {
-//            for(Schema.DescribeTabSetResult tabSetResult : Schema.describeTabs()) {
-//                for(Schema.DescribeTabResult tabResult : tabSetResult.getTabs()) {
-//                    if(tabResult.getSObjectName() != this.name) continue;
-//
-//                    String iconType = tabResult.isCustom() ? 'custom' : 'standard';
-//                    String svgIconName;
-//                    for(Schema.DescribeIconResult icon : tabResult.getIcons()) {
-//                        if(icon.getContentType() != 'image/svg+xml') continue;
-//
-//                        svgIconName = icon.getUrl().substringAfterLast('/').replace('.svg', '');
-//                        this.tabIcon = iconType + ':' + svgIconName;
-//                        break;
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    public class FieldMetadata {
-//        @AuraEnabled public Boolean isAccessible                         {get;private set;}
-//        @AuraEnabled public Boolean isCalculated                         {get;private set;}
-//        @AuraEnabled public Boolean isCreateable                         {get;private set;}
-//        @AuraEnabled public Boolean isCustom                             {get;private set;}
-//        @AuraEnabled public Boolean isDefaultedOnCreate                  {get;private set;}
-//        @AuraEnabled public Boolean isFilterable                         {get;private set;}
-//        @AuraEnabled public Boolean isGroupable                          {get;private set;}
-//        @AuraEnabled public Boolean isNameField                          {get;private set;}
-//        @AuraEnabled public Boolean isSortable                           {get;private set;}
-//        @AuraEnabled public Boolean isUpdateable                         {get;private set;}
-//        @AuraEnabled public Boolean required                             {get;private set;}
-//        @AuraEnabled public Integer maxLength                            {get;private set;}
-//        @AuraEnabled public List<PicklistEntryMetadata> picklistOptions  {get;private set;}
-//        @AuraEnabled public Object defaultValue                          {get;private set;}
-//        @AuraEnabled public SObjectMetadata sobjectMetadata              {get;private set;}
-//        @AuraEnabled public String displayType                           {get;private set;}
-//        @AuraEnabled public String inlineHelpText                        {get;private set;}
-//        @AuraEnabled public String label                                 {get;private set;}
-//        @AuraEnabled public String name                                  {get;private set;}
-//        @AuraEnabled public String relationshipName                      {get;private set;}
-//        @AuraEnabled public List<SObjectMetadata> relationshipReferences {get;private set;}
-//        @AuraEnabled public String sobjectName                           {get;private set;}
-//
-//        private Schema.DescribeFieldResult fieldDescribe {get;private set;}
-//
-//        public FieldMetadata(String sobjectName, String fieldName) {
-//            this.sobjectName     = sobjectName;
-//            this.name            = fieldName;
-//            this.sobjectMetadata = new SObjectMetadata(sobjectName);
-//            this.picklistOptions = new List<PicklistEntryMetadata>();
-//
-//            this.fieldDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName).getDescribe();
-//
-//            this.defaultValue        = this.fieldDescribe.getDefaultValue();
-//            this.displayType         = this.fieldDescribe.getType().name();
-//            this.inlineHelpText      = this.fieldDescribe.getInlineHelpText();
-//            this.isAccessible        = this.fieldDescribe.isAccessible();
-//            this.isCalculated        = this.fieldDescribe.isCalculated();
-//            this.isCreateable        = this.fieldDescribe.isCreateable();
-//            this.isCustom            = this.fieldDescribe.isCustom();
-//            this.isDefaultedOnCreate = this.fieldDescribe.isDefaultedOnCreate();
-//            this.isFilterable        = this.fieldDescribe.isFilterable();
-//            this.isGroupable         = this.fieldDescribe.isGroupable();
-//            this.isNameField         = this.fieldDescribe.isNameField();
-//            this.isSortable          = this.fieldDescribe.isSortable();
-//            this.isUpdateable        = this.fieldDescribe.isUpdateable();
-//            this.label               = this.fieldDescribe.getLabel();
-//            this.maxLength           = this.fieldDescribe.getLength();
-//            this.relationshipName    = this.fieldDescribe.getRelationshipName();
-//            this.required            = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
-//
-//            this.setPicklistOptions();
-//            this.setRelationshipReferences();
-//        }
-//
-//        private void setPicklistOptions() {
-//            Schema.DisplayType fieldDisplayType = this.fieldDescribe.getType();
-//            if(fieldDisplayType != Schema.DisplayType.Picklist && fieldDisplayType != Schema.DisplayType.MultiPicklist) return;
-//
-//            this.picklistOptions.add(new PicklistEntryMetadata()); // Empty picklist value
-//            for(Schema.PicklistEntry picklistEntry : this.fieldDescribe.getPickListValues()) {
-//                this.picklistOptions.add(new PicklistEntryMetadata(picklistEntry));
-//            }
-//        }
-//
-//        private void setRelationshipReferences() {
-//            this.relationshipReferences = new List<SObjectMetadata>();
-//            for(Schema.SObjectType sobjectType : this.fieldDescribe.getReferenceTo()) {
-//                this.relationshipReferences.add(new SObjectMetadata(sobjectType));
-//            }
-//        }
-//    }
-//
-//    public class PicklistEntryMetadata {
-//        @AuraEnabled public String label           {get;private set;}
-//        @AuraEnabled public String value           {get;private set;}
-//        @AuraEnabled public Boolean isDefaultValue {get;private set;}
-//
-//        private Schema.PicklistEntry picklistEntry;
-//
-//        public PicklistEntryMetadata() {
-//            this.label          = '--None--';
-//            this.value          = '';
-//            this.isDefaultValue = false;
-//        }
-//
-//        public PicklistEntryMetadata(Schema.PicklistEntry picklistEntry) {
-//            this.picklistEntry  = picklistEntry;
-//
-//            this.label          = picklistEntry.getLabel();
-//            this.value          = picklistEntry.getValue();
-//            this.isDefaultValue = picklistEntry.isDefaultValue();
-//        }
-//    }
 
 }
