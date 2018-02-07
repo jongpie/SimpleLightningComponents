@@ -28,7 +28,7 @@ public with sharing class LightningMetadataController {
                 if(fieldDescribe.isAccessible()) userFieldNamesToQuery.add(fieldName.toLowerCase());
             }
 
-            // Dedupe the field list
+            // Dedupe & sort the field list
             userFieldNamesToQuery = new List<String>(new Set<String>(userFieldNamesToQuery));
             userFieldNamesToQuery.sort();
 
