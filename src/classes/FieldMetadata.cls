@@ -79,7 +79,7 @@ global virtual class FieldMetadata {
         this.relationshipReferences = this.getRelationshipReferences(fieldDescribe);
         this.scale                  = fieldDescribe.getScale();
         this.soapType               = fieldDescribe.getSOAPType().name();
-        this.sobjectApiName         = String.valueOf(sobjectApiName);
+        this.sobjectApiName         = String.valueOf(sobjectType);
     }
 
     private String getNamespace() {

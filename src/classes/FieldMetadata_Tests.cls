@@ -60,6 +60,7 @@ private class FieldMetadata_Tests {
     }
 
     private static void validateAttributesAreSet(String fieldName, FieldMetadata fieldMetadata) {
+        String sobjectName = 'Account';
         DescribeFieldResult fieldDescribe = Schema.SObjectType.Account.fields.getMap().get(fieldName).getDescribe();
 
         System.assertEquals(fieldDescribe.getName(), fieldMetadata.apiName);
@@ -94,6 +95,7 @@ private class FieldMetadata_Tests {
         System.assertEquals(fieldDescribe.getScale(), fieldMetadata.scale);
         System.assertEquals(fieldDescribe.getScale(), fieldMetadata.scale);
         System.assertEquals(fieldDescribe.getSOAPType().name(), fieldMetadata.soapType);
+        System.assertEquals(sobjectName, fieldMetadata.sobjectApiName);
     }
 
     private static void validateCaseSentivityForJavascript(FieldMetadata fieldMetadata) {
