@@ -15,5 +15,4 @@
 
     <!-- Markup -->
     {!v.body}
-derp = [{!v.currentUser.Name}]
 </aura:component>
