@@ -1,0 +1,16 @@
+<aura:component extends="c.sobjectMetadata" extensible="true" controller="LightningMetadataController">
+
+    <!-- Public Attributes -->
+    <aura:attribute name="recordTypeId" type="String" required="true" description="The API name of the field"  />
+    <aura:attribute name="recordTypeMetadata" type="RecordTypeMetadata" access="public" description="The record type metadata object returned from the controller" />
+
+    <!-- Public Methods -->
+    <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the metadata">
+        <aura:attribute name="callback" type="function"/>
+    </aura:method>
+
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.recordTypeId}" action="{!c.doInit}" />
+
+</aura:component>
