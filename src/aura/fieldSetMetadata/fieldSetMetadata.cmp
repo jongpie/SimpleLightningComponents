@@ -1,7 +1,6 @@
 <aura:component extends="c.sobjectMetadata" extensible="true" controller="LightningMetadataController">
 
     <!-- Public Attributes -->
-    <aura:attribute name="sobjectName" type="String" required="true" description="The API name of the SObject" />
     <aura:attribute name="fieldSetName" type="String" required="true" description="The API name of the field set"  />
     <aura:attribute name="fieldSetMetadata" type="FieldSetMetadata" access="public" description="The field set metadata object returned from the controller" />
 
