@@ -17,7 +17,6 @@
             if(response.getState() === 'SUCCESS') {
                 var fieldMetadata = response.getReturnValue();
                 component.set('v.fieldMetadata', fieldMetadata);
-                component.set('v.label', fieldMetadata.label);
 
                 if(params) params.callback(null, fieldMetadata);
             } else if(response.getState() === 'ERROR') {

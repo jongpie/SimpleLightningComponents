@@ -4,14 +4,9 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 -->
 <aura:component extends="c.fieldMetadata">
 
-    <!-- Public Attributes -->
-    <aura:attribute name="label" type="String" />
-    <aura:attribute name="showHelpText" type="Boolean" default="true" />
-    <aura:attribute name="helpText" type="String" />
-
     <!-- Markup -->
-    <ui:outputText value="{!v.label}" />
-    <aura:if isTrue="{!and(v.showHelpText, v.helpText != null)}">
+    <ui:outputText value="{!v.fieldMetadata.label}" />
+    <aura:if isTrue="{!v.fieldMetadata.inlineHelpText != null}">
         <lightning:helptext iconName="utility:info" content="{!v.helpText}" />
     </aura:if>
 

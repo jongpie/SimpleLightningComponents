@@ -5,7 +5,6 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 <aura:component extends="c.sobjectMetadata" implements="flexipage:availableForAllPageTypes">
 
     <!-- Public Attributes -->
-    <aura:attribute name="sobjectName" type="String" required="true" />
     <aura:attribute name="variant" type="String" default="label" description="Options: label (default) and labelPlural" />
 
     <!-- Markup -->

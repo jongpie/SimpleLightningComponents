@@ -5,7 +5,6 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 <aura:component extends="c.sobjectMetadata" extensible="true" controller="LightningMetadataController">
 
     <!-- Public Attributes -->
-    <aura:attribute name="sobjectName" type="String" required="true" description="The API name of the SObject" />
     <aura:attribute name="fieldName" type="String" required="true" description="The API name of the field"  />
     <aura:attribute name="fieldMetadata" type="FieldMetadata" access="public" description="The field metadata object returned from the controller" />
 

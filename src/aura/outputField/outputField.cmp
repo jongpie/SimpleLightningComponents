@@ -29,7 +29,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                     <aura:if isTrue="{!and(v.required, v.displayType != 'BOOLEAN')}">
                         <abbr class="slds-required" title="required">*</abbr>
                     </aura:if>
-                    <c:fieldLabel sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" showHelpText="{!v.fieldMetadata.inlineHelpText != null}" />
+                    <c:fieldLabel sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" />
                 </label>
             </aura:if>
 
