@@ -62,20 +62,6 @@ public with sharing class LightningMetadataController {
     }
 
     @AuraEnabled
-    public static List<FieldMetadata> getFieldMetadataByNames(String sobjectName, List<String> fieldNames) {
-        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadataByNames(\'' + sobjectName + '\', \'' + fieldNames + '\')');
-        try {
-            List<FieldMetadata> results = new List<FieldMetadata>();
-            for(String fieldName : fieldNames) {
-                results.add(new FieldMetadata(sobjectName, fieldName));
-            }
-            return results;
-        } catch(Exception ex) {
-            throw new AuraHandledException(ex.getMessage());
-        }
-    }
-
-    @AuraEnabled
     public static FieldSetMetadata getFieldSetMetadataByName(String sobjectName, String fieldSetName) {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldSetMetadataByName(\'' + sobjectName + '\', \'' + fieldSetName + '\')');
         try {
@@ -120,20 +106,6 @@ public with sharing class LightningMetadataController {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getSObjectMetadata(\'' + sobjectName + '\')');
         try {
             return new SObjectMetadata(sobjectName);
-        } catch(Exception ex) {
-            throw new AuraHandledException(ex.getMessage());
-        }
-    }
-
-    @AuraEnabled
-    public static List<SObjectMetadata> getSObjectMetadataByNames(List<String> sobjectNames) {
-        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadataByNames(\'' + sobjectNames + '\')');
-        try {
-            List<SObjectMetadata> results = new List<SObjectMetadata>();
-            for(String sobjectName : sobjectNames) {
-                results.add(new SObjectMetadata(sobjectName));
-            }
-            return results;
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }
