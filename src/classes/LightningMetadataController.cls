@@ -30,6 +30,7 @@ public with sharing class LightningMetadataController {
 
             // Dedupe the field list
             userFieldNamesToQuery = new List<String>(new Set<String>(userFieldNamesToQuery));
+            userFieldNamesToQuery.sort();
 
             String userQuery = 'SELECT ' + String.join(userFieldNamesToQuery, ', ')
                 + ' FROM User WHERE Id = \'' + UserInfo.getUserId() + '\'';
