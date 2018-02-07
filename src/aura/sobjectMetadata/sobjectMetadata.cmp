@@ -2,14 +2,12 @@
 
     <!-- Public Attributes -->
     <aura:attribute name="sobjectName" type="String" description="The API name of the SObject" />
+    <aura:attribute name="sobjectMetadata" type="Object" access="public" description="The SObject metadata object returned from the controller" />
 
     <!-- Public Methods -->
     <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the metadata">
         <aura:attribute name="callback" type="function"/>
     </aura:method>
-
-    <!-- Private Attributes -->
-    <aura:attribute name="sobjectMetadata" type="Object" access="private" />
 
     <!-- Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
