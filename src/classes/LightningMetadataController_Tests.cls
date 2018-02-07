@@ -16,7 +16,7 @@ private class LightningMetadataController_Tests {
     }
 
     @isTest
-    static void it_should_throw_an_exception_for_invalid_sobject() {
+    static void it_should_throw_an_exception_for_invalid_sobject_name() {
         String sobjectName = 'FakeObject';
 
         Test.startTest();
@@ -37,7 +37,7 @@ private class LightningMetadataController_Tests {
         DescribeFieldResult fieldDescribe = Schema.Account.SObjectType.fields.Type.getDescribe();
 
         Test.startTest();
-        LightningMetadataController.ExtendedFieldMetadata fieldMetadata = LightningMetadataController.getFieldMetadataByName(sobjectName, fieldName);
+        FieldMetadata fieldMetadata = LightningMetadataController.getFieldMetadataByName(sobjectName, fieldName);
         Test.stopTest();
 
         System.assertEquals(sobjectName, fieldMetadata.sobjectApiName);
@@ -46,13 +46,13 @@ private class LightningMetadataController_Tests {
     }
 
     @isTest
-    static void it_should_throw_an_exception_for_invalid_field() {
+    static void it_should_throw_an_exception_for_invalid_field_name() {
         String sobjectName = 'Account';
         String fieldName = 'FakeField';
 
         Test.startTest();
         try {
-            LightningMetadataController.ExtendedFieldMetadata fieldMetadata = LightningMetadataController.getFieldMetadataByName(sobjectName, fieldName);
+            FieldMetadata fieldMetadata = LightningMetadataController.getFieldMetadataByName(sobjectName, fieldName);
             System.assert(false, 'Exception expected here');
         } catch(Exception ex) {
             System.assert(ex instanceOf AuraHandledException);

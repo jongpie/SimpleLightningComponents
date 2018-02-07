@@ -47,22 +47,22 @@ public with sharing class LightningMetadataController {
     }
 
     @AuraEnabled
-    public static ExtendedFieldMetadata getFieldMetadataByName(String sobjectName, String fieldName) {
+    public static FieldMetadata getFieldMetadataByName(String sobjectName, String fieldName) {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadata(\'' + sobjectName + '\', \'' + fieldName + '\')');
         try {
-            return new ExtendedFieldMetadata(sobjectName, fieldName);
+            return new FieldMetadata(sobjectName, fieldName);
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }
     }
 
     @AuraEnabled
-    public static List<ExtendedFieldMetadata> getFieldMetadataByNames(String sobjectName, List<String> fieldNames) {
+    public static List<FieldMetadata> getFieldMetadataByNames(String sobjectName, List<String> fieldNames) {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadataByNames(\'' + sobjectName + '\', \'' + fieldNames + '\')');
         try {
-            List<ExtendedFieldMetadata> results = new List<ExtendedFieldMetadata>();
+            List<FieldMetadata> results = new List<FieldMetadata>();
             for(String fieldName : fieldNames) {
-                results.add(new ExtendedFieldMetadata(sobjectName, fieldName));
+                results.add(new FieldMetadata(sobjectName, fieldName));
             }
             return results;
         } catch(Exception ex) {
@@ -131,32 +131,6 @@ public with sharing class LightningMetadataController {
             return results;
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
-        }
-    }
-
-//    public class ExtendedSObjectMetadata extends SObjectMetadata {
-//        // TODO finish implementing
-//        //@AuraEnabled public final List<RecordTypeMetadata> recordTypes {get; private set;}
-//        private ExtendedSObjectMetadata(String sobjectName) {
-//            super(sobjectName);
-//            //this.recordTypes = this.getRecordTypes();
-//        }
-//
-//        private List<RecordTypeMetadata> getRecordTypes() {
-//            List<RecordTypeMetadata> recordTypes = new List<RecordTypeMetadata>();
-//            for(String recordTypeApiName : RecordTypeMetadata.getRecordTypeApiNames(this.apiName)) {
-//                recordTypes.add(new RecordTypeMetadata(this.apiName, recordTypeApiName));
-//            }
-//            return recordTypes;
-//        }
-//    }
-
-    public class ExtendedFieldMetadata extends FieldMetadata {
-        // TODO consider moving to SimpleMetadata project instead
-        @AuraEnabled public final SObjectMetadata sobjectMetadata {get; private set;}
-        private ExtendedFieldMetadata(String sobjectName, String fieldName) {
-            super(sobjectName, fieldName);
-            this.sobjectMetadata = new SObjectMetadata(sobjectName);
         }
     }
 
