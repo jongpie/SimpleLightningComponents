@@ -12,7 +12,7 @@
 
         var action = component.get('c.getSObjectMetadataByName');
         action.setParams({
-            'sobjectApiName': sobjectApiName
+            sobjectApiName : sobjectApiName
         });
         action.setStorable();
         action.setCallback(this, function(response) {

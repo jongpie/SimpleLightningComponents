@@ -8,7 +8,7 @@
 
         var action = component.get('c.getRecordTypeMetadataById');
         action.setParams({
-            'recordTypeId': component.get('v.recordTypeId')
+            recordTypeId : component.get('v.recordTypeId')
         });
         action.setStorable();
         action.setCallback(this, function(response) {

@@ -9,8 +9,8 @@
 
         var action = component.get('c.getFieldMetadataByName');
         action.setParams({
-            'sobjectApiName': sobjectApiName,
-            'fieldApiName': fieldApiName
+            sobjectApiName : sobjectApiName,
+            fieldApiName   : fieldApiName
         });
         action.setStorable();
         action.setCallback(this, function(response) {
