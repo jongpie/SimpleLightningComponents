@@ -5,7 +5,7 @@
     <aura:attribute name="currentUser" type="User" access="public" description="The current user" />
 
     <!-- Public Methods -->
-    <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the metadata">
+    <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the current user">
         <aura:attribute name="callback" type="function"/>
     </aura:method>
 
@@ -15,4 +15,5 @@
 
     <!-- Markup -->
     {!v.body}
+
 </aura:component>
