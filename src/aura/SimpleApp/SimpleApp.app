@@ -1,9 +1,5 @@
 <aura:application extends="force:slds">
 
-    <!-- Public attributes -->
-    <aura:attribute name="myAccount" type="Account" default="{}" />
-    <aura:attribute name="myTask" type="Task" default="{}" />
-
     <!-- Private attributes for metadata service components -->
     <aura:attribute name="currentUser" type="User" access="private" />
     <aura:attribute name="environmentMetadata" type="EnvironmentMetadata" access="private" />
@@ -18,15 +14,19 @@
     <aura:attribute name="showFieldModal" type="String" access="private" />
     <aura:attribute name="showRecordTypeModal" type="String" access="private" />
 
+    <!-- Private attributes for input field demos -->
+    <aura:attribute name="myAccount" type="Account" default="{}" />
+    <aura:attribute name="myTask" type="Task" default="{}" />
+
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
     <!-- Metadata service components -->
     <c:currentUser aura:id="currentUserService" />
     <c:environmentMetadata aura:id="environmentMetadataService" />
     <c:fieldMetadata aura:id="fieldMetadataService" sobjectApiName="{!v.selectedSObject}" fieldApiName="{!v.selectedField}" />
     <c:recordTypeMetadata aura:id="recordTypeMetadataService" sobjectApiName="{!v.selectedSObject}" recordTypeApiName="{!v.selectedRecordType}" />
     <c:sobjectMetadata aura:id="sobjectMetadataService" sobjectApiName="{!v.selectedSObject}" />
-
-    <!-- Handlers -->
-    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
 
     <!-- Markup -->
     <h1 class="slds-align_absolute-center" style="font-size:250%;font-weight:bold;margin-bottom:30px;">Simple Lightning Components</h1>
