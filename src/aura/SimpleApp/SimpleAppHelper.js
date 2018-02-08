@@ -11,6 +11,12 @@
             component.set('v.environmentMetadata', response);
         }));
     },
+    fetchFieldMetadata : function(component, event) {
+        var fieldMetadataService = component.find('fieldMetadataService');
+        fieldMetadataService.fetch($A.getCallback(function(error, response) {
+            component.set('v.fieldMetadata', response);
+        }));
+    },
     fetchSObjectMetadata : function(component, event) {
         var sobjectMetadataService = component.find('sobjectMetadataService');
         sobjectMetadataService.fetch($A.getCallback(function(error, response) {

@@ -5,6 +5,13 @@
         helper.fetchSObjectMetadata(component, event);
     },
     fetchSObjectMetadata : function(component, event, helper) {
+        component.set('v.selectedField', null);
         helper.fetchSObjectMetadata(component, event);
+    },
+    fetchFieldMetadata : function(component, event, helper) {
+        helper.fetchFieldMetadata(component, event);
+    },
+    viewFieldMetadata : function(component, event, helper) {
+        component.set('v.showFieldModal', true);
     }
 })

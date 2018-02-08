@@ -4,16 +4,22 @@
     <aura:attribute name="myAccount" type="Account" default="{}" />
     <aura:attribute name="myTask" type="Task" default="{}" />
 
-    <!-- Private attributes -->
+    <!-- Private attributes for metadata service components -->
     <aura:attribute name="environmentMetadata" type="EnvironmentMetadata" access="private" />
     <aura:attribute name="currentUser" type="User" access="private" />
     <aura:attribute name="sobjectMetadata" type="SObjectMetadata" access="private" />
+    <aura:attribute name="fieldMetadata" type="SObjectMetadata" access="private" />
+
+    <!-- Private attributes for controlling UI -->
     <aura:attribute name="selectedSObject" type="String" access="private" />
+    <aura:attribute name="selectedField" type="String" access="private" />
+    <aura:attribute name="showFieldModal" type="String" access="private" />
 
     <!-- Metadata service components -->
     <c:environmentMetadata aura:id="environmentMetadataService" />
     <c:currentUser aura:id="currentUserService" />
     <c:sobjectMetadata aura:id="sobjectMetadataService" sobjectApiName="{!v.selectedSObject}" />
+    <c:fieldMetadata aura:id="fieldMetadataService" sobjectApiName="{!v.selectedSObject}" fieldApiName="{!v.selectedField}" />
 
     <!-- Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
@@ -94,7 +100,7 @@
                 </tbody>
             </table>
         </lightning:tab>
-        <lightning:tab label="SObject Metadata">
+        <lightning:tab label="SObject &amp; Field Metadata">
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">SObject Metadata</h2>
             <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
                 <div class="slds-text-color_inverse">
@@ -108,6 +114,79 @@
                 </aura:iteration>
             </lightning:select>
             <aura:if isTrue="{!empty(v.selectedSObject) == false}">
+                <div class="slds-float--right" style="margin: 10px 30px;">
+                    <lightning:button variant="brand" label="View Field Metadata" onclick="{!c.viewFieldMetadata}" />
+                </div>
+                <c:modal showModal="{!v.showFieldModal}" title="{!'Field Metadata for ' + v.selectedSObject}">
+                    <lightning:select name="selectItem" label="Select a field" value="{!v.selectedField}" onchange="{!c.fetchFieldMetadata}">
+                        <option value="" text="" />
+                        <aura:iteration items="{!v.sobjectMetadata.fieldApiNames}" var="fieldApiName">
+                            <option value="{!fieldApiName}" text="{!fieldApiName}" />
+                        </aura:iteration>
+                    </lightning:select>
+                    <aura:if isTrue="{!empty(v.selectedField) == false}">
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                            <thead>
+                                <tr class="slds-text-title_caps ">
+                                    <th scope="col" style="width:50%"><div class="slds-truncate">Attribute</div></th>
+                                    <th scope="col" style="width:50%"><div class="slds-truncate">Value</div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>apiName</td><td>{!v.fieldMetadata.apiName}</td></tr>
+                                <tr><td>byteLength</td><td>{!v.fieldMetadata.byteLength}</td></tr>
+                                <tr><td>defaultValue</td><td>{!v.fieldMetadata.defaultValue}</td></tr>
+                                <tr><td>digits</td><td>{!v.fieldMetadata.digits}</td></tr>
+                                <tr><td>displayType</td><td>{!v.fieldMetadata.displayType}</td></tr>
+                                <tr><td>inlineHelpText</td><td>{!v.fieldMetadata.inlineHelpText}</td></tr>
+                                <tr><td>isAccessible</td><td style="{!v.fieldMetadata.isAccessible ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isAccessible}</td></tr>
+                                <tr><td>isAutoNumber</td><td style="{!v.fieldMetadata.isAutoNumber ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isAutoNumber}</td></tr>
+                                <tr><td>isCalculated</td><td style="{!v.fieldMetadata.isCalculated ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isCalculated}</td></tr>
+                                <tr><td>isCaseSensitive</td><td style="{!v.fieldMetadata.isCaseSensitive ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isCaseSensitive}</td></tr>
+                                <tr><td>isCreateable</td><td style="{!v.fieldMetadata.isCreateable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isCreateable}</td></tr>
+                                <tr><td>isCustom</td><td style="{!v.fieldMetadata.isCustom ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isCustom}</td></tr>
+                                <tr><td>isDefaultedOnCreate</td><td style="{!v.fieldMetadata.isDefaultedOnCreate ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isDefaultedOnCreate}</td></tr>
+                                <tr><td>isFilterable</td><td style="{!v.fieldMetadata.isFilterable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isFilterable}</td></tr>
+                                <tr><td>isGroupable</td><td style="{!v.fieldMetadata.isGroupable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isGroupable}</td></tr>
+                                <tr><td>isNameField</td><td style="{!v.fieldMetadata.isNameField ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isNameField}</td></tr>
+                                <tr><td>isNillable</td><td style="{!v.fieldMetadata.isNillable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isNillable}</td></tr>
+                                <tr><td>isRequired</td><td style="{!v.fieldMetadata.isRequired ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isRequired}</td></tr>
+                                <tr><td>isSortable</td><td style="{!v.fieldMetadata.isSortable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isSortable}</td></tr>
+                                <tr><td>isUpdateable</td><td style="{!v.fieldMetadata.isUpdateable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isUpdateable}</td></tr>
+                                <tr><td>label</td><td>{!v.fieldMetadata.label}</td></tr>
+                                <tr><td>localApiName</td><td>{!v.fieldMetadata.localApiName}</td></tr>
+                                <tr><td>maxLength</td><td>{!v.fieldMetadata.maxLength}</td></tr>
+                                <tr><td>namespace</td><td>{!v.fieldMetadata.namespace}</td></tr>
+                                <tr>
+                                    <td>picklistOptions</td>
+                                    <td>
+                                        <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
+                                            <aura:iteration items="{!v.fieldMetadata.picklistOptions}" var="picklistOption">
+                                                <li>label: {!picklistOption.label}, value: {!picklistOption.value}, isDefaultValue: {!picklistOption.value}</li>
+                                            </aura:iteration>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr><td>precision</td><td>{!v.fieldMetadata.precision}</td></tr>
+                                <tr><td>relationshipName</td><td>{!v.fieldMetadata.relationshipName}</td></tr>
+                                <tr><td>relationshipOrder</td><td>{!v.fieldMetadata.relationshipOrder}</td></tr>
+                                <tr>
+                                    <td>relationshipReferences</td>
+                                    <td>
+                                        <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
+                                            <aura:iteration items="{!v.fieldMetadata.relationshipReferences}" var="relationshipReference">
+                                                <li>label: {!relationshipReference.label}, apiName: {!relationshipReference.apiName}</li>
+                                            </aura:iteration>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr><td>scale</td><td>{!v.fieldMetadata.scale}</td></tr>
+                                <tr><td>soapType</td><td>{!v.fieldMetadata.soapType}</td></tr>
+                                <tr><td>sobjectApiName</td><td>{!v.fieldMetadata.sobjectApiName}</td></tr>
+                            </tbody>
+                        </table>
+                    </aura:if>
+                </c:modal>
                 <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
                     <thead>
                         <tr class="slds-text-title_caps ">
