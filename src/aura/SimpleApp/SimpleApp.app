@@ -5,21 +5,25 @@
     <aura:attribute name="myTask" type="Task" default="{}" />
 
     <!-- Private attributes for metadata service components -->
-    <aura:attribute name="environmentMetadata" type="EnvironmentMetadata" access="private" />
     <aura:attribute name="currentUser" type="User" access="private" />
+    <aura:attribute name="environmentMetadata" type="EnvironmentMetadata" access="private" />
+    <aura:attribute name="fieldMetadata" type="FieldMetadata" access="private" />
+    <aura:attribute name="recordTypeMetadata" type="RecordTypeMetadata" access="private" />
     <aura:attribute name="sobjectMetadata" type="SObjectMetadata" access="private" />
-    <aura:attribute name="fieldMetadata" type="SObjectMetadata" access="private" />
 
     <!-- Private attributes for controlling UI -->
     <aura:attribute name="selectedSObject" type="String" access="private" />
     <aura:attribute name="selectedField" type="String" access="private" />
+    <aura:attribute name="selectedRecordType" type="String" access="private" />
     <aura:attribute name="showFieldModal" type="String" access="private" />
+    <aura:attribute name="showRecordTypeModal" type="String" access="private" />
 
     <!-- Metadata service components -->
-    <c:environmentMetadata aura:id="environmentMetadataService" />
     <c:currentUser aura:id="currentUserService" />
-    <c:sobjectMetadata aura:id="sobjectMetadataService" sobjectApiName="{!v.selectedSObject}" />
+    <c:environmentMetadata aura:id="environmentMetadataService" />
     <c:fieldMetadata aura:id="fieldMetadataService" sobjectApiName="{!v.selectedSObject}" fieldApiName="{!v.selectedField}" />
+    <c:recordTypeMetadata aura:id="recordTypeMetadataService" sobjectApiName="{!v.selectedSObject}" recordTypeApiName="{!v.selectedRecordType}" />
+    <c:sobjectMetadata aura:id="sobjectMetadataService" sobjectApiName="{!v.selectedSObject}" />
 
     <!-- Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
@@ -100,7 +104,7 @@
                 </tbody>
             </table>
         </lightning:tab>
-        <lightning:tab label="SObject &amp; Field Metadata">
+        <lightning:tab label="SObject Metadata">
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">SObject Metadata</h2>
             <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
                 <div class="slds-text-color_inverse">
@@ -115,7 +119,10 @@
             </lightning:select>
             <aura:if isTrue="{!empty(v.selectedSObject) == false}">
                 <div class="slds-float--right" style="margin: 10px 30px;">
-                    <lightning:button variant="brand" label="View Field Metadata" onclick="{!c.viewFieldMetadata}" />
+                    <lightning:buttonGroup>
+                        <lightning:button variant="brand" label="View Field Metadata" onclick="{!c.viewFieldMetadata}" />
+                        <lightning:button variant="brand" label="View Record Type Metadata" onclick="{!c.viewRecordTypeMetadata}" />
+                    </lightning:buttonGroup>
                 </div>
                 <c:modal showModal="{!v.showFieldModal}" title="{!'Field Metadata for ' + v.selectedSObject}">
                     <lightning:select name="selectItem" label="Select a field" value="{!v.selectedField}" onchange="{!c.fetchFieldMetadata}">
@@ -183,6 +190,38 @@
                                 <tr><td>scale</td><td>{!v.fieldMetadata.scale}</td></tr>
                                 <tr><td>soapType</td><td>{!v.fieldMetadata.soapType}</td></tr>
                                 <tr><td>sobjectApiName</td><td>{!v.fieldMetadata.sobjectApiName}</td></tr>
+                            </tbody>
+                        </table>
+                    </aura:if>
+                </c:modal>
+                <c:modal showModal="{!v.showRecordTypeModal}" title="{!'Record Type Metadata for ' + v.selectedSObject}">
+                    <lightning:select name="selectItem" label="Select a record type" value="{!v.selectedRecordType}" onchange="{!c.fetchRecordTypeMetadata}">
+                        <option value="" text="" />
+                        <aura:iteration items="{!v.sobjectMetadata.recordTypeApiNames}" var="recordTypeApiName">
+                            <option value="{!recordTypeApiName}" text="{!recordTypeApiName}" />
+                        </aura:iteration>
+                    </lightning:select>
+                    <aura:if isTrue="{!empty(v.selectedRecordType) == false}">
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                            <thead>
+                                <tr class="slds-text-title_caps ">
+                                    <th scope="col" style="width:50%"><div class="slds-truncate">Attribute</div></th>
+                                    <th scope="col" style="width:50%"><div class="slds-truncate">Value</div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>apiName</td><td>{!v.recordTypeMetadata.apiName}</td></tr>
+                                <tr><td>businessProcessId</td><td>{!v.recordTypeMetadata.businessProcessId}</td></tr>
+                                <tr><td>description</td><td>{!v.recordTypeMetadata.description}</td></tr>
+                                <tr><td>id</td><td>{!v.recordTypeMetadata.id}</td></tr>
+                                <tr><td>isActive</td><td style="{!v.recordTypeMetadata.isActive ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.isActive}</td></tr>
+                                <tr><td>isAvailable</td><td style="{!v.recordTypeMetadata.isAvailable ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.isAvailable}</td></tr>
+                                <tr><td>isDefault</td><td style="{!v.recordTypeMetadata.isDefault ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.isDefault}</td></tr>
+                                <tr><td>isMaster</td><td style="{!v.recordTypeMetadata.isMaster ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.isMaster}</td></tr>
+                                <tr><td>label</td><td>{!v.recordTypeMetadata.label}</td></tr>
+                                <tr><td>localApiName</td><td>{!v.recordTypeMetadata.localApiName}</td></tr>
+                                <tr><td>namespace</td><td>{!v.recordTypeMetadata.namespace}</td></tr>
+                                <tr><td>sobjectApiName</td><td>{!v.recordTypeMetadata.sobjectApiName}</td></tr>
                             </tbody>
                         </table>
                     </aura:if>

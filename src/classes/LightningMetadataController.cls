@@ -102,6 +102,16 @@ public with sharing class LightningMetadataController {
     }
 
     @AuraEnabled
+    public static RecordTypeMetadata getRecordTypeMetadataByApiName(String sobjectApiName, String recordTypeApiName) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getRecordTypeMetadataByApiName(\'' + sobjectApiName + '\', \'' + recordTypeApiName+ '\')');
+        try {
+            return new RecordTypeMetadata(sobjectApiName, recordTypeApiName);
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
     public static SObjectMetadata getSObjectMetadataByName(String sobjectApiName) {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getSObjectMetadata(\'' + sobjectApiName + '\')');
         try {

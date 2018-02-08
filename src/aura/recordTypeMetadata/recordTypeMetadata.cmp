@@ -1,7 +1,9 @@
 <aura:component extensible="true" controller="LightningMetadataController">
 
     <!-- Public Attributes -->
-    <aura:attribute name="recordTypeId" type="String" required="true" description="The API name of the field"  />
+    <aura:attribute name="recordTypeId" type="Id" description="The ID of the record type"  />
+    <aura:attribute name="sobjectApiName" type="String" description="The API name of the SObject"  />
+    <aura:attribute name="recordTypeApiName" type="String" description="The API name of the record type"  />
     <aura:attribute name="recordTypeMetadata" type="RecordTypeMetadata" access="public" description="The record type metadata object returned from the controller" />
 
     <!-- Public Methods -->
@@ -12,5 +14,7 @@
     <!-- Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     <aura:handler name="change" value="{!v.recordTypeId}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.sobjectApiName}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.recordTypeApiName}" action="{!c.doInit}" />
 
 </aura:component>

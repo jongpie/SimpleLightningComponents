@@ -17,6 +17,12 @@
             component.set('v.fieldMetadata', response);
         }));
     },
+    fetchRecordTypeMetadata : function(component, event) {
+        var recordTypeMetadataService = component.find('recordTypeMetadataService');
+        recordTypeMetadataService.fetch($A.getCallback(function(error, response) {
+            component.set('v.recordTypeMetadata', response);
+        }));
+    },
     fetchSObjectMetadata : function(component, event) {
         var sobjectMetadataService = component.find('sobjectMetadataService');
         sobjectMetadataService.fetch($A.getCallback(function(error, response) {

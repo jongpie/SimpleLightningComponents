@@ -18,14 +18,15 @@ global virtual class RecordTypeMetadata {
         QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_API_NAME            = new Map<String, List<String>>();
 
         for(RecordType recordType : [SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SObjectType FROM RecordType]) {
+            String namespace = recordType.NamespacePrefix == null ? '' : recordType.NamespacePrefix + '__';
             QUERIED_RECORD_TYPES_BY_ID.put(recordType.Id, recordType);
-            QUERIED_RECORD_TYPES_BY_SOBJECT_AND_DEVELOPER_API_NAME.put(recordType.SObjectType + recordType.DeveloperName, recordType);
+            QUERIED_RECORD_TYPES_BY_SOBJECT_AND_DEVELOPER_API_NAME.put(recordType.SObjectType + namespace + recordType.DeveloperName, recordType);
 
             if(!QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_API_NAME.containsKey(recordType.SObjectType)) {
                 QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_API_NAME.put(recordType.SObjectType, new List<String>{});
             }
             List<String> recordTypeApiNames = QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_API_NAME.get(recordType.SObjectType);
-            recordTypeApiNames.add((recordType.NamespacePrefix == null ? '' : recordType.NamespacePrefix + '__') + recordType.DeveloperName);
+            recordTypeApiNames.add(namespace + recordType.DeveloperName);
             QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_API_NAME.put(recordType.SObjectType, recordTypeApiNames);
         }
     }
