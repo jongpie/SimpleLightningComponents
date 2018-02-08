@@ -23,6 +23,11 @@
     <lightning:tabset>
         <lightning:tab label="Environment Metadata">
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">Environment Metadata</h2>
+            <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
+                <div class="slds-text-color_inverse">
+                    <p>Information for the current environment is shown below.</p>
+                </div>
+            </div>
             <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
                 <thead>
                     <tr class="slds-text-title_caps ">
@@ -59,6 +64,14 @@
         </lightning:tab>
         <lightning:tab label="Current User">
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">Current User</h2>
+            <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
+                <div class="slds-text-color_inverse">
+                    <p>
+                        Information for the current user is shown below. Additional fields can be returned for the current user by
+                        passing an array of field API names to the currentUser component
+                    </p>
+                </div>
+            </div>
             <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
                 <thead>
                     <tr class="slds-text-title_caps ">
@@ -83,6 +96,11 @@
         </lightning:tab>
         <lightning:tab label="SObject Metadata">
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">SObject Metadata</h2>
+            <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
+                <div class="slds-text-color_inverse">
+                    <p>Choose an SObject and the metadata will be shown below</p>
+                </div>
+            </div>
             <lightning:select name="selectItem" label="Select an SObject" value="{!v.selectedSObject}" onchange="{!c.fetchSObjectMetadata}">
                 <option value="" text="" />
                 <aura:iteration items="{!v.environmentMetadata.sobjectApiNames}" var="sobjectApiName">
