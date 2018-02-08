@@ -1,16 +1,16 @@
 ({
     fetchFieldSetMetadata : function(component, event) {
-        var sobjectName = component.get('v.sobjectName');
-        var fieldSetName = component.get('v.fieldSetName');
+        var sobjectApiName  = component.get('v.sobjectApiName');
+        var fieldSetApiName = component.get('v.fieldSetApiName');
 
-        if(!sobjectName || !fieldSetName) return;
+        if(!sobjectApiName || !fieldSetApiName) return;
 
         var params = event.getParam('arguments');
 
         var action = component.get('c.getFieldSetMetadataByName');
         action.setParams({
-            'sobjectName': component.get('v.sobjectName'),
-            'fieldSetName': component.get('v.fieldSetName')
+            'sobjectApiName': component.get('v.sobjectApiName'),
+            'fieldSetApiName': component.get('v.fieldSetApiName')
         });
         action.setStorable();
         action.setCallback(this, function(response) {

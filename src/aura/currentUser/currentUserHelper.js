@@ -4,14 +4,12 @@
 
         var action = component.get('c.getCurrentUser');
         action.setParams({
-            'additionalfieldNames': component.get('v.additionalfieldNames')
+            'additionalFieldApiNames': component.get('v.additionalFieldApiNames')
         });
         action.setStorable();
         action.setCallback(this, function(response) {
             if(response.getState() === 'SUCCESS') {
                 var currentUser = response.getReturnValue();
-                console.log('currentUser');
-                console.log(currentUser);
                 component.set('v.currentUser', currentUser);
 
                 if(params) params.callback(null, currentUser);

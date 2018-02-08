@@ -7,9 +7,9 @@
     },
     handleRecordChanged : function(component, event, helper) {
         var record     = component.get('v.record');
-        var fieldName  = component.get('v.fieldName');
+        var fieldApiName  = component.get('v.fieldApiName');
 
-        component.set('v.fieldValue', record[fieldName]);
+        component.set('v.fieldValue', record[fieldApiName]);
     },
     handleFieldValueChanged : function(component, event, helper) {
         helper.handleFieldValueChanged(component, event);

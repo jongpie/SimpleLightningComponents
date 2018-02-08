@@ -1,16 +1,16 @@
 ({
     fetchFieldMetadata : function(component, event) {
-        var sobjectName = component.get('v.sobjectName');
-        var fieldName = component.get('v.fieldName');
+        var sobjectApiName = component.get('v.sobjectApiName');
+        var fieldApiName   = component.get('v.fieldApiName');
 
-        if(!sobjectName || !fieldName) return;
+        if(!sobjectApiName || !fieldApiName) return;
 
         var params = event.getParam('arguments');
 
         var action = component.get('c.getFieldMetadataByName');
         action.setParams({
-            'sobjectName': component.get('v.sobjectName'),
-            'fieldName': component.get('v.fieldName')
+            'sobjectApiName': sobjectApiName,
+            'fieldApiName': fieldApiName
         });
         action.setStorable();
         action.setCallback(this, function(response) {

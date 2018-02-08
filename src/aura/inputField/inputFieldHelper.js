@@ -18,11 +18,11 @@
     },
     parseFieldValue : function(component, event) {
         var record = component.get('v.record');
-        var fieldName = component.get('v.fieldName');
+        var fieldApiName = component.get('v.fieldApiName');
         if(record === null) return;
 
-        if(record.hasOwnProperty(fieldName)) {
-            component.set('v.fieldValue', record[fieldName]);
+        if(record.hasOwnProperty(fieldApiName)) {
+            component.set('v.fieldValue', record[fieldApiName]);
         }
     },
     parsePicklistOptions : function(component, event) {
@@ -39,7 +39,7 @@
         component.set('v.picklistOptions', picklistOptions);
     },
     handleFieldValueChanged : function(component, event) {
-        var changedField  = component.get('v.fieldName');
+        var changedField  = component.get('v.fieldApiName');
         var record        = component.get('v.record');
         var fieldValue    = component.get('v.fieldValue');
         var fieldMetadata = component.get('v.fieldMetadata');

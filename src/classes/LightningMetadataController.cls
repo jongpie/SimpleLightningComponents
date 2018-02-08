@@ -5,8 +5,8 @@
 public with sharing class LightningMetadataController {
 
     @AuraEnabled
-    public static User getCurrentUser(List<String> additionalfieldNames) {
-        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getCurrentUser(' + additionalfieldNames + ')');
+    public static User getCurrentUser(List<String> additionalFieldApiNames) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getCurrentUser(' + additionalFieldApiNames + ')');
         try {
             List<String> userFieldNames = new List<String>{
                 'DefaultCurrency', 'Email', 'FirstName', 'Id', 'Language', 'LastName', 'Locale', 'Name',
@@ -15,17 +15,17 @@ public with sharing class LightningMetadataController {
 
             // If there are additional fields to query, verify that the current user has access to each field
             // TODO improve this so it handles field paths for parent objects, like 'Manager.Profile.Name'
-            if(additionalfieldNames != null) userFieldNames.addAll(additionalfieldNames);
+            if(additionalFieldApiNames != null) userFieldNames.addAll(additionalFieldApiNames);
 
             DescribeSObjectResult userDescribe = Schema.User.SObjectType.getDescribe();
             List<String> userFieldNamesToQuery = new List<String>();
-            for(String fieldName : userFieldNames) {
-                SObjectField field = userDescribe.fields.getMap().get(fieldName);
+            for(String fieldApiName : userFieldNames) {
+                SObjectField field = userDescribe.fields.getMap().get(fieldApiName);
 
                 if(field == null) continue;
 
                 DescribeFieldResult fieldDescribe = field.getDescribe();
-                if(fieldDescribe.isAccessible()) userFieldNamesToQuery.add(fieldName.toLowerCase());
+                if(fieldDescribe.isAccessible()) userFieldNamesToQuery.add(fieldApiName.toLowerCase());
             }
 
             // Dedupe & sort the field list
@@ -52,30 +52,30 @@ public with sharing class LightningMetadataController {
     }
 
     @AuraEnabled
-    public static FieldMetadata getFieldMetadataByName(String sobjectName, String fieldName) {
-        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadata(\'' + sobjectName + '\', \'' + fieldName + '\')');
+    public static FieldMetadata getFieldMetadataByName(String sobjectApiName, String fieldApiName) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldMetadata(\'' + sobjectApiName + '\', \'' + fieldApiName + '\')');
         try {
-            return new FieldMetadata(sobjectName, fieldName);
+            return new FieldMetadata(sobjectApiName, fieldApiName);
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }
     }
 
     @AuraEnabled
-    public static FieldSetMetadata getFieldSetMetadataByName(String sobjectName, String fieldSetName) {
-        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldSetMetadataByName(\'' + sobjectName + '\', \'' + fieldSetName + '\')');
+    public static FieldSetMetadata getFieldSetMetadataByName(String sobjectApiName, String fieldSetApiName) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getFieldSetMetadataByName(\'' + sobjectApiName + '\', \'' + fieldSetApiName + '\')');
         try {
-            return new FieldSetMetadata(sobjectName, fieldSetName);
+            return new FieldSetMetadata(sobjectApiName, fieldSetApiName);
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }
     }
 
     @AuraEnabled
-    public static ListViewMetadata getListViewMetadataByName(String sobjectName, String listViewName) {
-        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getListViewMetadata(\'' + sobjectName + '\', \'' + listViewName + '\')');
+    public static ListViewMetadata getListViewMetadataByName(String sobjectApiName, String listViewName) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getListViewMetadata(\'' + sobjectApiName + '\', \'' + listViewName + '\')');
         try {
-            return new ListViewMetadata(sobjectName, listViewName);
+            return new ListViewMetadata(sobjectApiName, listViewName);
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }
@@ -102,10 +102,10 @@ public with sharing class LightningMetadataController {
     }
 
     @AuraEnabled
-    public static SObjectMetadata getSObjectMetadataByName(String sobjectName) {
-        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getSObjectMetadata(\'' + sobjectName + '\')');
+    public static SObjectMetadata getSObjectMetadataByName(String sobjectApiName) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getSObjectMetadata(\'' + sobjectApiName + '\')');
         try {
-            return new SObjectMetadata(sobjectName);
+            return new SObjectMetadata(sobjectApiName);
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }

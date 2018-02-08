@@ -16,7 +16,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 
     <!-- Private SObject Selector Attributes -->
     <aura:attribute name="showSObjectSelector" type="Boolean" access="private" default="false" />
-    <aura:attribute name="parentSObjectName" type="String" access="private" />
+    <aura:attribute name="parentSObjectApiName" type="String" access="private" />
     <aura:attribute name="parentSObjectMetadata" type="SObjectMetadata" access="private" />
 
     <!-- Private Search Result Attributes -->
@@ -27,7 +27,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.parseFieldMetadata}" />
     <aura:handler name="change" value="{!v.selectedParentRecordId}" action="{!c.loadSelectedParentRecord}" />
-    <aura:handler name="change" value="{!v.parentSObjectName}" action="{!c.loadParentSObjectMetadata}" />
+    <aura:handler name="change" value="{!v.parentSObjectApiName}" action="{!c.loadParentSObjectMetadata}" />
 
     <!-- Markup -->
     <div class="slds-form-element">
@@ -46,7 +46,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                                     <aura:iteration items="{!v.fieldMetadata.relationshipReferences}" var="relationshipReference">
                                         <aura:if isTrue="{!relationshipReference.isAccessible}">
                                             <li class="slds-dropdown__item slds-is-selected" role="presentation">
-                                                <a href="javascript:void(0);" role="menuitemcheckbox" aria-checked="true" tabindex="0" data-sobjectname="{!relationshipReference.apiName}" onclick="{!c.selectParentSObject}">
+                                                <a href="javascript:void(0);" role="menuitemcheckbox" aria-checked="true" tabindex="0" data-sobjectapiname="{!relationshipReference.apiName}" onclick="{!c.selectParentSObject}">
                                                     <span class="slds-truncate" title="{!relationshipReference.labelPlural}">
                                                         <lightning:icon iconName="{!relationshipReference.tabIcon}" size="large" />
                                                         &nbsp;{!relationshipReference.labelPlural}

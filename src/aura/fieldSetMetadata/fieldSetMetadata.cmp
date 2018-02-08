@@ -1,7 +1,7 @@
 <aura:component extends="c.sobjectMetadata" extensible="true" controller="LightningMetadataController">
 
     <!-- Public Attributes -->
-    <aura:attribute name="fieldSetName" type="String" required="true" description="The API name of the field set"  />
+    <aura:attribute name="fieldSetApiName" type="String" required="true" description="The API name of the field set"  />
     <aura:attribute name="fieldSetMetadata" type="FieldSetMetadata" access="public" description="The field set metadata object returned from the controller" />
 
     <!-- Public Methods -->
@@ -11,8 +11,8 @@
 
     <!-- Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-    <aura:handler name="change" value="{!v.sobjectName}" action="{!c.doInit}" />
-    <aura:handler name="change" value="{!v.fieldSetName}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.sobjectApiName}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.fieldSetApiName}" action="{!c.doInit}" />
 
     <!-- Markup -->
     {!v.body}

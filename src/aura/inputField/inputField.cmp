@@ -31,7 +31,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                     <aura:if isTrue="{!and(v.required, v.displayType != 'BOOLEAN')}">
                         <abbr class="slds-required" title="required">*</abbr>
                     </aura:if>
-                    <c:fieldLabel sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" />
+                    <c:fieldLabel sobjectApiName="{!v.sobjectApiName}" fieldApiName="{!v.fieldApiName}" />
                 </label>
             </aura:if>
 
@@ -131,7 +131,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 
                 <!-- REFERENCE -->
                 <aura:if isTrue="{!v.displayType == 'REFERENCE'}">
-                    <c:lookup sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}"
+                    <c:lookup sobjectApiName="{!v.sobjectApiName}" fieldApiName="{!v.fieldApiName}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}"
                         record="{!v.record}"
                     />
                 </aura:if>

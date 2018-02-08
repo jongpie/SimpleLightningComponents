@@ -5,20 +5,20 @@
 public with sharing class LookupController {
 
     @AuraEnabled
-    public static List<MatchingRecord> search(String parentSObjectName, String searchFieldName, String searchText, String displayTextFieldName, Integer limitCount) {
+    public static List<MatchingRecord> search(String parentSObjectApiName, String searchFieldApiName, String searchText, String displayFieldApiName, Integer limitCount) {
         try {
-            Schema.DescribeSObjectResult parentSObjectDescribe = Schema.getGlobalDescribe().get(parentSObjectName).getDescribe();
-            SObjectMetadata parentSObjectMetadata = new SObjectMetadata(parentSObjectName);
+            Schema.DescribeSObjectResult parentSObjectDescribe = Schema.getGlobalDescribe().get(parentSObjectApiName).getDescribe();
+            SObjectMetadata parentSObjectMetadata = new SObjectMetadata(parentSObjectApiName);
 
-            String query = 'SELECT Id, ' + displayTextFieldName
-                + ' FROM ' + parentSObjectName;
+            String query = 'SELECT Id, ' + displayFieldApiName + ' FROM ' + parentSObjectApiName;
 
             if(!String.isEmpty(searchText)) {
                 searchText = '\'%' + String.escapeSingleQuotes(searchText.trim()) + '%\'';
-                query += ' WHERE ' + searchFieldName + ' LIKE ' + searchText;
+                query += ' WHERE ' + searchFieldApiName + ' LIKE ' + searchText;
             }
 
-            String sortByField = parentSObjectDescribe.fields.getMap().containsKey('LastViewedDate') ? 'LastViewedDate DESC NULLS LAST' : parentSObjectMetadata.displayFieldApiName;
+            Boolean canSortByLastViewdDate = parentSObjectDescribe.fields.getMap().containsKey('LastViewedDate') && String.isEmpty(searchText);
+            String sortByField = canSortByLastViewdDate ? 'LastViewedDate DESC NULLS LAST' : parentSObjectMetadata.displayFieldApiName;
             query += ' ORDER BY ' + sortByField
                 + ' LIMIT ' + limitCount;
 

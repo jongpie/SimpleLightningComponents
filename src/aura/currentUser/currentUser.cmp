@@ -1,7 +1,7 @@
 <aura:component extensible="true" controller="LightningMetadataController">
 
     <!-- Public Attributes -->
-    <aura:attribute name="additionalfieldNames" type="String[]" access="public" description="(Optional) Additional field names to return for the current user" />
+    <aura:attribute name="additionalFieldApiNames" type="String[]" access="public" description="(Optional) Additional field API names to return for the current user" />
     <aura:attribute name="currentUser" type="User" access="public" description="The current user" />
 
     <!-- Public Methods -->
@@ -11,7 +11,7 @@
 
     <!-- Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-    <aura:handler name="change" value="{!v.additionalfieldNames}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.additionalFieldApiNames}" action="{!c.doInit}" />
 
     <!-- Markup -->
     {!v.body}

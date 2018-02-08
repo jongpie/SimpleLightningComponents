@@ -5,7 +5,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 <aura:component extensible="true" controller="LightningMetadataController">
 
     <!-- Public Attributes -->
-    <aura:attribute name="sobjectName" type="String" description="The API name of the SObject" />
+    <aura:attribute name="sobjectApiName" type="String" required="true" description="The API name of the SObject" />
     <aura:attribute name="sobjectMetadata" type="SObjectMetadata" access="public" description="The SObject metadata object returned from the controller" />
 
     <!-- Public Methods -->
@@ -15,7 +15,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 
     <!-- Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-    <aura:handler name="change" value="{!v.sobjectName}" action="{!c.clearCachedMetadata}" />
+    <aura:handler name="change" value="{!v.sobjectApiName}" action="{!c.clearCachedMetadata}" />
 
     <!-- Markup -->
     {!v.body}

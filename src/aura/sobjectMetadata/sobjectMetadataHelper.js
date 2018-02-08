@@ -5,14 +5,14 @@
         // If we already have the sobject metadata cached, use the cache
         if(sobjectMetadata) return;
 
-        var sobjectName = component.get('v.sobjectName');
+        var sobjectApiName = component.get('v.sobjectApiName');
         var params = event.getParam('arguments');
 
-        if(!sobjectName) return;
+        if(!sobjectApiName) return;
 
         var action = component.get('c.getSObjectMetadataByName');
         action.setParams({
-            'sobjectName': sobjectName
+            'sobjectApiName': sobjectApiName
         });
         action.setStorable();
         action.setCallback(this, function(response) {

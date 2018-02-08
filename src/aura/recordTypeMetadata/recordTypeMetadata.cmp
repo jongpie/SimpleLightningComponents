@@ -1,4 +1,4 @@
-<aura:component extends="c.sobjectMetadata" extensible="true" controller="LightningMetadataController">
+<aura:component extensible="true" controller="LightningMetadataController">
 
     <!-- Public Attributes -->
     <aura:attribute name="recordTypeId" type="String" required="true" description="The API name of the field"  />
