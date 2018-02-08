@@ -14,6 +14,7 @@
         var defaultRelationshipReference;
         for(var i = 0; i < fieldMetadata.relationshipReferences.length; i++) {
             var relationshipReference = fieldMetadata.relationshipReferences[i];
+
             if(relationshipReference.isAccessible === true) {
                 defaultRelationshipReference = relationshipReference;
                 break;

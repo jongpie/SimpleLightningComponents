@@ -6,8 +6,8 @@
         helper.setFieldMetadataAttributes(component, event);
     },
     handleRecordChanged : function(component, event, helper) {
-        var record     = component.get('v.record');
-        var fieldApiName  = component.get('v.fieldApiName');
+        var record       = component.get('v.record');
+        var fieldApiName = component.get('v.fieldApiName');
 
         component.set('v.fieldValue', record[fieldApiName]);
     },

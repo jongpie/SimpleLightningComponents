@@ -14,8 +14,6 @@
         action.setCallback(this, function(response) {
             if(response.getState() === 'SUCCESS') {
                 var recordTypeMetadata = response.getReturnValue();
-                console.log('recordTypeMetadata');
-                console.log(recordTypeMetadata);
                 component.set('v.recordTypeMetadata', recordTypeMetadata);
 
                 if(params) params.callback(null, recordTypeMetadata);
