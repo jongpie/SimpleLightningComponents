@@ -101,6 +101,7 @@ global virtual class SObjectMetadata {
         for(Schema.SObjectField field : sobjectDescribe.fields.getMap().values()) {
             fieldApiNames.add(String.valueOf(field));
         }
+        fieldApiNames.sort();
         return fieldApiNames;
     }
 
