@@ -26,6 +26,7 @@ global class ListViewMetadata {
 
     public static List<String> getListViewApiNames(String sobjectApiName) {
         List<String> results = QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.get(sobjectApiName);
+        if(results != null) results.sort();
         return results != null ? results : new List<String>();
     }
 

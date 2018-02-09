@@ -33,6 +33,7 @@ global virtual class RecordTypeMetadata {
 
     public static List<String> getRecordTypeApiNames(String sobjectApiName) {
         List<String> results = QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_API_NAME.get(sobjectApiName);
+        if(results != null) results.sort();
         return results != null ? results : new List<String>();
     }
 

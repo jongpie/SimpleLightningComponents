@@ -111,6 +111,7 @@ global virtual class SObjectMetadata {
             String namespace = fieldSet.getNameSpace() == null ? '' : FieldSet.getNamespace() + '__';
             fieldSetApiNames.add(namespace + fieldSet.getName());
         }
+        fieldSetApiNames.sort();
         return fieldSetApiNames;
     }
 

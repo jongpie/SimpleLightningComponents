@@ -24,7 +24,8 @@ private class RecordTypeMetadata_Tests {
     static void it_should_return_record_type_metadata_for_sobject_and_record_type_api_names() {
         for(RecordType recordType : [SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SObjectType FROM RecordType LIMIT 5]) {
             Schema.RecordTypeInfo recordTypeInfo = Schema.getGlobalDescribe().get(recordType.SObjectType).getDescribe().getRecordTypeInfosById().get(recordType.Id);
-            RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(recordType.SObjectType, recordType.DeveloperName);
+            String namespace = recordType.NamespacePrefix == null ? '' : recordType.NamespacePrefix + '__';
+            RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(recordType.SObjectType, namespace + recordType.DeveloperName);
             validateAttributesAreSet(recordTypeInfo, recordType, recordType.SObjectType, recordTypeMetadata);
             validateCaseSentivityForJavascript(recordTypeMetadata);
         }
