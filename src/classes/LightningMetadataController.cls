@@ -72,10 +72,10 @@ public with sharing class LightningMetadataController {
     }
 
     @AuraEnabled
-    public static ListViewMetadata getListViewMetadataByName(String sobjectApiName, String listViewName) {
-        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getListViewMetadata(\'' + sobjectApiName + '\', \'' + listViewName + '\')');
+    public static ListViewMetadata getListViewMetadataByName(String sobjectApiName, String listViewApiName) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getListViewMetadata(\'' + sobjectApiName + '\', \'' + listViewApiName + '\')');
         try {
-            return new ListViewMetadata(sobjectApiName, listViewName);
+            return new ListViewMetadata(sobjectApiName, listViewApiName);
         } catch(Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }

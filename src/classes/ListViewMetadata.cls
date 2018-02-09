@@ -12,6 +12,7 @@ global class ListViewMetadata {
         QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME          = new Map<String, List<String>>();
 
         for(ListView listView : [SELECT Id, DeveloperName, IsSOQLCompatible, Name, NamespacePrefix, SObjectType FROM ListView]) {
+            String namespace = listView.NamespacePrefix == null ? '' : listView.NamespacePrefix + '__';
             QUERIED_LIST_VIEWS_BY_ID.put(listView.Id, listView);
             QUERIED_LIST_VIEWS_BY_SOBJECT_AND_DEVELOPER_NAME.put(listView.SObjectType + buildFullyQualifiedName(listView), listView);
 
@@ -19,7 +20,7 @@ global class ListViewMetadata {
                 QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.put(listView.SObjectType, new List<String>{});
             }
             List<String> listViewApiNames = QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.get(listView.SObjectType);
-            listViewApiNames.add((listView.NamespacePrefix == null ? '' : listView.NamespacePrefix + '__') + listView.DeveloperName);
+            listViewApiNames.add(namespace + listView.DeveloperName);
             QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.put(listView.SObjectType, listViewApiNames);
         }
     }

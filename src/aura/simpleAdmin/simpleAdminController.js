@@ -13,11 +13,19 @@
     fetchRecordTypeMetadata : function(component, event, helper) {
         helper.fetchRecordTypeMetadata(component, event);
     },
+    viewListViewMetadata : function(component, event, helper) {
+        component.set('v.showListViewModal', true);
+    },
+    fetchListViewMetadata : function(component, event, helper) {
+        helper.fetchListViewMetadata(component, event);
+    },
     viewRecordTypeMetadata : function(component, event, helper) {
         component.set('v.showRecordTypeModal', true);
     },
     fetchSObjectMetadata : function(component, event, helper) {
         component.set('v.selectedField', null);
+        component.set('v.selectedListView', null);
+        component.set('v.selectedRecordType', null);
         helper.fetchSObjectMetadata(component, event);
     }
 })

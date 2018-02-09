@@ -4,14 +4,17 @@
     <aura:attribute name="currentUser" type="User" access="private" />
     <aura:attribute name="environmentMetadata" type="EnvironmentMetadata" access="private" />
     <aura:attribute name="fieldMetadata" type="FieldMetadata" access="private" />
+    <aura:attribute name="listViewMetadata" type="ListViewMetadata" access="private" />
     <aura:attribute name="recordTypeMetadata" type="RecordTypeMetadata" access="private" />
     <aura:attribute name="sobjectMetadata" type="SObjectMetadata" access="private" />
 
     <!-- Private attributes for controlling UI -->
     <aura:attribute name="selectedSObject" type="String" access="private" />
     <aura:attribute name="selectedField" type="String" access="private" />
+    <aura:attribute name="selectedListView" type="String" access="private" />
     <aura:attribute name="selectedRecordType" type="String" access="private" />
     <aura:attribute name="showFieldModal" type="String" access="private" />
+    <aura:attribute name="showListViewModal" type="String" access="private" />
     <aura:attribute name="showRecordTypeModal" type="String" access="private" />
 
     <!-- Private attributes for input field demos -->
@@ -25,13 +28,14 @@
     <c:currentUser aura:id="currentUserService" />
     <c:environmentMetadata aura:id="environmentMetadataService" />
     <c:fieldMetadata aura:id="fieldMetadataService" sobjectApiName="{!v.selectedSObject}" fieldApiName="{!v.selectedField}" />
+    <c:listViewMetadata aura:id="listViewMetadataService" sobjectApiName="{!v.selectedSObject}" listViewApiName="{!v.selectedListView}" />
     <c:recordTypeMetadata aura:id="recordTypeMetadataService" sobjectApiName="{!v.selectedSObject}" recordTypeApiName="{!v.selectedRecordType}" />
     <c:sobjectMetadata aura:id="sobjectMetadataService" sobjectApiName="{!v.selectedSObject}" />
 
     <!-- Markup -->
-    <h1 class="slds-align_absolute-center" style="font-size:250%;font-weight:bold;margin-bottom:30px;">Simple Lightning Components</h1>
+    <h1 class="slds-align_absolute-center" style="color:#fff;font-size:250%;font-weight:bold;margin-bottom:30px;">Simple Lightning Components</h1>
     <lightning:tabset >
-        <lightning:tab label="Environment Metadata">
+        <lightning:tab label="Environment">
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">Environment Metadata</h2>
             <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
                 <div class="slds-text-color_inverse">
@@ -105,14 +109,14 @@
                 </tbody>
             </table>
         </lightning:tab>
-        <lightning:tab label="SObject Metadata">
+        <lightning:tab label="SObjects">
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">SObject Metadata</h2>
             <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
                 <div class="slds-text-color_inverse">
                     <p>Choose an SObject and the metadata will be shown below</p>
                 </div>
             </div>
-            <lightning:select name="selectItem" label="Select an SObject" value="{!v.selectedSObject}" onchange="{!c.fetchSObjectMetadata}">
+            <lightning:select label="Select an SObject" value="{!v.selectedSObject}" onchange="{!c.fetchSObjectMetadata}">
                 <option value="" text="" />
                 <aura:iteration items="{!v.environmentMetadata.sobjectApiNames}" var="sobjectApiName">
                     <option value="{!sobjectApiName}" text="{!sobjectApiName}" />
@@ -120,13 +124,12 @@
             </lightning:select>
             <aura:if isTrue="{!empty(v.selectedSObject) == false}">
                 <div class="slds-float--right" style="margin: 10px 30px;">
-                    <lightning:buttonGroup >
-                        <lightning:button variant="brand" label="View Field Metadata" onclick="{!c.viewFieldMetadata}" />
-                        <lightning:button variant="brand" label="View Record Type Metadata" onclick="{!c.viewRecordTypeMetadata}" />
-                    </lightning:buttonGroup>
+                    <lightning:button variant="brand" label="View Fields" onclick="{!c.viewFieldMetadata}" />
+                    <lightning:button variant="brand" label="View List Views" onclick="{!c.viewListViewMetadata}" />
+                    <lightning:button variant="brand" label="View Record Types" onclick="{!c.viewRecordTypeMetadata}" />
                 </div>
                 <c:modal showModal="{!v.showFieldModal}" title="{!'Field Metadata for ' + v.selectedSObject}">
-                    <lightning:select name="selectItem" label="Select a field" value="{!v.selectedField}" onchange="{!c.fetchFieldMetadata}">
+                    <lightning:select label="Select a field" value="{!v.selectedField}" onchange="{!c.fetchFieldMetadata}">
                         <option value="" text="" />
                         <aura:iteration items="{!v.sobjectMetadata.fieldApiNames}" var="fieldApiName">
                             <option value="{!fieldApiName}" text="{!fieldApiName}" />
@@ -195,8 +198,35 @@
                         </table>
                     </aura:if>
                 </c:modal>
+                <c:modal showModal="{!v.showListViewModal}" title="{!'List View Metadata for ' + v.selectedSObject}">
+                    <lightning:select label="Select a list view" value="{!v.selectedListView}" onchange="{!c.fetchListViewMetadata}">
+                        <option value="" text="" />
+                        <aura:iteration items="{!v.sobjectMetadata.listViewApiNames}" var="listViewApiName">
+                            <option value="{!listViewApiName}" text="{!listViewApiName}" />
+                        </aura:iteration>
+                    </lightning:select>
+                    <aura:if isTrue="{!empty(v.selectedListView) == false}">
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                            <thead>
+                                <tr class="slds-text-title_caps ">
+                                    <th scope="col" style="width:50%"><div class="slds-truncate">Attribute</div></th>
+                                    <th scope="col" style="width:50%"><div class="slds-truncate">Value</div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>apiName</td><td>{!v.listViewMetadata.apiName}</td></tr>
+                                <tr><td>id</td><td>{!v.listViewMetadata.id}</td></tr>
+                                <tr><td>isSoqlCompatible</td><td style="{!v.listViewMetadata.isSoqlCompatible ? 'color:green' : 'color:red'}">{!v.listViewMetadata.isSoqlCompatible}</td></tr>
+                                <tr><td>label</td><td>{!v.listViewMetadata.label}</td></tr>
+                                <tr><td>localApiName</td><td>{!v.listViewMetadata.localApiName}</td></tr>
+                                <tr><td>namespace</td><td>{!v.listViewMetadata.namespace}</td></tr>
+                                <tr><td>sobjectApiName</td><td>{!v.listViewMetadata.sobjectApiName}</td></tr>
+                            </tbody>
+                        </table>
+                    </aura:if>
+                </c:modal>
                 <c:modal showModal="{!v.showRecordTypeModal}" title="{!'Record Type Metadata for ' + v.selectedSObject}">
-                    <lightning:select name="selectItem" label="Select a record type" value="{!v.selectedRecordType}" onchange="{!c.fetchRecordTypeMetadata}">
+                    <lightning:select label="Select a record type" value="{!v.selectedRecordType}" onchange="{!c.fetchRecordTypeMetadata}">
                         <option value="" text="" />
                         <aura:iteration items="{!v.sobjectMetadata.recordTypeApiNames}" var="recordTypeApiName">
                             <option value="{!recordTypeApiName}" text="{!recordTypeApiName}" />
@@ -301,7 +331,7 @@
                 </table>
             </aura:if>
         </lightning:tab>
-        <lightning:tab label="Record Edit Demo">
+        <lightning:tab label="Input Fields Demo">
             <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
                 <div class="slds-text-color_inverse">
                     <p>This section provides demos of editing some account and task fields to show how your org metadata is leveraged to display each field</p>
