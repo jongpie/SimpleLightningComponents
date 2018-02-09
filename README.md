@@ -1,10 +1,8 @@
 # Simple Lightning Components
-A library of lightweight Salesforce Lightning components that simplify developing in Lightning by automatically applying:
-* SObject-level security
-* field-level security
-* field display types, including lookup fields & support for polymorphic fields like Task.WhoId & Task.WhatId
-* translations for SObject labels, field labels and picklist options
-* and more
+A library of lightweight Salesforce Lightning components that simplify developing in Lightning by automatically:
+* Honoring SObject-level security & field-level security for displaying fields & allowing fields to be edited
+* Displaying the correct input field type based on the field's metadata, including lookup fields & support for polymorphic fields like Task.WhoId & Task.WhatId
+* Translating SObject labels, field labels and picklist options
 
 <a href="https://githubsfdeploy.herokuapp.com" target="_blank">
   <img alt="Deploy to Salesforce" src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
