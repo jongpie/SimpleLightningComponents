@@ -1,4 +1,4 @@
-<aura:application extends="force:slds">
+<aura:component implements="force:appHostable">
 
     <!-- Private attributes for metadata service components -->
     <aura:attribute name="currentUser" type="User" access="private" />
@@ -30,7 +30,7 @@
 
     <!-- Markup -->
     <h1 class="slds-align_absolute-center" style="font-size:250%;font-weight:bold;margin-bottom:30px;">Simple Lightning Components</h1>
-    <lightning:tabset>
+    <lightning:tabset >
         <lightning:tab label="Environment Metadata">
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">Environment Metadata</h2>
             <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
@@ -46,6 +46,7 @@
                     </tr>
                 </thead>
                 <tbody>
+
                     <tr><td>baseUrl</td><td>{!v.environmentMetadata.baseUrl}</td></tr>
                     <tr><td>instanceName</td><td>{!v.environmentMetadata.instanceName}</td></tr>
                     <tr><td>isChatterEnabled</td><td style="{!v.environmentMetadata.isChatterEnabled ? 'color:green' : 'color:red'}">{!v.environmentMetadata.isChatterEnabled}</td></tr>
@@ -119,7 +120,7 @@
             </lightning:select>
             <aura:if isTrue="{!empty(v.selectedSObject) == false}">
                 <div class="slds-float--right" style="margin: 10px 30px;">
-                    <lightning:buttonGroup>
+                    <lightning:buttonGroup >
                         <lightning:button variant="brand" label="View Field Metadata" onclick="{!c.viewFieldMetadata}" />
                         <lightning:button variant="brand" label="View Record Type Metadata" onclick="{!c.viewRecordTypeMetadata}" />
                     </lightning:buttonGroup>
@@ -334,4 +335,4 @@
         </lightning:tab>
     </lightning:tabset>
 
-</aura:application>
+</aura:component>
