@@ -26,7 +26,9 @@ global virtual class QueueMetadata {
     }
 
     public static List<String> getQueueApiNames() {
-        return new List<String>(QUERIED_QUEUES_BY_DEVELOPER_NAME.keySet());
+        List<String> queueApiNames = new List<String>(QUERIED_QUEUES_BY_DEVELOPER_NAME.keySet());
+        queueApiNames.sort();
+        return queueApiNames;
     }
 
     @AuraEnabled global final String apiName                         {get; private set;}
@@ -74,6 +76,7 @@ global virtual class QueueMetadata {
         for(QueueSObject queueSObject : queue.QueueSObjects) {
             supportedSObjectApiNames.add(queueSObject.SObjectType);
         }
+        supportedSObjectApiNames.sort();
         return supportedSObjectApiNames;
     }
 
