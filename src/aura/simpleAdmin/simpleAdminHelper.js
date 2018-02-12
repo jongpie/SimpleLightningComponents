@@ -23,6 +23,15 @@
             component.set('v.listViewMetadata', response);
         }));
     },
+    fetchQueueMetadata : function(component, event) {
+        console.log('simpl adm q');
+        var queueMetadataService = component.find('queueMetadataService');
+        queueMetadataService.fetch($A.getCallback(function(error, response) {
+            console.log('queue=');
+            console.log(response);
+            component.set('v.queueMetadata', response);
+        }));
+    },
     fetchRecordTypeMetadata : function(component, event) {
         var recordTypeMetadataService = component.find('recordTypeMetadataService');
         recordTypeMetadataService.fetch($A.getCallback(function(error, response) {

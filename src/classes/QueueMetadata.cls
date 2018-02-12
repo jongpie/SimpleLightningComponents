@@ -25,6 +25,10 @@ global virtual class QueueMetadata {
         }
     }
 
+    public static List<String> getQueueApiNames() {
+        return new List<String>(QUERIED_QUEUES_BY_DEVELOPER_NAME.keySet());
+    }
+
     @AuraEnabled global final String apiName                         {get; private set;}
     @AuraEnabled global final Boolean doesIncludeBosses              {get; private set;}
     @AuraEnabled global final Boolean doesSendEmailToMembers         {get; private set;}

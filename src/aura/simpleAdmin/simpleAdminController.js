@@ -10,6 +10,10 @@
     viewFieldMetadata : function(component, event, helper) {
         component.set('v.showFieldModal', true);
     },
+    fetchQueueMetadata : function(component, event, helper) {
+        console.log('fetch!');
+        helper.fetchQueueMetadata(component, event);
+    },
     fetchRecordTypeMetadata : function(component, event, helper) {
         helper.fetchRecordTypeMetadata(component, event);
     },

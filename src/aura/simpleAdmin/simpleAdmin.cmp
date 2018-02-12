@@ -1,3 +1,7 @@
+<!--
+This file is part of the Simple Lightning Components project, released under the MIT License.
+See LICENSE file or go to https://github.com/jongpie/LightningComponents for full license details.
+-->
 <aura:component implements="force:appHostable">
 
     <!-- Private attributes for metadata service components -->
@@ -5,6 +9,7 @@
     <aura:attribute name="environmentMetadata" type="EnvironmentMetadata" access="private" />
     <aura:attribute name="fieldMetadata" type="FieldMetadata" access="private" />
     <aura:attribute name="listViewMetadata" type="ListViewMetadata" access="private" />
+    <aura:attribute name="queueMetadata" type="QueueMetadata" access="private" />
     <aura:attribute name="recordTypeMetadata" type="RecordTypeMetadata" access="private" />
     <aura:attribute name="sobjectMetadata" type="SObjectMetadata" access="private" />
 
@@ -12,6 +17,7 @@
     <aura:attribute name="selectedSObject" type="String" access="private" />
     <aura:attribute name="selectedField" type="String" access="private" />
     <aura:attribute name="selectedListView" type="String" access="private" />
+    <aura:attribute name="selectedQueue" type="String" access="private" />
     <aura:attribute name="selectedRecordType" type="String" access="private" />
     <aura:attribute name="showFieldModal" type="String" access="private" />
     <aura:attribute name="showListViewModal" type="String" access="private" />
@@ -29,6 +35,7 @@
     <c:environmentMetadata aura:id="environmentMetadataService" />
     <c:fieldMetadata aura:id="fieldMetadataService" sobjectApiName="{!v.selectedSObject}" fieldApiName="{!v.selectedField}" />
     <c:listViewMetadata aura:id="listViewMetadataService" sobjectApiName="{!v.selectedSObject}" listViewApiName="{!v.selectedListView}" />
+    <c:queueMetadata aura:id="queueMetadataService" queueApiName="{!v.selectedQueue}" />
     <c:recordTypeMetadata aura:id="recordTypeMetadataService" sobjectApiName="{!v.selectedSObject}" recordTypeApiName="{!v.selectedRecordType}" />
     <c:sobjectMetadata aura:id="sobjectMetadataService" sobjectApiName="{!v.selectedSObject}" />
 
@@ -50,7 +57,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
                     <tr><td>baseUrl</td><td>{!v.environmentMetadata.baseUrl}</td></tr>
                     <tr><td>instanceName</td><td>{!v.environmentMetadata.instanceName}</td></tr>
                     <tr><td>isChatterEnabled</td><td style="{!v.environmentMetadata.isChatterEnabled ? 'color:green' : 'color:red'}">{!v.environmentMetadata.isChatterEnabled}</td></tr>
@@ -64,6 +70,16 @@
                     <tr><td>organizationId</td><td>{!v.environmentMetadata.organizationId}</td></tr>
                     <tr><td>organizationName</td><td>{!v.environmentMetadata.organizationName}</td></tr>
                     <tr><td>organizationType</td><td>{!v.environmentMetadata.organizationType}</td></tr>
+                    <tr>
+                        <td>queueApiNames</td>
+                        <td>
+                            <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
+                                <aura:iteration items="{!v.environmentMetadata.queueApiNames}" var="queueApiName">
+                                    <li>{!queueApiName}</li>
+                                </aura:iteration>
+                            </ul>
+                        </td>
+                    </tr>
                     <tr>
                         <td>sobjectApiNames</td>
                         <td>
@@ -108,6 +124,62 @@
                     <tr><td><c:outputField sobjectApiName="User" fieldApiName="UserType" record="{!v.currentUser}" /></td></tr>
                 </tbody>
             </table>
+        </lightning:tab>
+        <lightning:tab label="Queues">
+            <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">Queue Metadata</h2>
+            <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
+                <div class="slds-text-color_inverse">
+                    <p>Choose an Queue and the metadata will be shown below</p>
+                </div>
+            <lightning:select label="Select a Queue" value="{!v.selectedQueue}" onchange="{!c.fetchQueueMetadata}" class="slds-text-color_inverse">
+                <option value="" text="" />
+                <aura:iteration items="{!v.environmentMetadata.queueApiNames}" var="queueApiName">
+                    <option value="{!queueApiName}" text="{!queueApiName}" />
+                </aura:iteration>
+            </lightning:select>
+            </div>
+            <aura:if isTrue="{!empty(v.selectedQueue) == false}">
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                    <thead>
+                        <tr class="slds-text-title_caps ">
+                            <th scope="col" style="width:50%"><div class="slds-truncate">Attribute</div></th>
+                            <th scope="col" style="width:50%"><div class="slds-truncate">Value</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>apiName</td><td>{!v.queueMetadata.apiName}</td></tr>
+                        <tr><td>doesIncludeBosses</td><td style="{!v.queueMetadata.doesIncludeBosses ? 'color:green' : 'color:red'}">{!v.queueMetadata.doesIncludeBosses}</td></tr>
+                        <tr><td>doesSendEmailToMembers</td><td style="{!v.queueMetadata.doesSendEmailToMembers ? 'color:green' : 'color:red'}">{!v.queueMetadata.doesSendEmailToMembers}</td></tr>
+                        <tr><td>email</td><td>{!v.queueMetadata.email}</td></tr>
+                        <tr><td>id</td><td>{!v.queueMetadata.id}</td></tr>
+                        <tr><td>label</td><td>{!v.queueMetadata.label}</td></tr>
+                        <tr><td>ownerId</td><td>{!v.queueMetadata.ownerId}</td></tr>
+                        <tr><td>ownerName</td><td>{!v.queueMetadata.ownerName}</td></tr>
+                        <tr><td>ownerType</td><td>{!v.queueMetadata.ownerType}</td></tr>
+                        <tr>
+                            <td>supportedSObjectApiNames</td>
+                            <td>
+                                <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
+                                    <aura:iteration items="{!v.queueMetadata.supportedSObjectApiNames}" var="supportedSObjectApiName">
+                                        <li>{!supportedSObjectApiName}</li>
+                                    </aura:iteration>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr><td>queueMembers</td><td>{!v.queueMetadata.queueMembers}</td></tr>
+                        <tr>
+                            <td>queueMembers</td>
+                            <td>
+                                <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
+                                    <aura:iteration items="{!v.queueMetadata.queueMembers}" var="queueMember">
+                                        <li>Type: {!queueMember.type}, User Or Group Id: {!queueMember.userOrGroupId}</li>
+                                    </aura:iteration>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </aura:if>
         </lightning:tab>
         <lightning:tab label="SObjects">
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">SObject Metadata</h2>

@@ -24,6 +24,7 @@ global virtual class EnvironmentMetadata {
     @AuraEnabled global final Id organizationId                    {get; private set;}
     @AuraEnabled global final String organizationName              {get; private set;}
     @AuraEnabled global final String organizationType              {get; private set;}
+    @AuraEnabled global final List<String> queueApiNames           {get; private set;}
     @AuraEnabled global final List<String> sobjectApiNames         {get; private set;}
 
     global EnvironmentMetadata() {
@@ -42,6 +43,7 @@ global virtual class EnvironmentMetadata {
         this.organizationId               = organization.Id;
         this.organizationName             = organization.Name;
         this.organizationType             = organization.OrganizationType;
+        this.queueApiNames                = QueueMetadata.getQueueApiNames();
         this.sobjectApiNames              = this.getSObjectApiNames(sobjectTypes);
     }
 

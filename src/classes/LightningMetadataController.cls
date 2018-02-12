@@ -92,6 +92,16 @@ public with sharing class LightningMetadataController {
     }
 
     @AuraEnabled
+    public static QueueMetadata getQueueMetadataByName(String queueApiName) {
+        System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getQueueMetadataByName(\'' + queueApiName + '\')');
+        try {
+            return new QueueMetadata(queueApiName);
+        } catch(Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
     public static RecordTypeMetadata getRecordTypeMetadataById(Id recordTypeId) {
         System.debug(LoggingLevel.INFO, 'Executing LightningMetadataController.getRecordTypeMetadataById(\'' + recordTypeId + '\')');
         try {
