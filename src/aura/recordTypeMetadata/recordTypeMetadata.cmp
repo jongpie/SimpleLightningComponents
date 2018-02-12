@@ -10,7 +10,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <aura:attribute name="recordTypeApiName" type="String" description="The API name of the record type"  />
     <aura:attribute name="recordTypeMetadata" type="RecordTypeMetadata" description="The record type metadata object returned from the controller" />
 
-    <!-- Public Methods -->
+    <!-- Public Functions -->
     <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the metadata">
         <aura:attribute name="callback" type="function"/>
     </aura:method>

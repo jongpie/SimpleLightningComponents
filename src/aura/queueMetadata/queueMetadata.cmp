@@ -9,7 +9,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <aura:attribute name="queueApiName" type="String" description="The API name of the queue"  />
     <aura:attribute name="queueMetadata" type="QueueMetadata" description="The queue metadata object returned from the controller" />
 
-    <!-- Public Methods -->
+    <!-- Public Functions -->
     <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the metadata">
         <aura:attribute name="callback" type="function"/>
     </aura:method>
