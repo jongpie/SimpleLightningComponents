@@ -9,7 +9,7 @@
         action.setCallback(this, function(response) {
             if(response.getState() === 'SUCCESS') {
                 component.set('v.selectedParentRecord', response.getReturnValue());
-                component.set('v.parentSObjectName', response.getReturnValue().sobjectName);
+                component.set('v.parentSObjectApiName', response.getReturnValue().sobjectApiName);
             } else if(response.getState() === 'ERROR') {
                 var errors = response.getError();
                 if(errors && errors[0] && errors[0].message) {
@@ -29,10 +29,10 @@
             var parentSObjectMetadata = component.get('v.parentSObjectMetadata');
             var action = component.get('c.search');
             action.setParams({
-                parentSObjectName    : parentSObjectMetadata.name,
-                searchFieldName      : parentSObjectMetadata.nameField,
+                parentSObjectApiName : parentSObjectMetadata.apiName,
+                searchFieldApiName   : parentSObjectMetadata.displayFieldApiName,
                 searchText           : searchText,
-                displayTextFieldName : parentSObjectMetadata.nameField,
+                displayFieldApiName  : parentSObjectMetadata.displayFieldApiName,
                 limitCount           : component.get('v.limitCount')
             });
             action.setStorable();
@@ -54,11 +54,11 @@
         if(selectedParentRecordIndex) {
             var searchResults = component.get('v.searchResults');
             var record = component.get('v.record');
-            var fieldName = component.get('v.fieldName');
+            var fieldApiName = component.get('v.fieldApiName');
             var selectedParentRecord = searchResults[selectedParentRecordIndex];
 
             if(selectedParentRecord.record) {
-                record[fieldName] = selectedParentRecord.record.Id;
+                record[fieldApiName] = selectedParentRecord.record.Id;
                 component.set('v.selectedParentRecord', selectedParentRecord);
             }
             component.set('v.searchResults', null);

@@ -1,20 +1,24 @@
+/*****************************************************************************************************
+* This file is part of the Simple Lightning Components project, released under the MIT License.      *
+* See LICENSE file or go to https://github.com/jongpie/LightningComponents for full license details. *
+*****************************************************************************************************/
 public with sharing class LookupController {
 
     @AuraEnabled
-    public static List<MatchingRecord> search(String parentSObjectName, String searchFieldName, String searchText, String displayTextFieldName, Integer limitCount) {
+    public static List<MatchingRecord> search(String parentSObjectApiName, String searchFieldApiName, String searchText, String displayFieldApiName, Integer limitCount) {
         try {
-            Schema.DescribeSObjectResult parentSObjectDescribe = Schema.getGlobalDescribe().get(parentSObjectName).getDescribe();
-            LightningMetadataController.SObjectMetadata parentSObjectMetadata = new LightningMetadataController.SObjectMetadata(parentSObjectName);
+            Schema.DescribeSObjectResult parentSObjectDescribe = Schema.getGlobalDescribe().get(parentSObjectApiName).getDescribe();
+            SObjectMetadata parentSObjectMetadata = new SObjectMetadata(parentSObjectApiName);
 
-            String query = 'SELECT Id, ' + displayTextFieldName
-                + ' FROM ' + parentSObjectName;
+            String query = 'SELECT Id, ' + displayFieldApiName + ' FROM ' + parentSObjectApiName;
 
             if(!String.isEmpty(searchText)) {
                 searchText = '\'%' + String.escapeSingleQuotes(searchText.trim()) + '%\'';
-                query += ' WHERE ' + searchFieldName + ' LIKE ' + searchText;
+                query += ' WHERE ' + searchFieldApiName + ' LIKE ' + searchText;
             }
 
-            String sortByField = parentSObjectDescribe.fields.getMap().containsKey('LastViewedDate') ? 'LastViewedDate DESC NULLS LAST' : parentSObjectMetadata.nameField;
+            Boolean canSortByLastViewdDate = parentSObjectDescribe.fields.getMap().containsKey('LastViewedDate') && String.isEmpty(searchText);
+            String sortByField = canSortByLastViewdDate ? 'LastViewedDate DESC NULLS LAST' : parentSObjectMetadata.displayFieldApiName;
             query += ' ORDER BY ' + sortByField
                 + ' LIMIT ' + limitCount;
 
@@ -38,11 +42,11 @@ public with sharing class LookupController {
         if(recordId == null) return null;
 
         Schema.SObjectType sobjectType = recordId.getSObjectType();
-        LightningMetadataController.SObjectMetadata sobjectMetadata = new LightningMetadataController.SObjectMetadata(sobjectType);
-        List<String> fields = new List<String>{'Id', sobjectMetadata.nameField};
+        SObjectMetadata sobjectMetadata = new SObjectMetadata(sobjectType);
+        List<String> fields = new List<String>{'Id', sobjectMetadata.displayFieldApiName};
 
         String query = 'SELECT ' + String.join(fields, ', ')
-            + ' FROM ' + sobjectMetadata.name
+            + ' FROM ' + sobjectMetadata.apiName
             + ' WHERE Id = \'' + recordId + '\'';
 
         SObject record = Database.query(query);
@@ -57,9 +61,9 @@ public with sharing class LookupController {
         public MatchingRecord(SObject record) {
             this.record = record;
 
-            LightningMetadataController.SObjectMetadata sobjectMetadata = new LightningMetadataController.SObjectMetadata(record.getSObjectType());
-            this.sobjectName = sobjectMetadata.name;
-            this.displayText = (String)record.get(sobjectMetadata.nameField);
+            SObjectMetadata sobjectMetadata = new SObjectMetadata(record.getSObjectType());
+            this.sobjectName = sobjectMetadata.apiName;
+            this.displayText = (String)record.get(sobjectMetadata.displayFieldApiName);
         }
     }
 

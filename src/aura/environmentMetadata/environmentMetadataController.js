@@ -1,5 +1,5 @@
 ({
     doInit : function(component, event, helper) {
-        helper.fetchSObjectMetadata(component, event);
+        helper.fetchEnvironmentMetadata(component, event);
     }
 })

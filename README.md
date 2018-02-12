@@ -1,79 +1,43 @@
-# Lightning Components
-A library of lightweight Salesforce Lightning components that streamline developing by automatically applying sobject-level security, field-level security, field types and more.
+# Simple Lightning Components
+A library of lightweight Salesforce Lightning components that simplify developing in Lightning by automatically:
+* Honoring SObject-level security & field-level security for displaying fields & allowing fields to be edited
+* Displaying the correct input field type based on the field's metadata, including lookup fields & support for polymorphic fields like Task.WhoId & Task.WhatId
+* Translating SObject labels, field labels and picklist options
 
 <a href="https://githubsfdeploy.herokuapp.com" target="_blank">
-  <img alt="Deploy to Salesforce"
-       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
+  <img alt="Deploy to Salesforce" src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
 
-## sobjectMetadata.cmp
-* An extensible, markup-less component that returns an instance of LightningMetadataController.SObjectMetadata for the specified SObject
+## Simple Admin component
+* simpleAdmin.cmp - this is a demo component that provides examples of how to use the other components. It's also a handy admin tool to quickly get information about your org.
 
-    `<c:sobjectMetadata sobjectName="Account" aura:id="accountMetadataService" />`
+## Metadata Components
+Several no-markup components are included. These can be used to dynamically access metadata about your org in Lightning components
+* **currentUser.cmp**: return info about the current user. Additional user fields can be returned by setting currentUser.additionalFieldApiNames
+* **environmentMetadata.cmp**: returns an instance of EnvironmentMetadata for the specified SObjectenvironmentMetadata.cmp
+* **fieldMetadata.cmp**: returns an instance of FieldMetadata for the specified SObjectfieldMetadata.cmp
+* **fieldSetMetadata.cmp**: returns an instance of FieldSetMetadata for the specified SObjectfieldSetMetadata.cmp
+* **listviewMetadata.cmp**: returns an instance of ListviewMetadata for the specified SObjectlistviewMetadata.cmp
+* **queueMetadata.cmp**: returns an instance of QueueMetadata for the specified SObjectqueueMetadata.cmp
+* **recordTypeMetadata.cmp**: returns an instance of RecordTypeMetadata for the specified SObjectrecordTypeMetadata.cmp
+* **sobjectMetadata.cmp**: returns an instance of SObjectMetadata for the specified SObjectsobjectMetadata.cmp
 
-## fieldMetadata.cmp
-* An extensible, markup-less component that returns an instance of LightningMetadataController.FieldMetadata for the specified field
+## UI Components
+These components are used to build UIs in Lightning - several of these leverage the metadata service components
+* **fieldLabel.cmp**: Displays the localized version of the provided field's label
+* **inputField.cmp**: Provides a simple way to display an SObject's field as an input (editable) that automatically determines sobject-level security, field-level security, the field type, field label, etc. Attributes can be overridden to allow control over the field when needed
+* **lookup.cmp**: Provides lookup functionality that Salesforce does not provide for developers in LEX. This component is used by inputField.cmp for lookup fields.
+* **modal.cmp**: Generates a modal window and displays your contents inside
+* **objectPropertyValue.cmp**: Displays the specified property of any javascript object - this is helpful since Lightning does not allow you to dynamically get a property value by name (like 'myObject[someProperty]')
+* **outputField.cmp**: Provides a simple way to display an SObject's field as an output (read-only) that automatically determines sobject-level security, field-level security, the field type, field label, etc. Attributes can be overridden to allow control over the field when needed
+* **sobjectLabel.cmp**: Displays the localized version of the provided SObject's label
 
-    `<c:fieldMetadata sobjectName="Account" fieldName="Type" aura:id="accountTypeMetadataService" />`
+## Apex Classes
 
-## inputField.cmp
-* Provides a simple way to display an SObject's field as an input (editable) that automatically determines sobject-level security, field-level security, the field type, field label, etc. Attributes can be overridden to allow control over the field when needed
-
-    `<c:inputField sobjectName="Account" fieldName="Type" record="{!v.myAccount}" />`
-
-## lookup.cmp
-* Provides lookup functionality that Salesforce does not provide for developers in LEX. This component is used by inputField.cmp for lookup fields.
-
-    Users can search for the record or choose one of the recently viewed records automatically displayed on focus
-    `<c:lookup sobjectName="Contact" fieldName="AccountId" record="{!v.myContact}" />`
-
-    Polymorphic fields, like Task.WhoId, automatically display an SObject Switcher.
-    SObject-level permissions are automatically applied - only objects that the user has permission to view are displayed in the SObject Switcher.
-    `<c:lookup sobjectName="Task" fieldName="WhoId" record="{!v.myTask}" />`
-    ![lookup-task-whoid](https://user-images.githubusercontent.com/1267157/34769563-6f5b8374-f5fe-11e7-88c7-98e6fbb0ec75.gif)
-
-
-## outputField.cmp
-* Provides a simple way to display an SObject's field as an output (read-only) that automatically determines sobject-level security, field-level security, the field type, field label, etc. Attributes can be overridden to allow control over the field when needed
-
-    `<c:inputField sobjectName="Account" fieldName="Type" record="{!v.myAccount}" />`
-
-## sobjectLabel.cmp
-* Displays the localized version of the provided SObject's label
-
-    `<c:sobjectLabel sobjectName="Account" />`
-
-* Feature: Show the SObject's plural label
-
-    `<c:sobjectLabel sobjectName="Account" variant="labelPlural" />`
-
-## fieldLabel.cmp
-* Displays the localized version of the provided field's label
-
-    `<c:fieldLabel sobjectName="Account" fieldName="Type" />`
-
-* Feature: Show the field's inline help text
-
-    `<c:fieldLabel sobjectName="Account" fieldName="Type" showHelpText="true" />`
-
-## modal.cmp
-* Generates a modal window and displays your contents inside
-    ```
-    <c:modal title="My Modal" isOpen="{!v.showModal}">
-        <aura:set attribute="body">
-            <p>This paragraph will be shown inside the modal</p>
-        </aura:set>
-    </c:modal>
-    ```
-
-## objectPropertyValue.cmp
-* Displays the specified property of any javascript object - this is helpful since Lightning does not allow you to dynamically get a property value by name (like 'myObject[someProperty]')
-
-    `<c:objectPropertyValue object="{!v.my.complex.nested.object}" propertyName="someProperty" />`
-
-# Apex Classes
-
-## LightningMetadataController.cls
+### LightningMetadataController.cls
 Contains methods for describing your orgs metadata and returning the info as aura-friendly objects that can be consumed by Lightning Components
 * getSObjectMetadata(String sobjectName) - returns an instance of LightningMetadataController.SObjectMetadata
 * getFieldMetadata(String sobjectName, String fieldName) - returns an instance of LightningMetadataController.FieldMetadata
+
+### SimpleMetadata classes
+The remaining metadata classes (SObjectMetadata.cls, FieldMetadata.cls, etc) are part of the [SimpleMetadata](https://github.com/jongpie/SimpleMetadata) project - any bugs or enhancements for those classes are maintained in that project, and the latest version is used in this repo.

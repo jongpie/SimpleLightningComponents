@@ -1,14 +1,18 @@
+<!--
+This file is part of the Simple Lightning Components project, released under the MIT License.
+See LICENSE file or go to https://github.com/jongpie/LightningComponents for full license details.
+-->
 <aura:component implements="flexipage:availableForAllPageTypes">
 
     <aura:attribute name="showModal" type="Boolean" default="false" />
     <aura:attribute name="title" type="String" />
-    <aura:attribute name="class" type="String" />
+    <aura:attribute name="class" type="String" default="slds-modal_large" />
     <aura:attribute name="primaryAction" type="Aura.Action" />
     <aura:attribute name="primaryActionLabel" type="String" />
     <aura:attribute name="primaryActionClass" type="String" />
 
     <aura:if isTrue="{!v.showModal}">
-        <div class="slds-m-around--xx-large">
+        <div class="slds-m-around--xx-large" style="top:20px;">
             <div role="dialog" tabindex="-1" aria-labelledby="header99" class="{! 'slds-modal slds-fade-in-open ' + v.class}">
                 <div class="slds-modal__container">
                     <!-- Start modal header -->

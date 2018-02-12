@@ -1,3 +1,7 @@
+<!--
+This file is part of the Simple Lightning Components project, released under the MIT License.
+See LICENSE file or go to https://github.com/jongpie/LightningComponents for full license details.
+-->
 <aura:component extends="c.fieldMetadata">
 
     <!-- Public Attributes -->
@@ -20,14 +24,14 @@
     <aura:handler name="change" value="{!v.handleBlur}" action="{!c.handleFieldValueChanged}" />
 
     <!-- Markup -->
-    <aura:if isTrue="{!and(v.fieldMetadata.sobjectMetadata.isAccessible, v.fieldMetadata.isAccessible, v.render)}">
+    <aura:if isTrue="{!and(v.sobjectMetadata.isAccessible, v.fieldMetadata.isAccessible, v.render)}">
         <div class="slds-form-element">
             <aura:if isTrue="{!v.variant == 'form'}">
                 <label class="slds-form-element__label" for="{!v.auraId}">
                     <aura:if isTrue="{!and(v.required, v.displayType != 'BOOLEAN')}">
                         <abbr class="slds-required" title="required">*</abbr>
                     </aura:if>
-                    <c:fieldLabel label="{!v.fieldMetadata.label}" helpText="{!v.fieldMetadata.inlineHelpText}" />
+                    <c:fieldLabel sobjectApiName="{!v.sobjectApiName}" fieldApiName="{!v.fieldApiName}" />
                 </label>
             </aura:if>
 
@@ -127,7 +131,7 @@
 
                 <!-- REFERENCE -->
                 <aura:if isTrue="{!v.displayType == 'REFERENCE'}">
-                    <c:lookup sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}"
+                    <c:lookup sobjectApiName="{!v.sobjectApiName}" fieldApiName="{!v.fieldApiName}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}"
                         record="{!v.record}"
                     />
                 </aura:if>

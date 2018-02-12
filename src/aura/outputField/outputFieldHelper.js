@@ -7,9 +7,9 @@
         component.set('v.displayType', fieldMetadata.displayType);
 
         // Parent record name (used for REFERENCE fields)
-        var relationshipName = fieldMetadata.relationshipName;
+        var relationshipName       = fieldMetadata.relationshipName;
         var relationshipReferences = fieldMetadata.relationshipReferences;
-        var relationshipNameField = relationshipReferences && relationshipReferences.length > 0 ? relationshipReferences[0].nameField : null;
+        var relationshipNameField  = relationshipReferences && relationshipReferences.length > 0 ? relationshipReferences[0].nameField : null;
 
         if(record && record.hasOwnProperty(relationshipName)) {
             var parentRecord = record[relationshipName];
@@ -22,12 +22,12 @@
     },
     handleFieldValueChanged : function(component, event) {
         var record = component.get('v.record');
-        var fieldName = component.get('v.fieldName');
+        var fieldApiName = component.get('v.fieldApiName');
 
         if(record === null) return;
 
-        if(record.hasOwnProperty(fieldName)) {
-            component.set('v.fieldValue', record[fieldName]);
+        if(record.hasOwnProperty(fieldApiName)) {
+            component.set('v.fieldValue', record[fieldApiName]);
         }
     }
 })
