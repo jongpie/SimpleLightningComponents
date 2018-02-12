@@ -1,8 +1,12 @@
+<!--
+This file is part of the Simple Lightning Components project, released under the MIT License.
+See LICENSE file or go to https://github.com/jongpie/LightningComponents for full license details.
+-->
 <aura:component extends="c.sobjectMetadata" extensible="true" controller="LightningMetadataController">
 
     <!-- Public Attributes -->
     <aura:attribute name="listViewApiName" type="String" required="true" description="The API name of the field set"  />
-    <aura:attribute name="listViewMetadata" type="ListViewMetadata" access="public" description="The field set metadata object returned from the controller" />
+    <aura:attribute name="listViewMetadata" type="ListViewMetadata" description="The field set metadata object returned from the controller" />
 
     <!-- Public Methods -->
     <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the metadata">

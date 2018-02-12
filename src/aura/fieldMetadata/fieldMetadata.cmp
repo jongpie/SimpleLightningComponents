@@ -6,7 +6,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 
     <!-- Public Attributes -->
     <aura:attribute name="fieldApiName" type="String" required="true" description="The API name of the field" />
-    <aura:attribute name="fieldMetadata" type="FieldMetadata" access="public" description="The field metadata object returned from the controller" />
+    <aura:attribute name="fieldMetadata" type="FieldMetadata" description="The field metadata object returned from the controller" />
 
     <!-- Public Methods -->
     <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the metadata">

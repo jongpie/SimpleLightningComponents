@@ -1,8 +1,12 @@
+<!--
+This file is part of the Simple Lightning Components project, released under the MIT License.
+See LICENSE file or go to https://github.com/jongpie/LightningComponents for full license details.
+-->
 <aura:component extensible="true" controller="LightningMetadataController">
 
     <!-- Public Attributes -->
-    <aura:attribute name="additionalFieldApiNames" type="String[]" access="public" description="(Optional) Additional field API names to return for the current user" />
-    <aura:attribute name="currentUser" type="User" access="public" description="The current user" />
+    <aura:attribute name="additionalFieldApiNames" type="String[]" description="(Optional) Additional field API names to return for the current user" />
+    <aura:attribute name="currentUser" type="User" description="The current user" />
 
     <!-- Public Methods -->
     <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the current user">
