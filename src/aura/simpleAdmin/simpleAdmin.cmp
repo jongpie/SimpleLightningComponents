@@ -131,12 +131,12 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                 <div class="slds-text-color_inverse">
                     <p>Choose an Queue and the metadata will be shown below</p>
                 </div>
-            <lightning:select label="Select a Queue" value="{!v.selectedQueue}" onchange="{!c.fetchQueueMetadata}" class="slds-text-color_inverse">
-                <option value="" text="" />
-                <aura:iteration items="{!v.environmentMetadata.queueApiNames}" var="queueApiName">
-                    <option value="{!queueApiName}" text="{!queueApiName}" />
-                </aura:iteration>
-            </lightning:select>
+                <lightning:select label="Select a Queue" value="{!v.selectedQueue}" onchange="{!c.fetchQueueMetadata}" class="slds-text-color_inverse">
+                    <option value="" text="" />
+                    <aura:iteration items="{!v.environmentMetadata.queueApiNames}" var="queueApiName">
+                        <option value="{!queueApiName}" text="{!queueApiName}" />
+                    </aura:iteration>
+                </lightning:select>
             </div>
             <aura:if isTrue="{!empty(v.selectedQueue) == false}">
                 <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
