@@ -12,6 +12,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 
     <!-- Private Attributes -->
     <aura:attribute name="fieldValue" type="Object" access="private" />
+    <aura:attribute name="fieldPicklistLabels" type="String" access="private" description="Used to display translated picklist values" />
     <aura:attribute name="relationshipNameField" type="String" access="private" />
     <aura:attribute name="parentRecordName" type="String" access="private" />
 
@@ -87,7 +88,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 
                 <!-- MULTIPICKLIST or PICKLIST -->
                 <aura:if isTrue="{!or(v.displayType == 'MULTIPICKLIST', v.displayType == 'PICKLIST')}">
-                    <ui:outputText aura:id="outputField" value="{!v.fieldValue}" />
+                    <ui:outputText aura:id="outputField" value="{!v.fieldPicklistLabels}" />
                 </aura:if>
 
                 <!-- PERCENT -->
