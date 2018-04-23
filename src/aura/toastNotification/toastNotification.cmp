@@ -1,0 +1,37 @@
+<aura:component >
+
+    <!-- Public attributes -->
+    <aura:attribute name="type" type="String" description="Supported values are: error, warning, success, or info" />
+    <aura:attribute name="title" type="String" description="A short message to show the user" />
+    <aura:attribute name="details" type="String[]" description="(Optional) Detailed list of information to show to the user, using bullet points" />
+    <aura:attribute name="positioning" type="String" default="absolute" description="Determines the positioning of the toast notificaiton. Supported values are: absolute and relative" />
+
+    <aura:attribute name="render" type="Boolean" access="private" default="false" />
+
+    <!-- Handlers -->
+    <aura:handler event="c:toastNotificationEvent" action="{!c.handleNotificationEvent}" />
+
+    <!-- Markup -->
+    <aura:if isTrue="{!v.render}">
+        <div class="{! 'slds-notify_container slds-is-' + v.positioning }">
+            <div class="{! 'slds-notify slds-notify_toast slds-theme_' + v.type }" role="alert">
+                <span class="slds-assistive-text">{!v.type}</span>
+                <span class="{! 'slds-icon_container slds-icon-utility-' + v.type + 'slds-m-right_small slds-no-flex slds-align-top' }" title="Description of icon when needed">
+                    <lightning:icon iconName="{! 'utility:' + v.type }" variant="inverse" size="small" />
+                </span>
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small">{!v.title}</h2>
+                    <ul>
+                        <aura:iteration items="{!v.details}" var="detail">
+                            <li>{!detail}</li>
+                        </aura:iteration>
+                    </ul>
+                </div>
+                <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse" title="Close" onclick="{!c.closeNotification}">
+                    <lightning:icon iconName="utility:close" variant="inverse" size="small" />
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

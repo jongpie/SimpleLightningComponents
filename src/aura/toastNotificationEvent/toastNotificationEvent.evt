@@ -1,0 +1,5 @@
+<aura:event type="APPLICATION" description="Event to trigger a toast notification">
+    <aura:attribute name="type" type="String" required="true" />
+    <aura:attribute name="title" type="String" required="true" />
+    <aura:attribute name="details" type="String[]" />
+</aura:event>
