@@ -9,26 +9,24 @@
     <aura:handler event="c:toastNotificationEvent" action="{!c.handleNotification}" />
 
     <!-- Markup -->
-    <div class="demo-only" style="height: 4rem;">
-        <div class="slds-notify_container slds-is-relative">
-            <div class="{! 'slds-notify slds-notify_toast slds-theme_' + v.type }" role="alert">
-                <span class="slds-assistive-text">{!v.type}</span>
-                <span class="{! 'slds-icon_container slds-icon-utility-' + v.type + 'slds-m-right_small slds-no-flex slds-align-top' }" title="Description of icon when needed">
-                    <lightning:icon iconName="{! 'utility:' + v.type }" variant="inverse" size="small" />
-                </span>
-                <div class="slds-notify__content">
-                    <h2 class="slds-text-heading_small">{!v.title}</h2>
-                    <ul>
-                        <aura:iteration items="{!v.details}" var="detail">
-                            <li>{!detail}</li>
-                        </aura:iteration>
-                    </ul>
-                </div>
-                <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse" title="Close" onclick="{!c.closeNotification}">
-                    <lightning:icon iconName="utility:close" variant="inverse" size="small" />
-                    <span class="slds-assistive-text">Close</span>
-                </button>
+    <div class="slds-notify_container slds-is-relative">
+        <div class="{! 'slds-notify slds-notify_toast slds-theme_' + v.type }" role="alert">
+            <span class="slds-assistive-text">{!v.type}</span>
+            <span class="{! 'slds-icon_container slds-icon-utility-' + v.type + 'slds-m-right_small slds-no-flex slds-align-top' }" title="Description of icon when needed">
+                <lightning:icon iconName="{! 'utility:' + v.type }" variant="inverse" size="small" />
+            </span>
+            <div class="slds-notify__content">
+                <h2 class="slds-text-heading_small">{!v.title}</h2>
+                <ul>
+                    <aura:iteration items="{!v.details}" var="detail">
+                        <li>{!detail}</li>
+                    </aura:iteration>
+                </ul>
             </div>
+            <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse" title="Close" onclick="{!c.closeNotification}">
+                <lightning:icon iconName="utility:close" variant="inverse" size="small" />
+                <span class="slds-assistive-text">Close</span>
+            </button>
         </div>
     </div>
 </aura:component>
