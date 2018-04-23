@@ -1,24 +1,13 @@
-<aura:component controller="LightningMetadataController" implements="flexipage:availableForAllPageTypes">
-
-    <!-- Public Attributes -->
-    <aura:attribute name="sobjectName" type="String" required="true" />
-    <aura:attribute name="fieldName" type="String" required="true" />
-    <aura:attribute name="showHelpText" type="Boolean" default="false" />
-
-    <!-- Private Attributes -->
-    <aura:attribute name="fieldMetadata" type="Object" access="private" />
-    <aura:attribute name="label" type="String" access="private" />
-
-    <!-- Handlers -->
-    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+<!--
+This file is part of the Simple Lightning Components project, released under the MIT License.
+See LICENSE file or go to https://github.com/jongpie/LightningComponents for full license details.
+-->
+<aura:component extends="c.fieldMetadata">
 
     <!-- Markup -->
-    <ui:outputText value="{!v.label}" />
-    <aura:if isTrue="{!and(v.showHelpText, v.fieldMetadata.inlineHelpText != null)}">
-        <a class="help-icon" href="javascript:void(0);">
-            <lightning:icon iconName="utility:info" variant="info" title="{!v.fieldMetadata.inlineHelpText}" />
-            <span class="slds-assistive-text">Help</span>
-        </a>
+    <ui:outputText value="{!v.fieldMetadata.label}" />
+    <aura:if isTrue="{!v.fieldMetadata.inlineHelpText != null}">
+        <lightning:helptext iconName="utility:info" content="{!v.fieldMetadata.inlineHelpText}" />
     </aura:if>
 
 </aura:component>

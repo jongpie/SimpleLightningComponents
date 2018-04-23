@@ -1,54 +1,57 @@
 ({
-    fetchFieldMetadata : function(component, event) {
-        var action = component.get('c.getFieldMetadata');
-        action.setParams({
-            'sobjectName': component.get('v.sobjectName'),
-            'fieldName': component.get('v.fieldName')
-        });
-        action.setStorable();
-        action.setCallback(this, function(response) {
-            if(response.getState() === 'SUCCESS') {
-                var fieldMetadata = response.getReturnValue();
-                component.set('v.fieldMetadata', fieldMetadata);
-
-                if(component.get('v.displayType') === undefined) {
-                    component.set('v.displayType', fieldMetadata.displayType);
-                }
-            } else {
-                console.log(response.getError().length + ' ERRORS');
-                for(var i = 0; i < response.getError().length; i++) {
-                   console.log(response.getError()[i]);
-                }
-            }
-        });
-        $A.enqueueAction(action);
-    },
-    parseFieldValue : function(component, event) {
+    setFieldMetadataAttributes : function(component, event) {
+        var fieldMetadata = component.get('v.fieldMetadata');
         var record = component.get('v.record');
-        var fieldName = component.get('v.fieldName');
 
-        if(record == null) return;
-        if(record.hasOwnProperty(fieldName)) {
-            component.set('v.fieldValue', record[fieldName]);
+        // Display type
+        component.set('v.displayType', fieldMetadata.displayType);
+
+        // Parent record name (used for REFERENCE fields)
+        var relationshipName       = fieldMetadata.relationshipName;
+        var relationshipReferences = fieldMetadata.relationshipReferences;
+        var relationshipNameField  = relationshipReferences && relationshipReferences.length > 0 ? relationshipReferences[0].nameField : null;
+
+        if(record && record.hasOwnProperty(relationshipName)) {
+            var parentRecord = record[relationshipName];
+
+            if(parentRecord.hasOwnProperty(relationshipNameField)) {
+                var parentRecordName = parentRecord[relationshipNameField];
+                component.set('v.parentRecordName', parentRecordName);
+            }
         }
     },
     handleFieldValueChanged : function(component, event) {
-        var changedField  = component.get('v.fieldName');
-        var record        = component.get('v.record');
-        var fieldValue    = component.get('v.fieldValue');
-        var fieldMetadata = component.get('v.fieldMetadata');
-        var fieldType     = component.get('v.fieldType');
+        var record = component.get('v.record');
+        var fieldApiName = component.get('v.fieldApiName');
 
-        var newFieldValue = event.getParam('value') != undefined ? event.getParam('value') : event.getSource().get('v.value');
-        if(typeof newFieldValue == 'undefined') newFieldValue = '';
-        var oldFieldValue = event.getParam('oldValue') != undefined ? event.getParam('oldValue') : event.getSource().get('v.oldValue');
+        if(record === null) return;
 
-        if(newFieldValue != oldFieldValue) {
-            if(fieldMetadata != null && fieldType != fieldMetadata.fieldType && typeof fieldType == 'string') {
-                newFieldValue = newFieldValue.toString();
-            }
-            record[changedField] = newFieldValue;
-            component.set('v.record', record);
+        if(record.hasOwnProperty(fieldApiName)) {
+            component.set('v.fieldValue', record[fieldApiName]);
         }
+    },
+    getPicklistLabels : function(component, event) {
+        var fieldMetadata = component.get('v.fieldMetadata');
+        var fieldApiName  = component.get('v.fieldApiName');
+        var record        = component.get('v.record');
+
+        if(fieldMetadata === null) return;
+        if(fieldMetadata.displayType !== 'MULTIPICKLIST' && fieldMetadata.displayType !== 'PICKLIST') return;
+        if(!record.hasOwnProperty(fieldApiName)) return;
+
+        var picklistValues = record[fieldApiName].split(';');
+        var picklistLabels = [];
+        for(var i = 0; i < picklistValues.length; i++) {
+            var picklistValue = picklistValues[i];
+
+            for(var j = 0; j < fieldMetadata.picklistOptions.length; j++) {
+                var picklistOption = fieldMetadata.picklistOptions[j];
+
+                if(picklistOption.value !== picklistValue) continue;
+
+                picklistLabels.push(picklistOption.label);
+            }
+        }
+        component.set('v.fieldPicklistLabels', picklistLabels.join(';'));
     }
 })

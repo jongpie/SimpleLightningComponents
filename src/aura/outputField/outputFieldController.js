@@ -1,15 +1,21 @@
 ({
     doInit : function(component, event, helper) {
-        helper.fetchFieldMetadata(component, event);
-        helper.parseFieldValue(component, event);
+        helper.handleFieldValueChanged(component, event);
+        helper.getPicklistLabels(component, event);
+    },
+    handleFieldMetadataChanged : function(component, event, helper) {
+        helper.setFieldMetadataAttributes(component, event);
+        helper.getPicklistLabels(component, event);
     },
     handleRecordChanged : function(component, event, helper) {
-        var record     = component.get('v.record');
-        var fieldName  = component.get('v.fieldName');
+        var record       = component.get('v.record');
+        var fieldApiName = component.get('v.fieldApiName');
 
-        component.set('v.fieldValue', record[fieldName]);
+        component.set('v.fieldValue', record[fieldApiName]);
+        helper.getPicklistLabels(component, event);
     },
     handleFieldValueChanged : function(component, event, helper) {
         helper.handleFieldValueChanged(component, event);
+        helper.getPicklistLabels(component, event);
     }
 })

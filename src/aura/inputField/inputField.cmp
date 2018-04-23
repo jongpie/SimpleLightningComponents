@@ -1,35 +1,37 @@
-<aura:component controller="LightningMetadataController" implements="flexipage:availableForAllPageTypes">
+<!--
+This file is part of the Simple Lightning Components project, released under the MIT License.
+See LICENSE file or go to https://github.com/jongpie/LightningComponents for full license details.
+-->
+<aura:component extends="c.fieldMetadata">
 
     <!-- Public Attributes -->
-    <aura:attribute name="sobjectName" type="String" required="true" />
-    <aura:attribute name="fieldName" type="String" required="true" />
-    <aura:attribute name="record" type="SObject" required="true" />
+    <aura:attribute name="record" type="SObject" default="{}" />
     <aura:attribute name="displayType" type="String" />
-    <aura:attribute name="picklistOptions" type="Object[]" />
-    <aura:attribute name="showLabel" type="Boolean" default="true" />
-    <aura:attribute name="render" type="Boolean" default="true" />
-    <aura:attribute name="disabled" type="Boolean" default="false" />
-    <aura:attribute name="required" type="Boolean" default="false" />
+    <aura:attribute name="picklistOptions" type="Object[]" description="(Optional) List of picklist options, used when displayType == 'PICKLIST'" />
+    <aura:attribute name="variant" type="String" default="form" description="Options: form (default) and bare" />
+    <aura:attribute name="render" type="Boolean" default="true" description="(Optional) Controls if the component is rendered. Default is true." />
+    <aura:attribute name="disabled" type="Boolean" description="(Optional) Disables the input field" />
+    <aura:attribute name="required" type="Boolean" description="(Optional) Marks the field as required (true) or optional (false)" />
 
     <!-- Private Attributes -->
-    <aura:attribute name="fieldMetadata" type="Object" access="private" />
     <aura:attribute name="fieldValue" type="Object" access="private" />
 
     <!-- Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.handleFieldMetadataChanged}" />
     <aura:handler name="change" value="{!v.record}" action="{!c.handleRecordChanged}" />
     <aura:handler name="change" value="{!v.fieldValue}" action="{!c.handleFieldValueChanged}" />
     <aura:handler name="change" value="{!v.handleBlur}" action="{!c.handleFieldValueChanged}" />
 
     <!-- Markup -->
-    <aura:if isTrue="{!and(v.fieldMetadata.sobjectMetadata.isAccessible, v.fieldMetadata.isAccessible, v.render)}">
+    <aura:if isTrue="{!and(v.sobjectMetadata.isAccessible, v.fieldMetadata.isAccessible, v.render)}">
         <div class="slds-form-element">
-            <aura:if isTrue="{!v.showLabel}">
+            <aura:if isTrue="{!v.variant == 'form'}">
                 <label class="slds-form-element__label" for="{!v.auraId}">
                     <aura:if isTrue="{!and(v.required, v.displayType != 'BOOLEAN')}">
                         <abbr class="slds-required" title="required">*</abbr>
                     </aura:if>
-                    <c:fieldLabel sobjectName="{!v.sobjectName}" fieldName="{!v.fieldName}" showHelpText="{!v.fieldMetadata.inlineHelpText != null}" />
+                    <c:fieldLabel sobjectApiName="{!v.sobjectApiName}" fieldApiName="{!v.fieldApiName}" />
                 </label>
             </aura:if>
 
@@ -43,7 +45,6 @@
                 <!-- COMBOBOX - TODO -->
                 <!-- DATACATEGORYGROUPREFERENCE - TODO -->
                 <!-- ID - TODO -->
-                <!-- REFERENCE - TODO -->
                 <!-- TIME - TODO -->
 
                 <!-- BOOLEAN -->
@@ -125,6 +126,13 @@
                 <aura:if isTrue="{!v.displayType == 'PHONE'}">
                     <ui:inputPhone aura:id="inputField" value="{!v.fieldValue}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}" class="slds-input" maxlength="{!v.fieldMetadata.maxLength}"
                         blur="{!c.handleBlur}"
+                    />
+                </aura:if>
+
+                <!-- REFERENCE -->
+                <aura:if isTrue="{!v.displayType == 'REFERENCE'}">
+                    <c:lookup sobjectApiName="{!v.sobjectApiName}" fieldApiName="{!v.fieldApiName}" required="{!v.required}" disabled="{!or(v.fieldMetadata.isUpdateable == false, v.disabled)}"
+                        record="{!v.record}"
                     />
                 </aura:if>
 

@@ -1,0 +1,24 @@
+<!--
+This file is part of the Simple Lightning Components project, released under the MIT License.
+See LICENSE file or go to https://github.com/jongpie/LightningComponents for full license details.
+-->
+<aura:component extends="c.sobjectMetadata" extensible="true" controller="LightningMetadataController">
+
+    <!-- Public Attributes -->
+    <aura:attribute name="fieldApiName" type="String" required="true" description="The API name of the field" />
+    <aura:attribute name="fieldMetadata" type="FieldMetadata" description="The field metadata object returned from the controller" />
+
+    <!-- Public Functions -->
+    <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the metadata">
+        <aura:attribute name="callback" type="function"/>
+    </aura:method>
+
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.sobjectApiName}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.fieldApiName}" action="{!c.doInit}" />
+
+    <!-- Markup -->
+    {!v.body}
+
+</aura:component>
