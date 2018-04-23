@@ -1,7 +1,4 @@
 ({
-    doInit : function(component, event, helper) {
-        console.log('doInit');
-    },
     closeNotification : function(component, event, helper) {
         component.destroy();
     },
