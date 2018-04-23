@@ -6,7 +6,7 @@
     <aura:attribute name="details" type="String[]" />
 
     <!-- Handlers -->
-    <aura:handler event="c:toastNotificationEvent" action="{!c.handleNotification}" />
+    <aura:handler event="c:toastNotificationEvent" action="{!c.handleNotificationEvent}" />
 
     <!-- Markup -->
     <div class="slds-notify_container slds-is-relative">
