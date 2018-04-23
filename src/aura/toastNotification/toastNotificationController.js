@@ -6,7 +6,8 @@
         component.destroy();
     },
     handleNotification : function(component, event, helper) {
-        component.set('v.errorMessage', event.getParam('errorMessage'));
-        component.set('v.errorDetails', event.getParam('errorDetails'));
+        component.set('v.type', event.getParam('type'));
+        component.set('v.message', event.getParam('message'));
+        component.set('v.details', event.getParam('details'));
     }
 })
