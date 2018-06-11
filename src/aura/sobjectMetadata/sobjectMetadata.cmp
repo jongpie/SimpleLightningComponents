@@ -6,7 +6,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 
     <!-- Public Attributes -->
     <aura:attribute name="sobjectApiName" type="String" required="true" description="The API name of the SObject" />
-    <aura:attribute name="sobjectMetadata" type="SObjectMetadata" access="public" description="The SObject metadata object returned from the controller" />
+    <aura:attribute name="sobjectMetadata" type="SobjectMetadata" access="public" description="The SObject metadata object returned from the controller" />
 
     <!-- Public Functions -->
     <aura:method name="fetch" action="{!c.doInit}" description="(Optional) Callback function to use after fetching the metadata">
