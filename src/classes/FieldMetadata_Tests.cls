@@ -21,12 +21,12 @@ private class FieldMetadata_Tests {
 
     @isTest
     static void it_should_return_metadata_for_sobject_type_token_and_field_token() {
-        SObjectType accountSObjectType = Account.SObjectType;
-        SObjectField accountNameField = Account.Name;
+        SobjectType accountSobjectType = Account.SobjectType;
+        SobjectField accountNameField = Account.Name;
 
         Test.startTest();
 
-        FieldMetadata accountFieldMetadata = new FieldMetadata(accountSObjectType, accountNameField);
+        FieldMetadata accountFieldMetadata = new FieldMetadata(accountSobjectType, accountNameField);
         validateAttributesAreSet(String.valueOf(accountNameField), accountFieldMetadata);
         validateCaseSentivityForJavascript(accountFieldMetadata);
 
@@ -35,11 +35,11 @@ private class FieldMetadata_Tests {
 
     @isTest
     static void it_should_return_metadata_for_account_parentid_lookup_field_token() {
-        SObjectField parentIdField = Account.ParentId;
+        SobjectField parentIdField = Account.ParentId;
 
         Test.startTest();
 
-        FieldMetadata accountFieldMetadata = new FieldMetadata(Account.SObjectType, parentIdField);
+        FieldMetadata accountFieldMetadata = new FieldMetadata(Account.SobjectType, parentIdField);
         validateAttributesAreSet(String.valueOf(parentIdField), accountFieldMetadata);
         validateCaseSentivityForJavascript(accountFieldMetadata);
 
@@ -48,11 +48,11 @@ private class FieldMetadata_Tests {
 
     @isTest
     static void it_should_return_metadata_for_account_type_picklist_field_token() {
-        SObjectField typeField = Account.Type;
+        SobjectField typeField = Account.Type;
 
         Test.startTest();
 
-        FieldMetadata accountFieldMetadata = new FieldMetadata(Account.SObjectType, typeField);
+        FieldMetadata accountFieldMetadata = new FieldMetadata(Account.SobjectType, typeField);
         validateAttributesAreSet(String.valueOf(typeField), accountFieldMetadata);
         validateCaseSentivityForJavascript(accountFieldMetadata);
 
@@ -61,41 +61,39 @@ private class FieldMetadata_Tests {
 
     private static void validateAttributesAreSet(String fieldName, FieldMetadata fieldMetadata) {
         String sobjectName = 'Account';
-        DescribeFieldResult fieldDescribe = Schema.SObjectType.Account.fields.getMap().get(fieldName).getDescribe();
+        DescribeFieldResult fieldDescribe = Schema.SobjectType.Account.fields.getMap().get(fieldName).getDescribe();
 
-        System.assertEquals(fieldDescribe.getName(), fieldMetadata.apiName);
-        System.assertEquals(fieldDescribe.getByteLength(), fieldMetadata.byteLength);
-        System.assertEquals(fieldDescribe.getDefaultValue(), fieldMetadata.defaultValue);
-        System.assertEquals(fieldDescribe.getDigits(), fieldMetadata.digits);
-        System.assertEquals(fieldDescribe.getType().name(), fieldMetadata.displayType);
-        System.assertEquals(fieldDescribe.getInlineHelpText(), fieldMetadata.inlineHelpText);
-        System.assertEquals(fieldDescribe.isAccessible(), fieldMetadata.isAccessible);
-        System.assertEquals(fieldDescribe.isAutoNumber(), fieldMetadata.isAutoNumber);
-        System.assertEquals(fieldDescribe.isCalculated(), fieldMetadata.isCalculated);
-        System.assertEquals(fieldDescribe.isCaseSensitive(), fieldMetadata.isCaseSensitive);
-        System.assertEquals(fieldDescribe.isCreateable(), fieldMetadata.isCreateable);
-        System.assertEquals(fieldDescribe.isCustom(), fieldMetadata.isCustom);
-        System.assertEquals(fieldDescribe.isDefaultedOnCreate(), fieldMetadata.isDefaultedOnCreate);
-        System.assertEquals(fieldDescribe.isFilterable(), fieldMetadata.isFilterable);
-        System.assertEquals(fieldDescribe.isGroupable(), fieldMetadata.isGroupable);
-        System.assertEquals(fieldDescribe.isNameField(), fieldMetadata.isNameField);
-        System.assertEquals(fieldDescribe.isNillable(), fieldMetadata.isNillable);
-        System.assertEquals(fieldDescribe.isNillable() == false && fieldDescribe.isCreateable(), fieldMetadata.isRequired);
-        System.assertEquals(fieldDescribe.isSortable(), fieldMetadata.isSortable);
-        System.assertEquals(fieldDescribe.isUpdateable(), fieldMetadata.isUpdateable);
-        System.assertEquals(fieldDescribe.getLabel(), fieldMetadata.label);
-        System.assertEquals(fieldDescribe.getLocalName(), fieldMetadata.localApiName);
-        System.assertEquals(fieldDescribe.getLength(), fieldMetadata.maxLength);
+        System.assertEquals(fieldDescribe.getName(), fieldMetadata.ApiName);
+        System.assertEquals(fieldDescribe.getByteLength(), fieldMetadata.ByteLength);
+        System.assertEquals(fieldDescribe.getDefaultValue(), fieldMetadata.DefaultValue);
+        System.assertEquals(fieldDescribe.getDigits(), fieldMetadata.Digits);
+        System.assertEquals(fieldDescribe.getType().name(), fieldMetadata.DisplayType);
+        System.assertEquals(fieldDescribe.getInlineHelpText(), fieldMetadata.InlineHelpText);
+        System.assertEquals(fieldDescribe.isAccessible(), fieldMetadata.IsAccessible);
+        System.assertEquals(fieldDescribe.isAutoNumber(), fieldMetadata.IsAutoNumber);
+        System.assertEquals(fieldDescribe.isCalculated(), fieldMetadata.IsCalculated);
+        System.assertEquals(fieldDescribe.isCaseSensitive(), fieldMetadata.IsCaseSensitive);
+        System.assertEquals(fieldDescribe.isCreateable(), fieldMetadata.IsCreateable);
+        System.assertEquals(fieldDescribe.isCustom(), fieldMetadata.IsCustom);
+        System.assertEquals(fieldDescribe.isDefaultedOnCreate(), fieldMetadata.IsDefaultedOnCreate);
+        System.assertEquals(fieldDescribe.isFilterable(), fieldMetadata.IsFilterable);
+        System.assertEquals(fieldDescribe.isGroupable(), fieldMetadata.IsGroupable);
+        System.assertEquals(fieldDescribe.isNameField(), fieldMetadata.IsNameField);
+        System.assertEquals(fieldDescribe.isNillable(), fieldMetadata.IsNillable);
+        System.assertEquals(fieldDescribe.isNillable() == false && fieldDescribe.isCreateable(), fieldMetadata.IsRequired);
+        System.assertEquals(fieldDescribe.isSortable(), fieldMetadata.IsSortable);
+        System.assertEquals(fieldDescribe.isUpdateable(), fieldMetadata.IsUpdateable);
+        System.assertEquals(fieldDescribe.getLabel(), fieldMetadata.Label);
+        System.assertEquals(fieldDescribe.getLocalName(), fieldMetadata.LocalApiName);
+        System.assertEquals(fieldDescribe.getLength(), fieldMetadata.MaxLength);
         //System.assertEquals(this.getNamespace(), fieldMetadata.namespace);
         //System.assertEquals(this.getPicklistOptions(fieldDescribe), fieldMetadata.picklistOptions);
-        System.assertEquals(fieldDescribe.getPrecision(), fieldMetadata.precision);
-        System.assertEquals(fieldDescribe.getRelationshipName(), fieldMetadata.relationshipName);
-        System.assertEquals(fieldDescribe.getRelationshipOrder(), fieldMetadata.relationshipOrder);
-        //System.assertEquals( this.getRelationshipReferences(fieldDescribe), fieldMetadata.relationshipReferences);
-        System.assertEquals(fieldDescribe.getScale(), fieldMetadata.scale);
-        System.assertEquals(fieldDescribe.getScale(), fieldMetadata.scale);
-        System.assertEquals(fieldDescribe.getSOAPType().name(), fieldMetadata.soapType);
-        System.assertEquals(sobjectName, fieldMetadata.sobjectApiName);
+        System.assertEquals(fieldDescribe.getPrecision(), fieldMetadata.Precision);
+        System.assertEquals(fieldDescribe.getRelationshipName(), fieldMetadata.RelationshipApiName);
+        System.assertEquals(fieldDescribe.getRelationshipOrder(), fieldMetadata.RelationshipOrder);
+        //System.assertEquals( this.getRelationshipReferences(fieldDescribe), fieldMetadata.RelationshipReferences);
+        System.assertEquals(fieldDescribe.getScale(), fieldMetadata.Scale);
+        System.assertEquals(sobjectName, fieldMetadata.SobjectApiName);
     }
 
     private static void validateCaseSentivityForJavascript(FieldMetadata fieldMetadata) {
@@ -106,38 +104,37 @@ private class FieldMetadata_Tests {
         // One negative to confirm that the strings in our map are case sensitive
         System.assert(untypedFieldMetadata.containsKey('APINAME') == false);
         // Now for the 'real' tests
-        System.assert(untypedFieldMetadata.containsKey('apiName'));
-        System.assert(untypedFieldMetadata.containsKey('byteLength'));
-        System.assert(untypedFieldMetadata.containsKey('defaultValue'));
-        System.assert(untypedFieldMetadata.containsKey('digits'));
-        System.assert(untypedFieldMetadata.containsKey('displayType'));
-        System.assert(untypedFieldMetadata.containsKey('inlineHelpText'));
-        System.assert(untypedFieldMetadata.containsKey('isAccessible'));
-        System.assert(untypedFieldMetadata.containsKey('isAutoNumber'));
-        System.assert(untypedFieldMetadata.containsKey('isCalculated'));
-        System.assert(untypedFieldMetadata.containsKey('isCaseSensitive'));
-        System.assert(untypedFieldMetadata.containsKey('isCreateable'));
-        System.assert(untypedFieldMetadata.containsKey('isCustom'));
-        System.assert(untypedFieldMetadata.containsKey('isDefaultedOnCreate'));
-        System.assert(untypedFieldMetadata.containsKey('isFilterable'));
-        System.assert(untypedFieldMetadata.containsKey('isGroupable'));
-        System.assert(untypedFieldMetadata.containsKey('isNameField'));
-        System.assert(untypedFieldMetadata.containsKey('isNillable'));
-        System.assert(untypedFieldMetadata.containsKey('isRequired'));
-        System.assert(untypedFieldMetadata.containsKey('isSortable'));
-        System.assert(untypedFieldMetadata.containsKey('isUpdateable'));
-        System.assert(untypedFieldMetadata.containsKey('label'));
-        System.assert(untypedFieldMetadata.containsKey('localApiName'));
-        System.assert(untypedFieldMetadata.containsKey('maxLength'));
-        System.assert(untypedFieldMetadata.containsKey('namespace'));
-        System.assert(untypedFieldMetadata.containsKey('picklistOptions'));
-        System.assert(untypedFieldMetadata.containsKey('precision'));
-        System.assert(untypedFieldMetadata.containsKey('relationshipName'));
-        System.assert(untypedFieldMetadata.containsKey('relationshipOrder'));
-        System.assert(untypedFieldMetadata.containsKey('relationshipReferences'));
-        System.assert(untypedFieldMetadata.containsKey('scale'));
-        System.assert(untypedFieldMetadata.containsKey('soapType'));
-        System.assert(untypedFieldMetadata.containsKey('sobjectApiName'));
+        System.assert(untypedFieldMetadata.containsKey('ApiName'));
+        System.assert(untypedFieldMetadata.containsKey('ByteLength'));
+        System.assert(untypedFieldMetadata.containsKey('DefaultValue'));
+        System.assert(untypedFieldMetadata.containsKey('Digits'));
+        System.assert(untypedFieldMetadata.containsKey('DisplayType'));
+        System.assert(untypedFieldMetadata.containsKey('InlineHelpText'));
+        System.assert(untypedFieldMetadata.containsKey('IsAccessible'));
+        System.assert(untypedFieldMetadata.containsKey('IsAutoNumber'));
+        System.assert(untypedFieldMetadata.containsKey('IsCalculated'));
+        System.assert(untypedFieldMetadata.containsKey('IsCaseSensitive'));
+        System.assert(untypedFieldMetadata.containsKey('IsCreateable'));
+        System.assert(untypedFieldMetadata.containsKey('IsCustom'));
+        System.assert(untypedFieldMetadata.containsKey('IsDefaultedOnCreate'));
+        System.assert(untypedFieldMetadata.containsKey('IsFilterable'));
+        System.assert(untypedFieldMetadata.containsKey('IsGroupable'));
+        System.assert(untypedFieldMetadata.containsKey('IsNameField'));
+        System.assert(untypedFieldMetadata.containsKey('IsNillable'));
+        System.assert(untypedFieldMetadata.containsKey('IsRequired'));
+        System.assert(untypedFieldMetadata.containsKey('IsSortable'));
+        System.assert(untypedFieldMetadata.containsKey('IsUpdateable'));
+        System.assert(untypedFieldMetadata.containsKey('Label'));
+        System.assert(untypedFieldMetadata.containsKey('LocalApiName'));
+        System.assert(untypedFieldMetadata.containsKey('MaxLength'));
+        System.assert(untypedFieldMetadata.containsKey('Namespace'));
+        System.assert(untypedFieldMetadata.containsKey('PicklistOptions'));
+        System.assert(untypedFieldMetadata.containsKey('Precision'));
+        System.assert(untypedFieldMetadata.containsKey('RelationshipApiName'));
+        System.assert(untypedFieldMetadata.containsKey('RelationshipOrder'));
+        System.assert(untypedFieldMetadata.containsKey('RelationshipReferences'));
+        System.assert(untypedFieldMetadata.containsKey('Scale'));
+        System.assert(untypedFieldMetadata.containsKey('SobjectApiName'));
     }
 
 }
