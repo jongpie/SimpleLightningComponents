@@ -5,7 +5,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 <aura:component extends="c.fieldMetadata">
 
     <!-- Public Attributes -->
-    <aura:attribute name="record" type="SObject" default="{}" />
+    <aura:attribute name="record" type="Sobject" default="{}" />
     <aura:attribute name="displayType" type="String" />
     <aura:attribute name="variant" type="String" default="form" description="Options: form (default) and bare" />
     <aura:attribute name="render" type="Boolean" default="true" />
@@ -23,7 +23,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <aura:handler name="change" value="{!v.fieldValue}" action="{!c.handleFieldValueChanged}" />
 
     <!-- Markup -->
-    <aura:if isTrue="{!and(v.sobjectMetadata.isAccessible, v.fieldMetadata.isAccessible, v.render)}">
+    <aura:if isTrue="{!and(v.sobjectMetadata.IsAccessible, v.fieldMetadata.IsAccessible, v.render)}">
         <div class="slds-form-element">
             <aura:if isTrue="{!v.variant == 'form'}">
                 <label class="slds-form-element__label" for="{!v.auraId}">

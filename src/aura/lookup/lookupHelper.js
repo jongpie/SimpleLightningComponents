@@ -1,6 +1,6 @@
 ({
     fetchSelectedParentRecord : function(component, event, helper) {
-        var parentSObjectMetadata = component.get('v.parentSObjectMetadata');
+        var parentSobjectMetadata = component.get('v.parentSobjectMetadata');
         var action = component.get('c.getRecord');
         action.setParams({
             recordId : component.get('v.selectedParentRecordId')
@@ -9,7 +9,7 @@
         action.setCallback(this, function(response) {
             if(response.getState() === 'SUCCESS') {
                 component.set('v.selectedParentRecord', response.getReturnValue());
-                component.set('v.parentSObjectApiName', response.getReturnValue().sobjectApiName);
+                component.set('v.parentSobjectApiName', response.getReturnValue().sobjectApiName);
             } else if(response.getState() === 'ERROR') {
                 var errors = response.getError();
                 if(errors && errors[0] && errors[0].message) {
@@ -26,13 +26,13 @@
         if(event.keyCode == escapeKeyCode) {
             helper.clearSelection(component, event, helper);
         } else {
-            var parentSObjectMetadata = component.get('v.parentSObjectMetadata');
+            var parentSobjectMetadata = component.get('v.parentSobjectMetadata');
             var action = component.get('c.search');
             action.setParams({
-                parentSObjectApiName : parentSObjectMetadata.apiName,
-                searchFieldApiName   : parentSObjectMetadata.displayFieldApiName,
+                parentSobjectApiName : parentSobjectMetadata.ApiName,
+                searchFieldApiName   : parentSobjectMetadata.DisplayFieldApiName,
                 searchText           : searchText,
-                displayFieldApiName  : parentSObjectMetadata.displayFieldApiName,
+                displayFieldApiName  : parentSobjectMetadata.DisplayFieldApiName,
                 limitCount           : component.get('v.limitCount')
             });
             action.setStorable();
@@ -57,8 +57,8 @@
             var fieldApiName = component.get('v.fieldApiName');
             var selectedParentRecord = searchResults[selectedParentRecordIndex];
 
-            if(selectedParentRecord.record) {
-                record[fieldApiName] = selectedParentRecord.record.Id;
+            if(selectedParentRecord.Record) {
+                record[fieldApiName] = selectedParentRecord.Record.Id;
                 component.set('v.selectedParentRecord', selectedParentRecord);
             }
             component.set('v.searchResults', null);

@@ -1,5 +1,5 @@
 ({
-    fetchSObjectMetadata : function(component, event) {
+    fetchSobjectMetadata : function(component, event) {
         var sobjectMetadata = component.get('v.sobjectMetadata');
 
         // If we already have the sobject metadata cached, use the cache
@@ -10,7 +10,7 @@
 
         if(!sobjectApiName) return;
 
-        var action = component.get('c.getSObjectMetadataByName');
+        var action = component.get('c.getSobjectMetadataByApiName');
         action.setParams({
             sobjectApiName : sobjectApiName
         });

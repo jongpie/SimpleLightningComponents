@@ -5,28 +5,34 @@
 @isTest
 private class RecordTypeMetadata_Tests {
 
+    private static final String ORG_NAMESPACE_PREFIX;
+
+    static {
+        ORG_NAMESPACE_PREFIX = [SELECT NamespacePrefix FROM Organization].NamespacePrefix;
+    }
+
     @isTest
     static void it_should_return_record_type_metadata_for_record_type_info() {
         // For larger orgs with a lot of record types, we don't need to test every record type
         // We'll keep a count and stop after 5 to keep tests quick
         Integer count = 0;
 
-        Schema.SObjectType accountSObjectType = Schema.Account.SObjectType;
-        for(Schema.RecordTypeInfo recordTypeInfo : Schema.SObjectType.Account.getRecordTypeInfos()) {
+        Schema.SobjectType accountSobjectType = Schema.Account.SobjectType;
+        for(Schema.RecordTypeInfo recordTypeInfo : Schema.SobjectType.Account.getRecordTypeInfos()) {
             if(count >= 5) break;
 
-            RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(accountSObjectType, recordTypeInfo);
+            RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(accountSobjectType, recordTypeInfo);
             count++;
         }
     }
 
     @isTest
     static void it_should_return_record_type_metadata_for_sobject_and_record_type_api_names() {
-        for(RecordType recordType : [SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SObjectType FROM RecordType LIMIT 5]) {
-            Schema.RecordTypeInfo recordTypeInfo = Schema.getGlobalDescribe().get(recordType.SObjectType).getDescribe().getRecordTypeInfosById().get(recordType.Id);
-            String namespace = recordType.NamespacePrefix == null ? '' : recordType.NamespacePrefix + '__';
-            RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(recordType.SObjectType, namespace + recordType.DeveloperName);
-            validateAttributesAreSet(recordTypeInfo, recordType, recordType.SObjectType, recordTypeMetadata);
+        for(RecordType recordType : [SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SobjectType FROM RecordType LIMIT 5]) {
+            Schema.RecordTypeInfo recordTypeInfo = Schema.getGlobalDescribe().get(recordType.SobjectType).getDescribe().getRecordTypeInfosById().get(recordType.Id);
+            String namespace = recordType.NamespacePrefix == null || recordType.NamespacePrefix == ORG_NAMESPACE_PREFIX ? '' : recordType.NamespacePrefix + '__';
+            RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(recordType.SobjectType, namespace + recordType.DeveloperName);
+            validateAttributesAreSet(recordTypeInfo, recordType, recordType.SobjectType, recordTypeMetadata);
             validateCaseSentivityForJavascript(recordTypeMetadata);
         }
     }
@@ -34,7 +40,7 @@ private class RecordTypeMetadata_Tests {
     @isTest
     static void it_should_return_record_type_metadata_for_record_type_id() {
         Schema.RecordTypeInfo queryableRecordTypeInfo;
-        for(Schema.RecordTypeInfo recordTypeInfo : Schema.SObjectType.Account.getRecordTypeInfos()) {
+        for(Schema.RecordTypeInfo recordTypeInfo : Schema.SobjectType.Account.getRecordTypeInfos()) {
             if(recordTypeInfo.isMaster()) continue;
 
             queryableRecordTypeInfo = recordTypeInfo;
@@ -43,32 +49,34 @@ private class RecordTypeMetadata_Tests {
 
         if(queryableRecordTypeInfo == null) return; // This will be null in orgs with no record types, so the test can't finish
 
-        RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(queryableRecordTypeInfo.getRecordTypeId());
+        RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(Schema.Account.SobjectType, queryableRecordTypeInfo.getRecordTypeId());
         RecordType recordType = [
-            SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SObjectType
+            SELECT Id, DeveloperName, NamespacePrefix, SobjectType
             FROM RecordType WHERE Id = :queryableRecordTypeInfo.getRecordTypeId()
         ];
-        validateAttributesAreSet(queryableRecordTypeInfo, recordType, recordType.SObjectType, recordTypeMetadata);
+        validateAttributesAreSet(queryableRecordTypeInfo, recordType, recordType.SobjectType, recordTypeMetadata);
         validateCaseSentivityForJavascript(recordTypeMetadata);
     }
 
     private static void validateAttributesAreSet(RecordTypeInfo recordTypeInfo, RecordType recordType, String sobjectApiName, RecordTypeMetadata recordTypeMetadata) {
+        String namespace;
         String namespacePrefix = '';
-        if(recordType != null && recordType.NamespacePrefix != null) namespacePrefix = recordType.NamespacePrefix + '__';
+        if(recordType != null && recordType.NamespacePrefix != null && recordType.NamespacePrefix != ORG_NAMESPACE_PREFIX) {
+            namespace = recordType.NamespacePrefix;
+            namespacePrefix = recordType.NamespacePrefix + '__';
+        }
         String recordTypeName = recordType == null ? null : namespacePrefix + recordType.DeveloperName;
 
-        System.assertEquals(recordType == null ? null : recordTypeName, recordTypeMetadata.apiName);
-        System.assertEquals(recordType == null ? null : recordType.BusinessProcessId, recordTypeMetadata.businessProcessId);
-        System.assertEquals(recordType == null ? null : recordType.Description, recordTypeMetadata.description);
-        System.assertEquals(recordTypeInfo.getRecordTypeId(), recordTypeMetadata.id);
-        System.assertEquals(recordTypeInfo.isActive(), recordTypeMetadata.isActive);
-        System.assertEquals(recordTypeInfo.isAvailable(), recordTypeMetadata.isAvailable);
-        System.assertEquals(recordTypeInfo.isDefaultRecordTypeMapping(), recordTypeMetadata.isDefault);
-        System.assertEquals(recordTypeInfo.isMaster(), recordTypeMetadata.isMaster);
-        System.assertEquals(recordTypeInfo.getName(), recordTypeMetadata.label);
-        System.assertEquals(recordType == null ? null : recordType.DeveloperName, recordTypeMetadata.localApiName);
-        System.assertEquals(recordType == null ? null : recordType.NamespacePrefix, recordTypeMetadata.namespace);
-        System.assertEquals(sobjectApiName, recordTypeMetadata.sobjectApiName);
+        System.assertEquals(recordType == null ? null : recordTypeName, recordTypeMetadata.ApiName);
+        System.assertEquals(recordTypeInfo.getRecordTypeId(), recordTypeMetadata.Id);
+        System.assertEquals(recordTypeInfo.isActive(), recordTypeMetadata.IsActive);
+        System.assertEquals(recordTypeInfo.isAvailable(), recordTypeMetadata.IsAvailable);
+        System.assertEquals(recordTypeInfo.isDefaultRecordTypeMapping(), recordTypeMetadata.IsDefault);
+        System.assertEquals(recordTypeInfo.isMaster(), recordTypeMetadata.IsMaster);
+        System.assertEquals(recordTypeInfo.getName(), recordTypeMetadata.Label);
+        System.assertEquals(recordType == null ? null : recordType.DeveloperName, recordTypeMetadata.LocalApiName);
+        System.assertEquals(recordType == null ? null : namespace, recordTypeMetadata.Namespace);
+        System.assertEquals(sobjectApiName, recordTypeMetadata.SobjectApiName);
     }
 
     private static void validateCaseSentivityForJavascript(RecordTypeMetadata recordTypeMetadata) {
@@ -79,18 +87,16 @@ private class RecordTypeMetadata_Tests {
         // One negative to confirm that the strings in our map are case sensitive
         System.assert(untypedRecordTypeMetadata.containsKey('APINAME') == false);
         // Now for the 'real' tests
-        System.assert(untypedRecordTypeMetadata.containsKey('apiName'));
-        System.assert(untypedRecordTypeMetadata.containsKey('businessProcessId'));
-        System.assert(untypedRecordTypeMetadata.containsKey('description'));
-        System.assert(untypedRecordTypeMetadata.containsKey('id'));
-        System.assert(untypedRecordTypeMetadata.containsKey('isActive'));
-        System.assert(untypedRecordTypeMetadata.containsKey('isAvailable'));
-        System.assert(untypedRecordTypeMetadata.containsKey('isDefault'));
-        System.assert(untypedRecordTypeMetadata.containsKey('isMaster'));
-        System.assert(untypedRecordTypeMetadata.containsKey('label'));
-        System.assert(untypedRecordTypeMetadata.containsKey('localApiName'));
-        System.assert(untypedRecordTypeMetadata.containsKey('namespace'));
-        System.assert(untypedRecordTypeMetadata.containsKey('sobjectApiName'));
+        System.assert(untypedRecordTypeMetadata.containsKey('ApiName'));
+        System.assert(untypedRecordTypeMetadata.containsKey('Id'));
+        System.assert(untypedRecordTypeMetadata.containsKey('IsActive'));
+        System.assert(untypedRecordTypeMetadata.containsKey('IsAvailable'));
+        System.assert(untypedRecordTypeMetadata.containsKey('IsDefault'));
+        System.assert(untypedRecordTypeMetadata.containsKey('IsMaster'));
+        System.assert(untypedRecordTypeMetadata.containsKey('Label'));
+        System.assert(untypedRecordTypeMetadata.containsKey('LocalApiName'));
+        System.assert(untypedRecordTypeMetadata.containsKey('Namespace'));
+        System.assert(untypedRecordTypeMetadata.containsKey('SobjectApiName'));
     }
 
 }

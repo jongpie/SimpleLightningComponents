@@ -4,14 +4,14 @@
         var fieldMetadata = component.get('v.fieldMetadata');
 
         if(component.get('v.displayType') === undefined) {
-            component.set('v.displayType', fieldMetadata.displayType);
+            component.set('v.displayType', fieldMetadata.DisplayType);
         }
         if(component.get('v.disabled') === undefined) {
-            component.set('v.disabled', fieldMetadata.isUpdateable == false);
+            component.set('v.disabled', fieldMetadata.IsUpdateable == false);
         }
         if(component.get('v.required') === undefined) {
-            var isUpdateableRequired = fieldMetadata.isUpdateable && fieldMetadata.isRequired;
-            var isUpdateableNameField = fieldMetadata.isUpdateable && fieldMetadata.isNameField;
+            var isUpdateableRequired = fieldMetadata.IsUpdateable && fieldMetadata.IsRequired;
+            var isUpdateableNameField = fieldMetadata.IsUpdateable && fieldMetadata.IsNameField;
             component.set('v.required', isUpdateableRequired || isUpdateableNameField);
         }
         this.parsePicklistOptions(component, event);
@@ -34,7 +34,7 @@
 
             if(fieldMetadata == null) return;
 
-            picklistOptions = fieldMetadata.picklistOptions;
+            picklistOptions = fieldMetadata.PicklistOptions;
         }
         component.set('v.picklistOptions', picklistOptions);
     },
@@ -51,14 +51,14 @@
 
         var fieldChanged = newFieldValue !== oldFieldValue;
         // If the displayType is different from the field metadata and it should be a string, then cast to strings and compare to see if the field changed
-        if(newFieldValue !== null && typeof newFieldValue !== 'string' && fieldMetadata != null && (fieldMetadata.displayType === 'TEXT' || fieldMetadata.displayType === 'TEXTAREA')) {
+        if(newFieldValue !== null && typeof newFieldValue !== 'string' && fieldMetadata != null && (fieldMetadata.DisplayType === 'TEXT' || fieldMetadata.DisplayType === 'TEXTAREA')) {
             var newFieldValueString = newFieldValue == null ? null : newFieldValue.toString();
             var oldFieldValueString = oldFieldValue == null ? null : oldFieldValue.toString();
             fieldChanged = newFieldValueString !== oldFieldValueString;
         }
 
         if(fieldChanged) {
-            if(newFieldValue !== null && typeof newFieldValue !== 'string' && fieldMetadata != null && (fieldMetadata.displayType === 'TEXT' || fieldMetadata.displayType === 'TEXTAREA')) {
+            if(newFieldValue !== null && typeof newFieldValue !== 'string' && fieldMetadata != null && (fieldMetadata.DisplayType === 'TEXT' || fieldMetadata.DisplayType === 'TEXTAREA')) {
                 newFieldValue = newFieldValue.toString();
             }
             record[changedField] = newFieldValue;

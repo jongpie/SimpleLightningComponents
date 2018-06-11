@@ -13,9 +13,9 @@ private class QueueMetadata_Tests {
         Group queue = new Group(DeveloperName = queueDeveloperName, Name = queueDeveloperName, Type = 'Queue');
         insert queue;
 
-        // Create queue SObject
-        QueueSObject queueCaseSObject = new QueueSObject(QueueId = queue.Id, SObjectType = 'Case');
-        insert queueCaseSObject;
+        // Create queue Sobject
+        QueueSobject queueCaseSobject = new QueueSobject(QueueId = queue.Id, SobjectType = 'Case');
+        insert queueCaseSobject;
 
         // Create queue members
         List<GroupMember> queueMembers = new List<GroupMember>();
@@ -66,15 +66,12 @@ private class QueueMetadata_Tests {
     }
 
     private static void validateAttributesAreSet(Group queue, QueueMetadata queueMetadata) {
-        System.assertEquals(queue.DeveloperName, queueMetadata.apiName);
-        System.assertEquals(queue.DoesIncludeBosses, queueMetadata.doesIncludeBosses);
-        System.assertEquals(queue.DoesSendEmailToMembers, queueMetadata.doesSendEmailToMembers);
-        System.assertEquals(queue.Email, queueMetadata.email);
-        System.assertEquals(queue.Name, queueMetadata.label);
-        System.assertEquals(queue.OwnerId, queueMetadata.ownerId);
-        System.assertEquals(queue.Owner.Name, queueMetadata.ownerName);
-        System.assertEquals(queue.Owner.Type, queueMetadata.ownerType);
-        System.assertEquals(queue.Id, queueMetadata.id);
+        System.assertEquals(queue.DeveloperName, queueMetadata.ApiName);
+        System.assertEquals(queue.DoesIncludeBosses, queueMetadata.DoesIncludeBosses);
+        System.assertEquals(queue.DoesSendEmailToMembers, queueMetadata.DoesSendEmailToMembers);
+        System.assertEquals(queue.Email, queueMetadata.Email);
+        System.assertEquals(queue.Id, queueMetadata.Id);
+        System.assertEquals(queue.Name, queueMetadata.Label);
     }
 
     private static void validateCaseSentivityForJavascript(QueueMetadata queueMetadata) {
@@ -85,17 +82,14 @@ private class QueueMetadata_Tests {
         // One negative to confirm that the strings in our map are case sensitive
         System.assert(untypedQueueMetadata.containsKey('APINAME') == false);
         // Now for the 'real' tests
-        System.assert(untypedQueueMetadata.containsKey('apiName'));
-        System.assert(untypedQueueMetadata.containsKey('doesIncludeBosses'));
-        System.assert(untypedQueueMetadata.containsKey('doesSendEmailToMembers'));
-        System.assert(untypedQueueMetadata.containsKey('email'));
-        System.assert(untypedQueueMetadata.containsKey('id'));
-        System.assert(untypedQueueMetadata.containsKey('label'));
-        System.assert(untypedQueueMetadata.containsKey('ownerId'));
-        System.assert(untypedQueueMetadata.containsKey('ownerName'));
-        System.assert(untypedQueueMetadata.containsKey('ownerType'));
-        System.assert(untypedQueueMetadata.containsKey('supportedSObjectApiNames'));
-        System.assert(untypedQueueMetadata.containsKey('queueMembers'));
+        System.assert(untypedQueueMetadata.containsKey('ApiName'));
+        System.assert(untypedQueueMetadata.containsKey('DoesIncludeBosses'));
+        System.assert(untypedQueueMetadata.containsKey('DoesSendEmailToMembers'));
+        System.assert(untypedQueueMetadata.containsKey('Email'));
+        System.assert(untypedQueueMetadata.containsKey('Id'));
+        System.assert(untypedQueueMetadata.containsKey('Label'));
+        System.assert(untypedQueueMetadata.containsKey('QueueMembers'));
+        System.assert(untypedQueueMetadata.containsKey('SobjectApiNames'));
     }
 
 }

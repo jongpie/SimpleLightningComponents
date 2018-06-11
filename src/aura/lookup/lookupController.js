@@ -12,41 +12,41 @@
         if(!fieldMetadata) return;
 
         var defaultRelationshipReference;
-        for(var i = 0; i < fieldMetadata.relationshipReferences.length; i++) {
-            var relationshipReference = fieldMetadata.relationshipReferences[i];
+        for(var i = 0; i < fieldMetadata.RelationshipReferences.length; i++) {
+            var relationshipReference = fieldMetadata.RelationshipReferences[i];
 
-            if(relationshipReference.isAccessible === true) {
+            if(relationshipReference.IsAccessible === true) {
                 defaultRelationshipReference = relationshipReference;
                 break;
             }
         }
-        component.set('v.parentSObjectApiName', defaultRelationshipReference.apiName);
+        component.set('v.parentSobjectApiName', defaultRelationshipReference.ApiName);
     },
-    toggleParentSObjectSelector : function(component, event, helper) {
-        component.set('v.showSObjectSelector', !component.get('v.showSObjectSelector'));
+    toggleParentSobjectSelector : function(component, event, helper) {
+        component.set('v.showSobjectSelector', !component.get('v.showSobjectSelector'));
         component.set('v.showSearchResults', !component.get('v.showSearchResults'));
     },
-    selectParentSObject : function(component, event, helper) {
-        var parentSObjectApiName = event.currentTarget.dataset.sobjectapiname;
-        component.set('v.parentSObjectApiName', parentSObjectApiName);
-        component.set('v.showSObjectSelector', false);
+    selectParentSobject : function(component, event, helper) {
+        var parentSobjectApiName = event.currentTarget.dataset.sobjectapiname;
+        component.set('v.parentSobjectApiName', parentSobjectApiName);
+        component.set('v.showSobjectSelector', false);
     },
-    loadParentSObjectMetadata : function(component, event, helper) {
+    loadParentSobjectMetadata : function(component, event, helper) {
         component.set('v.searchResults', null);
 
         var fieldMetadata = component.get('v.fieldMetadata');
-        var parentSObjectApiName = component.get('v.parentSObjectApiName');
+        var parentSobjectApiName = component.get('v.parentSobjectApiName');
 
-        var selectedSObjectMetadata;
-        for(var i = 0; i < fieldMetadata.relationshipReferences.length; i++) {
-            var relationshipReference = fieldMetadata.relationshipReferences[i];
+        var selectedSobjectMetadata;
+        for(var i = 0; i < fieldMetadata.RelationshipReferences.length; i++) {
+            var relationshipReference = fieldMetadata.RelationshipReferences[i];
 
-            if(relationshipReference.apiName !== parentSObjectApiName) continue;
+            if(relationshipReference.ApiName !== parentSobjectApiName) continue;
 
-            selectedSObjectMetadata = fieldMetadata.relationshipReferences[i];
+            selectedSobjectMetadata = fieldMetadata.RelationshipReferences[i];
             break;
         }
-        component.set('v.parentSObjectMetadata', selectedSObjectMetadata);
+        component.set('v.parentSobjectMetadata', selectedSobjectMetadata);
     },
     loadSelectedParentRecord :  function(component, event, helper) {
         var selectedParentRecordId = component.get('v.selectedParentRecordId');

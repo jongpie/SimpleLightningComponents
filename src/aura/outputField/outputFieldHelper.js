@@ -4,11 +4,11 @@
         var record = component.get('v.record');
 
         // Display type
-        component.set('v.displayType', fieldMetadata.displayType);
+        component.set('v.displayType', fieldMetadata.DisplayType);
 
         // Parent record name (used for REFERENCE fields)
-        var relationshipName       = fieldMetadata.relationshipName;
-        var relationshipReferences = fieldMetadata.relationshipReferences;
+        var relationshipName       = fieldMetadata.RelationshipName;
+        var relationshipReferences = fieldMetadata.RelationshipReferences;
         var relationshipNameField  = relationshipReferences && relationshipReferences.length > 0 ? relationshipReferences[0].nameField : null;
 
         if(record && record.hasOwnProperty(relationshipName)) {
@@ -36,7 +36,7 @@
         var record        = component.get('v.record');
 
         if(fieldMetadata === null) return;
-        if(fieldMetadata.displayType !== 'MULTIPICKLIST' && fieldMetadata.displayType !== 'PICKLIST') return;
+        if(fieldMetadata.DisplayType !== 'MULTIPICKLIST' && fieldMetadata.DisplayType !== 'PICKLIST') return;
         if(!record.hasOwnProperty(fieldApiName)) return;
 
         var picklistValues = record[fieldApiName].split(';');
@@ -44,8 +44,8 @@
         for(var i = 0; i < picklistValues.length; i++) {
             var picklistValue = picklistValues[i];
 
-            for(var j = 0; j < fieldMetadata.picklistOptions.length; j++) {
-                var picklistOption = fieldMetadata.picklistOptions[j];
+            for(var j = 0; j < fieldMetadata.PicklistOptions.length; j++) {
+                var picklistOption = fieldMetadata.PicklistOptions[j];
 
                 if(picklistOption.value !== picklistValue) continue;
 

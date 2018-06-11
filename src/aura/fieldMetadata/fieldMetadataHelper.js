@@ -7,7 +7,7 @@
 
         var params = event.getParam('arguments');
 
-        var action = component.get('c.getFieldMetadataByName');
+        var action = component.get('c.getFieldMetadataByApiName');
         action.setParams({
             sobjectApiName : sobjectApiName,
             fieldApiName   : fieldApiName

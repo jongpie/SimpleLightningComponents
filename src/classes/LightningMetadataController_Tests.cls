@@ -11,7 +11,7 @@ private class LightningMetadataController_Tests {
         DescribeSObjectResult sobjectDescribe = Schema.Account.SObjectType.getDescribe();
 
         Test.startTest();
-        SObjectMetadata sobjectMetadata = LightningMetadataController.getSObjectMetadataByName(sobjectName);
+        SObjectMetadata sobjectMetadata = LightningMetadataController.getSObjectMetadataByApiName(sobjectName);
         Test.stopTest();
 
         System.assertEquals(sobjectName, sobjectMetadata.apiName);
@@ -25,7 +25,7 @@ private class LightningMetadataController_Tests {
 
         Test.startTest();
         try {
-            SObjectMetadata sobjectMetadata = LightningMetadataController.getSObjectMetadataByName(sobjectName);
+            SObjectMetadata sobjectMetadata = LightningMetadataController.getSObjectMetadataByApiName(sobjectName);
             System.assert(false, 'Exception expected here');
         } catch(Exception ex) {
             System.assert(ex instanceOf AuraHandledException);
@@ -41,7 +41,7 @@ private class LightningMetadataController_Tests {
         DescribeFieldResult fieldDescribe = Schema.Account.SObjectType.fields.Type.getDescribe();
 
         Test.startTest();
-        FieldMetadata fieldMetadata = LightningMetadataController.getFieldMetadataByName(sobjectName, fieldName);
+        FieldMetadata fieldMetadata = LightningMetadataController.getFieldMetadataByApiName(sobjectName, fieldName);
         Test.stopTest();
 
         System.assertEquals(sobjectName, fieldMetadata.sobjectApiName);
@@ -56,7 +56,7 @@ private class LightningMetadataController_Tests {
 
         Test.startTest();
         try {
-            FieldMetadata fieldMetadata = LightningMetadataController.getFieldMetadataByName(sobjectName, fieldName);
+            FieldMetadata fieldMetadata = LightningMetadataController.getFieldMetadataByApiName(sobjectName, fieldName);
             System.assert(false, 'Exception expected here');
         } catch(Exception ex) {
             System.assert(ex instanceOf AuraHandledException);

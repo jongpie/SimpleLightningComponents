@@ -12,7 +12,7 @@ private class FieldSetMetadata_Tests {
 
         Test.startTest();
 
-        String sobjectName = String.valueOf(fieldSet.getSObjectType());
+        String sobjectName = String.valueOf(fieldSet.getSobjectType());
         String fieldSetNamespace = fieldSet.getNamespace() == null ? '' : fieldSet.getNamespace() + '__';
         String fieldSetName = fieldSetNamespace + fieldSet.getName();
         FieldSetMetadata fieldSetMetadata = new FieldSetMetadata(sobjectName, fieldSetName);
@@ -39,11 +39,11 @@ private class FieldSetMetadata_Tests {
     private static Schema.FieldSet getFieldSet() {
         // Dynamically check for field sets in some of the most commonly used objects
         // If not results are found, then test coverage will drop
-        List<String> commonSObjectNames = new List<String>{
+        List<String> commonSobjectNames = new List<String>{
             'Account', 'Lead', 'Contact', 'Opportunity'
         };
-        for(String sobjectName : commonSObjectNames) {
-            Schema.DescribeSObjectResult sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
+        for(String sobjectName : commonSobjectNames) {
+            Schema.DescribeSobjectResult sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
             // If there are any fields sets found, return the first one
             if(sobjectDescribe.fieldSets.getMap().isEmpty() == false) return sobjectDescribe.fieldSets.getMap().values()[0];
         }
@@ -55,14 +55,14 @@ private class FieldSetMetadata_Tests {
         if(fieldSet.getNamespace() != null) namespacePrefix = fieldSet.getNamespace() + '__';
         String fieldSetName = namespacePrefix + fieldSet.getName();
 
-        System.assertEquals(fieldSetName, fieldSetMetadata.apiName);
-        System.assertEquals(fieldSet.getDescription(), fieldSetMetadata.description);
-        System.assertEquals(fieldSet.getFields().size(), fieldSetMetadata.fieldSetMembers.size());
+        System.assertEquals(fieldSetName, fieldSetMetadata.ApiName);
+        System.assertEquals(fieldSet.getDescription(), fieldSetMetadata.Description);
+        System.assertEquals(fieldSet.getFields().size(), fieldSetMetadata.FieldSetMembers.size());
         // TODO add asserts for field set members' field metadata
-        System.assertEquals(fieldSet.getLabel(), fieldSetMetadata.label);
+        System.assertEquals(fieldSet.getLabel(), fieldSetMetadata.Label);
         // TODO add assert for localName
-        System.assertEquals(fieldSet.getNamespace(), fieldSetMetadata.namespace);
-        System.assertEquals(String.valueOf(fieldSet.getSObjectType()), fieldSetMetadata.sobjectApiName);
+        System.assertEquals(fieldSet.getNamespace(), fieldSetMetadata.Namespace);
+        System.assertEquals(String.valueOf(fieldSet.getSobjectType()), fieldSetMetadata.SobjectApiName);
     }
 
     private static void validateCaseSentivityForJavascript(FieldSetMetadata fieldSetMetadata) {
@@ -73,13 +73,13 @@ private class FieldSetMetadata_Tests {
         // One negative to confirm that the strings in our map are case sensitive
         System.assert(untypedFieldSetMetadata.containsKey('APINAME') == false);
         // Now for the 'real' tests
-        System.assert(untypedFieldSetMetadata.containsKey('apiName'));
-        System.assert(untypedFieldSetMetadata.containsKey('description'));
-        System.assert(untypedFieldSetMetadata.containsKey('fieldSetMembers'));
-        System.assert(untypedFieldSetMetadata.containsKey('label'));
-        System.assert(untypedFieldSetMetadata.containsKey('localApiName'));
-        System.assert(untypedFieldSetMetadata.containsKey('namespace'));
-        System.assert(untypedFieldSetMetadata.containsKey('sobjectApiName'));
+        System.assert(untypedFieldSetMetadata.containsKey('ApiName'));
+        System.assert(untypedFieldSetMetadata.containsKey('Description'));
+        System.assert(untypedFieldSetMetadata.containsKey('FieldSetMembers'));
+        System.assert(untypedFieldSetMetadata.containsKey('Label'));
+        System.assert(untypedFieldSetMetadata.containsKey('LocalApiName'));
+        System.assert(untypedFieldSetMetadata.containsKey('Namespace'));
+        System.assert(untypedFieldSetMetadata.containsKey('SobjectApiName'));
         // TODO add asserts for FieldSetMembers
     }
 
