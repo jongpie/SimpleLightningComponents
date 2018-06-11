@@ -8,7 +8,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <aura:attribute name="variant" type="String" default="label" description="Options: label (default) and labelPlural" />
 
     <!-- Markup -->
-    <aura:if isTrue="{!v.variant == 'label'}"><ui:outputText value="{!v.sobjectMetadata.label}" /></aura:if>
-    <aura:if isTrue="{!v.variant == 'labelPlural'}"><ui:outputText value="{!v.sobjectMetadata.labelPlural}" /></aura:if>
+    <aura:if isTrue="{!v.variant == 'label'}"><ui:outputText value="{!v.sobjectMetadata.Label}" /></aura:if>
+    <aura:if isTrue="{!v.variant == 'labelPlural'}"><ui:outputText value="{!v.sobjectMetadata.LabelPlural}" /></aura:if>
 
 </aura:component>

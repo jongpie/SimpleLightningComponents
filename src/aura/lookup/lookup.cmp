@@ -5,19 +5,19 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 <aura:component extends="c.fieldMetadata" controller="LookupController">
 
     <!-- Public Config Attributes -->
-    <aura:attribute name="record" type="SObject" default="{}" />
+    <aura:attribute name="record" type="Sobject" default="{}" />
     <aura:attribute name="disabled" type="Boolean" description="(Optional) Disables the input field" />
     <aura:attribute name="required" type="Boolean" description="(Optional) Marks the field as required (true) or optional (false)" />
     <aura:attribute name="limitCount" type="Integer" default="5" description="Total number of records to return" />
 
     <!-- Private Selected Record Attributes -->
     <aura:attribute name="selectedParentRecordId" type="Id" access="private" />
-    <aura:attribute name="selectedParentRecord" type="SObject" access="private" />
+    <aura:attribute name="selectedParentRecord" type="Sobject" access="private" />
 
-    <!-- Private SObject Selector Attributes -->
-    <aura:attribute name="showSObjectSelector" type="Boolean" access="private" default="false" />
-    <aura:attribute name="parentSObjectApiName" type="String" access="private" />
-    <aura:attribute name="parentSObjectMetadata" type="SobjectMetadata" access="private" />
+    <!-- Private Sobject Selector Attributes -->
+    <aura:attribute name="showSobjectSelector" type="Boolean" access="private" default="false" />
+    <aura:attribute name="parentSobjectApiName" type="String" access="private" />
+    <aura:attribute name="parentSobjectMetadata" type="SobjectMetadata" access="private" />
 
     <!-- Private Search Result Attributes -->
     <aura:attribute name="showSearchResults" type="Boolean" access="private" default="false" />
@@ -27,29 +27,29 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.parseFieldMetadata}" />
     <aura:handler name="change" value="{!v.selectedParentRecordId}" action="{!c.loadSelectedParentRecord}" />
-    <aura:handler name="change" value="{!v.parentSObjectApiName}" action="{!c.loadParentSObjectMetadata}" />
+    <aura:handler name="change" value="{!v.parentSobjectApiName}" action="{!c.loadParentSobjectMetadata}" />
 
     <!-- Markup -->
     <div class="slds-form-element">
         <div class="slds-form-element__control">
             <div class="slds-combobox_container slds-has-object-switcher">
-                <!-- SObject Switcher -->
-                <aura:if isTrue="{! and(empty(v.selectedParentRecord), v.fieldMetadata.relationshipReferences.length > 1)}">
+                <!-- Sobject Switcher -->
+                <aura:if isTrue="{! and(empty(v.selectedParentRecord), v.fieldMetadata.RelationshipReferences.length > 1)}">
                     <div class="slds-listbox_object-switcher slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
-                        <button class="slds-button slds-button_icon" aria-haspopup="true" title="Select object to search in" onclick="{!c.toggleParentSObjectSelector}">
-                            <lightning:icon iconName="{!v.parentSObjectMetadata.tabIcon}" size="small" />
+                        <button class="slds-button slds-button_icon" aria-haspopup="true" title="Select object to search in" onclick="{!c.toggleParentSobjectSelector}">
+                            <lightning:icon iconName="{!v.parentSobjectMetadata.TabIcon}" size="small" />
                             <lightning:icon iconName="utility:down" size="x-small" />
                         </button>
-                        <aura:if isTrue="{!v.showSObjectSelector}">
+                        <aura:if isTrue="{!v.showSobjectSelector}">
                             <div class="slds-dropdown slds-dropdown_left slds-dropdown_small">
                                 <ul class="slds-dropdown__list" role="menu">
-                                    <aura:iteration items="{!v.fieldMetadata.relationshipReferences}" var="relationshipReference">
-                                        <aura:if isTrue="{!relationshipReference.isAccessible}">
+                                    <aura:iteration items="{!v.fieldMetadata.RelationshipReferences}" var="relationshipReference">
+                                        <aura:if isTrue="{!relationshipReference.IsAccessible}">
                                             <li class="slds-dropdown__item slds-is-selected" role="presentation">
-                                                <a href="javascript:void(0);" role="menuitemcheckbox" aria-checked="true" tabindex="0" data-sobjectapiname="{!relationshipReference.apiName}" onclick="{!c.selectParentSObject}">
-                                                    <span class="slds-truncate" title="{!relationshipReference.labelPlural}">
-                                                        <lightning:icon iconName="{!relationshipReference.tabIcon}" size="large" />
-                                                        &nbsp;{!relationshipReference.labelPlural}
+                                                <a href="javascript:void(0);" role="menuitemcheckbox" aria-checked="true" tabindex="0" data-sobjectapiname="{!relationshipReference.ApiName}" onclick="{!c.selectParentSobject}">
+                                                    <span class="slds-truncate" title="{!relationshipReference.LabelPlural}">
+                                                        <lightning:icon iconName="{!relationshipReference.TabIcon}" size="large" />
+                                                        &nbsp;{!relationshipReference.LabelPlural}
                                                     </span>
                                                 </a>
                                             </li>
@@ -69,12 +69,12 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                                 aria-controls="listbox-unique-id"
                                 autocomplete="off"
                                 class="slds-input slds-combobox__input"
-                                disabled="{!or(empty(v.parentSObjectMetadata), v.fieldMetadata.isUpdateable == false, v.disabled)}"
+                                disabled="{!or(empty(v.parentSobjectMetadata), v.fieldMetadata.IsUpdateable == false, v.disabled)}"
                                 id="combobox-unique-id"
                                 onfocus="{!c.fetchSearchResults}"
                                 onkeyup="{!c.fetchSearchResults}"
-                                placeholder="{! if(empty(v.parentSObjectMetadata), '', v.parentSObjectMetadata.labelPlural) }"
-                                required="{!or(v.required, v.fieldMetadata.required)}"
+                                placeholder="{! if(empty(v.parentSobjectMetadata), '', v.parentSobjectMetadata.LabelPlural) }"
+                                required="{!or(v.required, v.fieldMetadata.Required)}"
                                 role="textbox"
                                 type="text"
                             />
@@ -83,9 +83,9 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                             </span>
                             <aura:set attribute="else">
                                 <span class="slds-pill slds-pill_link">
-                                    <a href="javascript:void(0);" class="slds-pill__action slds-p-left_x-small" title="{#v.selectedParentRecord.displayText}">
-                                        <lightning:icon iconName="{!v.parentSObjectMetadata.tabIcon}" size="x-small" />
-                                        <span class="slds-pill__label slds-p-left_x-small">{#v.selectedParentRecord.displayText}</span>
+                                    <a href="javascript:void(0);" class="slds-pill__action slds-p-left_x-small" title="{#v.selectedParentRecord.DisplayText}">
+                                        <lightning:icon iconName="{!v.parentSobjectMetadata.TabIcon}" size="x-small" />
+                                        <span class="slds-pill__label slds-p-left_x-small">{#v.selectedParentRecord.DisplayText}</span>
                                     </a>
                                     <button class="slds-button slds-button_icon slds-button_icon slds-pill__remove" title="Remove" onclick="{!c.clearSelection}" >
                                         <lightning:icon iconName="utility:close" size="small" />
@@ -104,12 +104,12 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                                         <span role="option" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta">
                                             <span class="slds-media__figure optionIcon">
                                                 <span class="slds-icon_container" >
-                                                    <lightning:icon iconName="{#v.parentSObjectMetadata.tabIcon}" size="small" />
-                                                    <span class="slds-assistive-text">{!v.parentSObjectMetadata.label}</span>
+                                                    <lightning:icon iconName="{#v.parentSobjectMetadata.TabIcon}" size="small" />
+                                                    <span class="slds-assistive-text">{!v.parentSobjectMetadata.Label}</span>
                                                 </span>
                                             </span>
                                             <span class="slds-media__body">
-                                                <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!matchingRecord.displayText}</span>
+                                                <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!matchingRecord.DisplayText}</span>
                                             </span>
                                         </span>
                                     </li>

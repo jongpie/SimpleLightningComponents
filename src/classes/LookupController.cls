@@ -5,27 +5,27 @@
 public with sharing class LookupController {
 
     @AuraEnabled
-    public static List<MatchingRecord> search(String parentSObjectApiName, String searchFieldApiName, String searchText, String displayFieldApiName, Integer limitCount) {
+    public static List<MatchingRecord> search(String parentSobjectApiName, String searchFieldApiName, String searchText, String displayFieldApiName, Integer limitCount) {
         try {
-            Schema.DescribeSObjectResult parentSObjectDescribe = Schema.getGlobalDescribe().get(parentSObjectApiName).getDescribe();
-            SObjectMetadata parentSObjectMetadata = new SObjectMetadata(parentSObjectApiName);
+            Schema.DescribeSobjectResult parentSobjectDescribe = Schema.getGlobalDescribe().get(parentSobjectApiName).getDescribe();
+            SobjectMetadata parentSobjectMetadata = new SobjectMetadata(parentSobjectApiName);
 
-            String query = 'SELECT Id, ' + displayFieldApiName + ' FROM ' + parentSObjectApiName;
+            String query = 'SELECT Id, ' + displayFieldApiName + ' FROM ' + parentSobjectApiName;
 
             if(!String.isEmpty(searchText)) {
                 searchText = '\'%' + String.escapeSingleQuotes(searchText.trim()) + '%\'';
                 query += ' WHERE ' + searchFieldApiName + ' LIKE ' + searchText;
             }
 
-            Boolean canSortByLastViewdDate = parentSObjectDescribe.fields.getMap().containsKey('LastViewedDate') && String.isEmpty(searchText);
-            String sortByField = canSortByLastViewdDate ? 'LastViewedDate DESC NULLS LAST' : parentSObjectMetadata.displayFieldApiName;
+            Boolean canSortByLastViewdDate = parentSobjectDescribe.fields.getMap().containsKey('LastViewedDate') && String.isEmpty(searchText);
+            String sortByField = canSortByLastViewdDate ? 'LastViewedDate DESC NULLS LAST' : parentSobjectMetadata.DisplayFieldApiName;
             query += ' ORDER BY ' + sortByField
                 + ' LIMIT ' + limitCount;
 
             System.debug('query=' + query);
 
             List<MatchingRecord> searchResults = new List<MatchingRecord>();
-            for(SObject record : Database.query(query)) {
+            for(Sobject record : Database.query(query)) {
                 MatchingRecord matchingRecord = new MatchingRecord(record);
                 searchResults.add(matchingRecord);
             }
@@ -41,30 +41,32 @@ public with sharing class LookupController {
     public static MatchingRecord getRecord(Id recordId) {
         if(recordId == null) return null;
 
-        Schema.SObjectType sobjectType = recordId.getSObjectType();
-        SObjectMetadata sobjectMetadata = new SObjectMetadata(sobjectType);
-        List<String> fields = new List<String>{'Id', sobjectMetadata.displayFieldApiName};
+        Schema.SobjectType sobjectType = recordId.getSobjectType();
+        SobjectMetadata sobjectMetadata = new SobjectMetadata(sobjectType);
+        List<String> fields = new List<String>{'Id', sobjectMetadata.DisplayFieldApiName};
 
         String query = 'SELECT ' + String.join(fields, ', ')
-            + ' FROM ' + sobjectMetadata.apiName
+            + ' FROM ' + sobjectMetadata.ApiName
             + ' WHERE Id = \'' + recordId + '\'';
 
-        SObject record = Database.query(query);
+        Sobject record = Database.query(query);
         return new MatchingRecord(record);
     }
 
     public class MatchingRecord {
-        @AuraEnabled public SObject record     {get;private set;}
-        @AuraEnabled public String displayText {get;private set;}
-        @AuraEnabled public String sobjectName {get;private set;}
 
-        public MatchingRecord(SObject record) {
+        @AuraEnabled public Sobject Record     {get;private set;}
+        @AuraEnabled public String DisplayText {get;private set;}
+        @AuraEnabled public String SobjectName {get;private set;}
+
+        public MatchingRecord(Sobject record) {
             this.record = record;
 
-            SObjectMetadata sobjectMetadata = new SObjectMetadata(record.getSObjectType());
-            this.sobjectName = sobjectMetadata.apiName;
-            this.displayText = (String)record.get(sobjectMetadata.displayFieldApiName);
+            SobjectMetadata sobjectMetadata = new SobjectMetadata(record.getSobjectType());
+            this.sobjectName = sobjectMetadata.ApiName;
+            this.displayText = (String)record.get(sobjectMetadata.DisplayFieldApiName);
         }
+
     }
 
 }

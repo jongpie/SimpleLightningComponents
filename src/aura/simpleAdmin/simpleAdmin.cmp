@@ -13,7 +13,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <aura:attribute name="sobjectMetadata" type="SobjectMetadata" access="private" />
 
     <!-- Private attributes for controlling UI -->
-    <aura:attribute name="selectedSObject" type="String" access="private" />
+    <aura:attribute name="selectedSobject" type="String" access="private" />
     <aura:attribute name="selectedField" type="String" access="private" />
     <aura:attribute name="selectedQueue" type="String" access="private" />
     <aura:attribute name="selectedRecordType" type="String" access="private" />
@@ -30,10 +30,10 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <!-- Metadata service components -->
     <c:currentUser aura:id="currentUserService" />
     <c:environmentMetadata aura:id="environmentMetadataService" />
-    <c:fieldMetadata aura:id="fieldMetadataService" sobjectApiName="{!v.selectedSObject}" fieldApiName="{!v.selectedField}" />
+    <c:fieldMetadata aura:id="fieldMetadataService" sobjectApiName="{!v.selectedSobject}" fieldApiName="{!v.selectedField}" />
     <c:queueMetadata aura:id="queueMetadataService" queueApiName="{!v.selectedQueue}" />
-    <c:recordTypeMetadata aura:id="recordTypeMetadataService" sobjectApiName="{!v.selectedSObject}" recordTypeApiName="{!v.selectedRecordType}" />
-    <c:sobjectMetadata aura:id="sobjectMetadataService" sobjectApiName="{!v.selectedSObject}" />
+    <c:recordTypeMetadata aura:id="recordTypeMetadataService" sobjectApiName="{!v.selectedSobject}" recordTypeApiName="{!v.selectedRecordType}" />
+    <c:sobjectMetadata aura:id="sobjectMetadataService" sobjectApiName="{!v.selectedSobject}" />
 
     <!-- Markup -->
     <h1 class="slds-align_absolute-center" style="color:#fff;font-size:250%;font-weight:bold;margin-bottom:30px;">Simple Lightning Components</h1>
@@ -53,34 +53,34 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>baseUrl</td><td>{!v.environmentMetadata.baseUrl}</td></tr>
-                    <tr><td>instanceName</td><td>{!v.environmentMetadata.instanceName}</td></tr>
-                    <tr><td>isChatterEnabled</td><td style="{!v.environmentMetadata.isChatterEnabled ? 'color:green' : 'color:red'}">{!v.environmentMetadata.isChatterEnabled}</td></tr>
-                    <tr><td>isKnowledgeEnabled</td><td style="{!v.environmentMetadata.isKnowledgeEnabled == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.isKnowledgeEnabled}</td></tr>
-                    <tr><td>isMultiCurrencyEnabled</td><td style="{!v.environmentMetadata.isMultiCurrencyEnabled == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.isMultiCurrencyEnabled}</td></tr>
-                    <tr><td>isPersonAccountEnabled</td><td style="{!v.environmentMetadata.isPersonAccountEnabled == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.isPersonAccountEnabled}</td></tr>
-                    <tr><td>isProduction</td><td style="{!v.environmentMetadata.isProduction == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.isProduction}</td></tr>
-                    <tr><td>isSandbox</td><td style="{!v.environmentMetadata.isSandbox == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.isSandbox}</td></tr>
-                    <tr><td>isTerritoryManagementEnabled</td><td style="{!v.environmentMetadata.isTerritoryManagementEnabled == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.isTerritoryManagementEnabled}</td></tr>
-                    <tr><td>namespace</td><td>{!v.environmentMetadata.namespace}</td></tr>
-                    <tr><td>organizationId</td><td>{!v.environmentMetadata.organizationId}</td></tr>
-                    <tr><td>organizationName</td><td>{!v.environmentMetadata.organizationName}</td></tr>
-                    <tr><td>organizationType</td><td>{!v.environmentMetadata.organizationType}</td></tr>
+                    <tr><td>BaseUrl</td><td>{!v.environmentMetadata.BaseUrl}</td></tr>
+                    <tr><td>InstanceName</td><td>{!v.environmentMetadata.InstanceName}</td></tr>
+                    <tr><td>IsChatterEnabled</td><td style="{!v.environmentMetadata.IsChatterEnabled ? 'color:green' : 'color:red'}">{!v.environmentMetadata.IsChatterEnabled}</td></tr>
+                    <tr><td>IsKnowledgeEnabled</td><td style="{!v.environmentMetadata.IsKnowledgeEnabled == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.IsKnowledgeEnabled}</td></tr>
+                    <tr><td>IsMultiCurrencyEnabled</td><td style="{!v.environmentMetadata.IsMultiCurrencyEnabled == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.IsMultiCurrencyEnabled}</td></tr>
+                    <tr><td>IsPersonAccountEnabled</td><td style="{!v.environmentMetadata.IsPersonAccountEnabled == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.IsPersonAccountEnabled}</td></tr>
+                    <tr><td>IsProduction</td><td style="{!v.environmentMetadata.IsProduction == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.IsProduction}</td></tr>
+                    <tr><td>IsSandbox</td><td style="{!v.environmentMetadata.IsSandbox == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.IsSandbox}</td></tr>
+                    <tr><td>IsTerritoryManagementEnabled</td><td style="{!v.environmentMetadata.IsTerritoryManagementEnabled == true ? 'color:green' : 'color:red'}">{!v.environmentMetadata.IsTerritoryManagementEnabled}</td></tr>
+                    <tr><td>Namespace</td><td>{!v.environmentMetadata.Namespace}</td></tr>
+                    <tr><td>OrganizationId</td><td>{!v.environmentMetadata.OrganizationId}</td></tr>
+                    <tr><td>OrganizationName</td><td>{!v.environmentMetadata.OrganizationName}</td></tr>
+                    <tr><td>OrganizationType</td><td>{!v.environmentMetadata.OrganizationType}</td></tr>
                     <tr>
-                        <td>queueApiNames</td>
+                        <td>QueueApiNames</td>
                         <td>
                             <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
-                                <aura:iteration items="{!v.environmentMetadata.queueApiNames}" var="queueApiName">
+                                <aura:iteration items="{!v.environmentMetadata.QueueApiNames}" var="queueApiName">
                                     <li>{!queueApiName}</li>
                                 </aura:iteration>
                             </ul>
                         </td>
                     </tr>
                     <tr>
-                        <td>sobjectApiNames</td>
+                        <td>SobjectApiNames</td>
                         <td>
                             <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
-                                <aura:iteration items="{!v.environmentMetadata.sobjectApiNames}" var="sobjectApiName">
+                                <aura:iteration items="{!v.environmentMetadata.SobjectApiNames}" var="sobjectApiName">
                                     <li>{!sobjectApiName}</li>
                                 </aura:iteration>
                             </ul>
@@ -125,11 +125,11 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">Queue Metadata</h2>
             <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
                 <div class="slds-text-color_inverse">
-                    <p>Choose an Queue and the metadata will be shown below</p>
+                    <p>Choose a queue and the metadata will be shown below</p>
                 </div>
                 <lightning:select label="Select a Queue" value="{!v.selectedQueue}" onchange="{!c.fetchQueueMetadata}" class="slds-text-color_inverse">
                     <option value="" text="" />
-                    <aura:iteration items="{!v.environmentMetadata.queueApiNames}" var="queueApiName">
+                    <aura:iteration items="{!v.environmentMetadata.QueueApiNames}" var="queueApiName">
                         <option value="{!queueApiName}" text="{!queueApiName}" />
                     </aura:iteration>
                 </lightning:select>
@@ -143,32 +143,28 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>apiName</td><td>{!v.queueMetadata.apiName}</td></tr>
-                        <tr><td>doesIncludeBosses</td><td style="{!v.queueMetadata.doesIncludeBosses ? 'color:green' : 'color:red'}">{!v.queueMetadata.doesIncludeBosses}</td></tr>
-                        <tr><td>doesSendEmailToMembers</td><td style="{!v.queueMetadata.doesSendEmailToMembers ? 'color:green' : 'color:red'}">{!v.queueMetadata.doesSendEmailToMembers}</td></tr>
-                        <tr><td>email</td><td>{!v.queueMetadata.email}</td></tr>
-                        <tr><td>id</td><td>{!v.queueMetadata.id}</td></tr>
-                        <tr><td>label</td><td>{!v.queueMetadata.label}</td></tr>
-                        <tr><td>ownerId</td><td>{!v.queueMetadata.ownerId}</td></tr>
-                        <tr><td>ownerName</td><td>{!v.queueMetadata.ownerName}</td></tr>
-                        <tr><td>ownerType</td><td>{!v.queueMetadata.ownerType}</td></tr>
+                        <tr><td>ApiName</td><td>{!v.queueMetadata.ApiName}</td></tr>
+                        <tr><td>DoesIncludeBosses</td><td style="{!v.queueMetadata.DoesIncludeBosses ? 'color:green' : 'color:red'}">{!v.queueMetadata.DoesIncludeBosses}</td></tr>
+                        <tr><td>DoesSendEmailToMembers</td><td style="{!v.queueMetadata.DoesSendEmailToMembers ? 'color:green' : 'color:red'}">{!v.queueMetadata.DoesSendEmailToMembers}</td></tr>
+                        <tr><td>Email</td><td>{!v.queueMetadata.Email}</td></tr>
+                        <tr><td>Id</td><td>{!v.queueMetadata.Id}</td></tr>
+                        <tr><td>Label</td><td>{!v.queueMetadata.Label}</td></tr>
                         <tr>
-                            <td>supportedSObjectApiNames</td>
+                            <td>SobjectApiNames</td>
                             <td>
                                 <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
-                                    <aura:iteration items="{!v.queueMetadata.supportedSObjectApiNames}" var="supportedSObjectApiName">
-                                        <li>{!supportedSObjectApiName}</li>
+                                    <aura:iteration items="{!v.queueMetadata.SobjectApiNames}" var="sobjectApiName">
+                                        <li>{!sobjectApiName}</li>
                                     </aura:iteration>
                                 </ul>
                             </td>
                         </tr>
-                        <tr><td>queueMembers</td><td>{!v.queueMetadata.queueMembers}</td></tr>
                         <tr>
-                            <td>queueMembers</td>
+                            <td>QueueMembers</td>
                             <td>
                                 <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
-                                    <aura:iteration items="{!v.queueMetadata.queueMembers}" var="queueMember">
-                                        <li>Type: {!queueMember.type}, User Or Group Id: {!queueMember.userOrGroupId}</li>
+                                    <aura:iteration items="{!v.queueMetadata.QueueMembers}" var="queueMember">
+                                        <li>Type: {!queueMember.Type}, User Or Group Id: {!queueMember.UserOrGroupId}</li>
                                     </aura:iteration>
                                 </ul>
                             </td>
@@ -177,28 +173,28 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                 </table>
             </aura:if>
         </lightning:tab>
-        <lightning:tab label="SObjects">
-            <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">SObject Metadata</h2>
+        <lightning:tab label="Sobjects">
+            <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">Sobject Metadata</h2>
             <div style="padding: 1.0rem; background: rgb(22, 50, 92) none repeat scroll 0% 0%;">
                 <div class="slds-text-color_inverse">
-                    <p>Choose an SObject and the metadata will be shown below</p>
+                    <p>Choose an Sobject and the metadata will be shown below</p>
                 </div>
             </div>
-            <lightning:select label="Select an SObject" value="{!v.selectedSObject}" onchange="{!c.fetchSObjectMetadata}">
+            <lightning:select label="Select an Sobject" value="{!v.selectedSobject}" onchange="{!c.fetchSobjectMetadata}">
                 <option value="" text="" />
-                <aura:iteration items="{!v.environmentMetadata.sobjectApiNames}" var="sobjectApiName">
+                <aura:iteration items="{!v.environmentMetadata.SobjectApiNames}" var="sobjectApiName">
                     <option value="{!sobjectApiName}" text="{!sobjectApiName}" />
                 </aura:iteration>
             </lightning:select>
-            <aura:if isTrue="{!empty(v.selectedSObject) == false}">
+            <aura:if isTrue="{!empty(v.selectedSobject) == false}">
                 <div class="slds-float--right" style="margin: 10px 30px;">
                     <lightning:button variant="brand" label="View Fields" onclick="{!c.viewFieldMetadata}" />
                     <lightning:button variant="brand" label="View Record Types" onclick="{!c.viewRecordTypeMetadata}" />
                 </div>
-                <c:modal showModal="{!v.showFieldModal}" title="{!'Field Metadata for ' + v.selectedSObject}">
+                <c:modal showModal="{!v.showFieldModal}" title="{!'Field Metadata for ' + v.selectedSobject}">
                     <lightning:select label="Select a field" value="{!v.selectedField}" onchange="{!c.fetchFieldMetadata}">
                         <option value="" text="" />
-                        <aura:iteration items="{!v.sobjectMetadata.fieldApiNames}" var="fieldApiName">
+                        <aura:iteration items="{!v.sobjectMetadata.FieldApiNames}" var="fieldApiName">
                             <option value="{!fieldApiName}" text="{!fieldApiName}" />
                         </aura:iteration>
                     </lightning:select>
@@ -211,65 +207,64 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td>apiName</td><td>{!v.fieldMetadata.apiName}</td></tr>
-                                <tr><td>byteLength</td><td>{!v.fieldMetadata.byteLength}</td></tr>
-                                <tr><td>defaultValue</td><td>{!v.fieldMetadata.defaultValue}</td></tr>
-                                <tr><td>digits</td><td>{!v.fieldMetadata.digits}</td></tr>
-                                <tr><td>displayType</td><td>{!v.fieldMetadata.displayType}</td></tr>
-                                <tr><td>inlineHelpText</td><td>{!v.fieldMetadata.inlineHelpText}</td></tr>
-                                <tr><td>isAccessible</td><td style="{!v.fieldMetadata.isAccessible ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isAccessible}</td></tr>
-                                <tr><td>isAutoNumber</td><td style="{!v.fieldMetadata.isAutoNumber ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isAutoNumber}</td></tr>
-                                <tr><td>isCalculated</td><td style="{!v.fieldMetadata.isCalculated ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isCalculated}</td></tr>
-                                <tr><td>isCaseSensitive</td><td style="{!v.fieldMetadata.isCaseSensitive ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isCaseSensitive}</td></tr>
-                                <tr><td>isCreateable</td><td style="{!v.fieldMetadata.isCreateable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isCreateable}</td></tr>
-                                <tr><td>isCustom</td><td style="{!v.fieldMetadata.isCustom ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isCustom}</td></tr>
-                                <tr><td>isDefaultedOnCreate</td><td style="{!v.fieldMetadata.isDefaultedOnCreate ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isDefaultedOnCreate}</td></tr>
-                                <tr><td>isFilterable</td><td style="{!v.fieldMetadata.isFilterable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isFilterable}</td></tr>
-                                <tr><td>isGroupable</td><td style="{!v.fieldMetadata.isGroupable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isGroupable}</td></tr>
-                                <tr><td>isNameField</td><td style="{!v.fieldMetadata.isNameField ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isNameField}</td></tr>
-                                <tr><td>isNillable</td><td style="{!v.fieldMetadata.isNillable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isNillable}</td></tr>
-                                <tr><td>isRequired</td><td style="{!v.fieldMetadata.isRequired ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isRequired}</td></tr>
-                                <tr><td>isSortable</td><td style="{!v.fieldMetadata.isSortable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isSortable}</td></tr>
-                                <tr><td>isUpdateable</td><td style="{!v.fieldMetadata.isUpdateable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.isUpdateable}</td></tr>
-                                <tr><td>label</td><td>{!v.fieldMetadata.label}</td></tr>
-                                <tr><td>localApiName</td><td>{!v.fieldMetadata.localApiName}</td></tr>
-                                <tr><td>maxLength</td><td>{!v.fieldMetadata.maxLength}</td></tr>
-                                <tr><td>namespace</td><td>{!v.fieldMetadata.namespace}</td></tr>
+                                <tr><td>ApiName</td><td>{!v.fieldMetadata.ApiName}</td></tr>
+                                <tr><td>ByteLength</td><td>{!v.fieldMetadata.ByteLength}</td></tr>
+                                <tr><td>DefaultValue</td><td>{!v.fieldMetadata.DefaultValue}</td></tr>
+                                <tr><td>Digits</td><td>{!v.fieldMetadata.Digits}</td></tr>
+                                <tr><td>DisplayType</td><td>{!v.fieldMetadata.DisplayType}</td></tr>
+                                <tr><td>InlineHelpText</td><td>{!v.fieldMetadata.InlineHelpText}</td></tr>
+                                <tr><td>IsAccessible</td><td style="{!v.fieldMetadata.IsAccessible ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsAccessible}</td></tr>
+                                <tr><td>IsAutoNumber</td><td style="{!v.fieldMetadata.IsAutoNumber ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsAutoNumber}</td></tr>
+                                <tr><td>IsCalculated</td><td style="{!v.fieldMetadata.IsCalculated ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsCalculated}</td></tr>
+                                <tr><td>IsCaseSensitive</td><td style="{!v.fieldMetadata.IsCaseSensitive ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsCaseSensitive}</td></tr>
+                                <tr><td>IsCreateable</td><td style="{!v.fieldMetadata.IsCreateable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsCreateable}</td></tr>
+                                <tr><td>IsCustom</td><td style="{!v.fieldMetadata.IsCustom ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsCustom}</td></tr>
+                                <tr><td>IsDefaultedOnCreate</td><td style="{!v.fieldMetadata.IsDefaultedOnCreate ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsDefaultedOnCreate}</td></tr>
+                                <tr><td>IsFilterable</td><td style="{!v.fieldMetadata.IsFilterable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsFilterable}</td></tr>
+                                <tr><td>IsGroupable</td><td style="{!v.fieldMetadata.IsGroupable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsGroupable}</td></tr>
+                                <tr><td>IsNameField</td><td style="{!v.fieldMetadata.IsNameField ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsNameField}</td></tr>
+                                <tr><td>IsNillable</td><td style="{!v.fieldMetadata.IsNillable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsNillable}</td></tr>
+                                <tr><td>IsRequired</td><td style="{!v.fieldMetadata.IsRequired ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsRequired}</td></tr>
+                                <tr><td>IsSortable</td><td style="{!v.fieldMetadata.IsSortable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsSortable}</td></tr>
+                                <tr><td>IsUpdateable</td><td style="{!v.fieldMetadata.IsUpdateable ? 'color:green' : 'color:red'}">{!v.fieldMetadata.IsUpdateable}</td></tr>
+                                <tr><td>Label</td><td>{!v.fieldMetadata.Label}</td></tr>
+                                <tr><td>LocalApiName</td><td>{!v.fieldMetadata.LocalApiName}</td></tr>
+                                <tr><td>MaxLength</td><td>{!v.fieldMetadata.MaxLength}</td></tr>
+                                <tr><td>Namespace</td><td>{!v.fieldMetadata.Namespace}</td></tr>
                                 <tr>
-                                    <td>picklistOptions</td>
+                                    <td>PicklistOptions</td>
                                     <td>
                                         <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
-                                            <aura:iteration items="{!v.fieldMetadata.picklistOptions}" var="picklistOption">
-                                                <li>label: {!picklistOption.label}, value: {!picklistOption.value}, isDefaultValue: {!picklistOption.value}</li>
+                                            <aura:iteration items="{!v.fieldMetadata.PicklistOptions}" var="picklistOption">
+                                                <li>Label: {!picklistOption.Label}, Value: {!picklistOption.Value}, IsDefaultValue: {!picklistOption.Value}</li>
                                             </aura:iteration>
                                         </ul>
                                     </td>
                                 </tr>
-                                <tr><td>precision</td><td>{!v.fieldMetadata.precision}</td></tr>
-                                <tr><td>relationshipName</td><td>{!v.fieldMetadata.relationshipName}</td></tr>
-                                <tr><td>relationshipOrder</td><td>{!v.fieldMetadata.relationshipOrder}</td></tr>
+                                <tr><td>Precision</td><td>{!v.fieldMetadata.Precision}</td></tr>
+                                <tr><td>RelationshipName</td><td>{!v.fieldMetadata.RelationshipApiName}</td></tr>
+                                <tr><td>RelationshipOrder</td><td>{!v.fieldMetadata.RelationshipOrder}</td></tr>
                                 <tr>
-                                    <td>relationshipReferences</td>
+                                    <td>RelationshipReferences</td>
                                     <td>
                                         <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
-                                            <aura:iteration items="{!v.fieldMetadata.relationshipReferences}" var="relationshipReference">
-                                                <li>label: {!relationshipReference.label}, apiName: {!relationshipReference.apiName}</li>
+                                            <aura:iteration items="{!v.fieldMetadata.RelationshipReferences}" var="relationshipReference">
+                                                <li>Label: {!relationshipReference.Label}, ApiName: {!relationshipReference.ApiName}</li>
                                             </aura:iteration>
                                         </ul>
                                     </td>
                                 </tr>
-                                <tr><td>scale</td><td>{!v.fieldMetadata.scale}</td></tr>
-                                <tr><td>soapType</td><td>{!v.fieldMetadata.soapType}</td></tr>
-                                <tr><td>sobjectApiName</td><td>{!v.fieldMetadata.sobjectApiName}</td></tr>
+                                <tr><td>Scale</td><td>{!v.fieldMetadata.Scale}</td></tr>
+                                <tr><td>SobjectApiName</td><td>{!v.fieldMetadata.SobjectApiName}</td></tr>
                             </tbody>
                         </table>
                     </aura:if>
                 </c:modal>
-                <c:modal showModal="{!v.showRecordTypeModal}" title="{!'Record Type Metadata for ' + v.selectedSObject}">
+                <c:modal showModal="{!v.showRecordTypeModal}" title="{!'Record Type Metadata for ' + v.selectedSobject}">
                     <lightning:select label="Select a record type" value="{!v.selectedRecordType}" onchange="{!c.fetchRecordTypeMetadata}">
                         <option value="" text="" />
-                        <aura:iteration items="{!v.sobjectMetadata.recordTypeApiNames}" var="recordTypeApiName">
-                            <option value="{!recordTypeApiName}" text="{!recordTypeApiName}" />
+                        <aura:iteration items="{!v.sobjectMetadata.RecordTypes}" var="recordType">
+                            <option value="{!recordType.ApiName}" text="{!recordType.ApiName}" />
                         </aura:iteration>
                     </lightning:select>
                     <aura:if isTrue="{!empty(v.selectedRecordType) == false}">
@@ -281,18 +276,16 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td>apiName</td><td>{!v.recordTypeMetadata.apiName}</td></tr>
-                                <tr><td>businessProcessId</td><td>{!v.recordTypeMetadata.businessProcessId}</td></tr>
-                                <tr><td>description</td><td>{!v.recordTypeMetadata.description}</td></tr>
-                                <tr><td>id</td><td>{!v.recordTypeMetadata.id}</td></tr>
-                                <tr><td>isActive</td><td style="{!v.recordTypeMetadata.isActive ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.isActive}</td></tr>
-                                <tr><td>isAvailable</td><td style="{!v.recordTypeMetadata.isAvailable ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.isAvailable}</td></tr>
-                                <tr><td>isDefault</td><td style="{!v.recordTypeMetadata.isDefault ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.isDefault}</td></tr>
-                                <tr><td>isMaster</td><td style="{!v.recordTypeMetadata.isMaster ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.isMaster}</td></tr>
-                                <tr><td>label</td><td>{!v.recordTypeMetadata.label}</td></tr>
-                                <tr><td>localApiName</td><td>{!v.recordTypeMetadata.localApiName}</td></tr>
-                                <tr><td>namespace</td><td>{!v.recordTypeMetadata.namespace}</td></tr>
-                                <tr><td>sobjectApiName</td><td>{!v.recordTypeMetadata.sobjectApiName}</td></tr>
+                                <tr><td>ApiName</td><td>{!v.recordTypeMetadata.ApiName}</td></tr>
+                                <tr><td>Id</td><td>{!v.recordTypeMetadata.Id}</td></tr>
+                                <tr><td>IsActive</td><td style="{!v.recordTypeMetadata.IsActive ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.IsActive}</td></tr>
+                                <tr><td>IsAvailable</td><td style="{!v.recordTypeMetadata.IsAvailable ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.IsAvailable}</td></tr>
+                                <tr><td>IsDefault</td><td style="{!v.recordTypeMetadata.IsDefault ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.IsDefault}</td></tr>
+                                <tr><td>IsMaster</td><td style="{!v.recordTypeMetadata.IsMaster ? 'color:green' : 'color:red'}">{!v.recordTypeMetadata.IsMaster}</td></tr>
+                                <tr><td>Label</td><td>{!v.recordTypeMetadata.Label}</td></tr>
+                                <tr><td>LocalApiName</td><td>{!v.recordTypeMetadata.LocalApiName}</td></tr>
+                                <tr><td>Namespace</td><td>{!v.recordTypeMetadata.Namespace}</td></tr>
+                                <tr><td>SobjectApiName</td><td>{!v.recordTypeMetadata.SobjectApiName}</td></tr>
                             </tbody>
                         </table>
                     </aura:if>
@@ -305,27 +298,27 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>apiName</td><td>{!v.sobjectMetadata.apiName}</td></tr>
-                        <tr><td>displayFieldApiName</td><td>{!v.sobjectMetadata.displayFieldApiName}</td></tr>
-                        <tr><td>hasMultiCurrency</td><td style="{!v.sobjectMetadata.hasMultiCurrency ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.hasMultiCurrency}</td></tr>
-                        <tr><td>hasSubtypes</td><td style="{!v.sobjectMetadata.hasSubtypes ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.hasSubtypes}</td></tr>
-                        <tr><td>isAccessible</td><td style="{!v.sobjectMetadata.isAccessible ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isAccessible}</td></tr>
-                        <tr><td>isChatterFeedEnabled</td><td style="{!v.sobjectMetadata.isChatterFeedEnabled ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isChatterFeedEnabled}</td></tr>
-                        <tr><td>isCreateable</td><td style="{!v.sobjectMetadata.isCreateable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isCreateable}</td></tr>
-                        <tr><td>isCustom</td><td style="{!v.sobjectMetadata.isCustom ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isCustom}</td></tr>
-                        <tr><td>isCustomSetting</td><td style="{!v.sobjectMetadata.isCustomSetting ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isCustomSetting}</td></tr>
-                        <tr><td>isDeletable</td><td style="{!v.sobjectMetadata.isDeletable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isDeletable}</td></tr>
-                        <tr><td>isMruEnabled</td><td style="{!v.sobjectMetadata.isMruEnabled ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isMruEnabled}</td></tr>
-                        <tr><td>isMergeable</td><td style="{!v.sobjectMetadata.isMergeable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isMergeable}</td></tr>
-                        <tr><td>isQueryable</td><td style="{!v.sobjectMetadata.isQueryable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isQueryable}</td></tr>
-                        <tr><td>isSearchable</td><td style="{!v.sobjectMetadata.isSearchable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isSearchable}</td></tr>
-                        <tr><td>isUndeletable</td><td style="{!v.sobjectMetadata.isUndeletable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isUndeletable}</td></tr>
-                        <tr><td>isUpdateable</td><td style="{!v.sobjectMetadata.isUpdateable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.isUpdateable}</td></tr>
+                        <tr><td>apiName</td><td>{!v.sobjectMetadata.ApiName}</td></tr>
+                        <tr><td>displayFieldApiName</td><td>{!v.sobjectMetadata.DisplayFieldApiName}</td></tr>
+                        <tr><td>hasMultiCurrency</td><td style="{!v.sobjectMetadata.HasMultiCurrency ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.HasMultiCurrency}</td></tr>
+                        <tr><td>hasSubtypes</td><td style="{!v.sobjectMetadata.HasSubtypes ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.HasSubtypes}</td></tr>
+                        <tr><td>isAccessible</td><td style="{!v.sobjectMetadata.IsAccessible ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsAccessible}</td></tr>
+                        <tr><td>isChatterFeedEnabled</td><td style="{!v.sobjectMetadata.IsChatterFeedEnabled ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsChatterFeedEnabled}</td></tr>
+                        <tr><td>isCreateable</td><td style="{!v.sobjectMetadata.IsCreateable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsCreateable}</td></tr>
+                        <tr><td>isCustom</td><td style="{!v.sobjectMetadata.IsCustom ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsCustom}</td></tr>
+                        <tr><td>isCustomSetting</td><td style="{!v.sobjectMetadata.IsCustomSetting ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsCustomSetting}</td></tr>
+                        <tr><td>isDeletable</td><td style="{!v.sobjectMetadata.IsDeletable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsDeletable}</td></tr>
+                        <tr><td>isMruEnabled</td><td style="{!v.sobjectMetadata.IsMruEnabled ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsMruEnabled}</td></tr>
+                        <tr><td>isMergeable</td><td style="{!v.sobjectMetadata.IsMergeable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsMergeable}</td></tr>
+                        <tr><td>isQueryable</td><td style="{!v.sobjectMetadata.IsQueryable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsQueryable}</td></tr>
+                        <tr><td>isSearchable</td><td style="{!v.sobjectMetadata.IsSearchable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsSearchable}</td></tr>
+                        <tr><td>isUndeletable</td><td style="{!v.sobjectMetadata.IsUndeletable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsUndeletable}</td></tr>
+                        <tr><td>isUpdateable</td><td style="{!v.sobjectMetadata.IsUpdateable ? 'color:green' : 'color:red'}">{!v.sobjectMetadata.IsUpdateable}</td></tr>
                         <tr>
                             <td>fieldApiNames</td>
                             <td>
                                 <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
-                                    <aura:iteration items="{!v.sobjectMetadata.fieldApiNames}" var="fieldApiName">
+                                    <aura:iteration items="{!v.sobjectMetadata.FieldApiNames}" var="fieldApiName">
                                         <li>{!fieldApiName}</li>
                                     </aura:iteration>
                                 </ul>
@@ -335,28 +328,28 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                             <td>fieldSetApiNames</td>
                             <td>
                                 <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
-                                    <aura:iteration items="{!v.sobjectMetadata.fieldSetApiNames}" var="fieldSetApiName">
+                                    <aura:iteration items="{!v.sobjectMetadata.FieldSetApiNames}" var="fieldSetApiName">
                                         <li>{!fieldSetApiName}</li>
                                     </aura:iteration>
                                 </ul>
                             </td>
                         </tr>
-                        <tr><td>keyPrefix</td><td>{!v.sobjectMetadata.keyPrefix}</td></tr>
-                        <tr><td>label</td><td>{!v.sobjectMetadata.label}</td></tr>
-                        <tr><td>labelPlural</td><td>{!v.sobjectMetadata.labelPlural}</td></tr>
-                        <tr><td>localApiName</td><td>{!v.sobjectMetadata.localApiName}</td></tr>
-                        <tr><td>namespace</td><td>{!v.sobjectMetadata.namespace}</td></tr>
+                        <tr><td>keyPrefix</td><td>{!v.sobjectMetadata.KeyPrefix}</td></tr>
+                        <tr><td>label</td><td>{!v.sobjectMetadata.Label}</td></tr>
+                        <tr><td>labelPlural</td><td>{!v.sobjectMetadata.LabelPlural}</td></tr>
+                        <tr><td>localApiName</td><td>{!v.sobjectMetadata.LocalApiName}</td></tr>
+                        <tr><td>namespace</td><td>{!v.sobjectMetadata.Namespace}</td></tr>
                         <tr>
                             <td>recordTypeApiNames</td>
                             <td>
                                 <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
-                                    <aura:iteration items="{!v.sobjectMetadata.recordTypeApiNames}" var="recordTypeApiName">
+                                    <aura:iteration items="{!v.sobjectMetadata.RecordTypeApiNames}" var="recordTypeApiName">
                                         <li>{!recordTypeApiName}</li>
                                     </aura:iteration>
                                 </ul>
                             </td>
                         </tr>
-                        <tr><td>tabIcon</td><td>{!v.sobjectMetadata.tabIcon}</td></tr>
+                        <tr><td>tabIcon</td><td>{!v.sobjectMetadata.TabIcon}</td></tr>
                     </tbody>
                 </table>
             </aura:if>
@@ -370,7 +363,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
             <div class="slds-text-color_inverse">
             </div>
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">
-                SObject Account Label: <c:sobjectLabel sobjectApiName="Account" />
+                Sobject Account Label: <c:sobjectLabel sobjectApiName="Account" />
                 (Plural: <c:sobjectLabel sobjectApiName="Account" variant="labelPlural" />)
             </h2>
             <div>
@@ -381,7 +374,7 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
             <br />
             <br />
             <h2 style="font-size:150%;font-weight:bold;margin-bottom:20px;">
-                SObject Task Label: <c:sobjectLabel sobjectApiName="Task" />
+                Sobject Task Label: <c:sobjectLabel sobjectApiName="Task" />
                 (Plural: <c:sobjectLabel sobjectApiName="Task" variant="labelPlural" />)
             </h2>
             <div>

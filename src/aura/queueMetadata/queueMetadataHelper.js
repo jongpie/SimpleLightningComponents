@@ -1,7 +1,7 @@
 ({
     fetchQueueMetadata : function(component, event) {
-        var queueId        = component.get('v.queueId');
-        var queueApiName   = component.get('v.queueApiName');
+        var queueId      = component.get('v.queueId');
+        var queueApiName = component.get('v.queueApiName');
 
         if(!queueId && !queueApiName) return;
 
@@ -15,7 +15,7 @@
            });
        } else {
            // Otherwise, use the API name
-           action = component.get('c.getQueueMetadataByName');
+           action = component.get('c.getQueueMetadataByApiName');
            action.setParams({
                queueApiName : queueApiName
            });

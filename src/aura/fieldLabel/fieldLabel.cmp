@@ -5,9 +5,9 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
 <aura:component extends="c.fieldMetadata">
 
     <!-- Markup -->
-    <ui:outputText value="{!v.fieldMetadata.label}" />
-    <aura:if isTrue="{!v.fieldMetadata.inlineHelpText != null}">
-        <lightning:helptext iconName="utility:info" content="{!v.fieldMetadata.inlineHelpText}" />
+    <ui:outputText value="{!v.fieldMetadata.Label}" />
+    <aura:if isTrue="{!v.fieldMetadata.InlineHelpText != null}">
+        <lightning:helptext iconName="utility:info" content="{!v.fieldMetadata.InlineHelpText}" />
     </aura:if>
 
 </aura:component>
