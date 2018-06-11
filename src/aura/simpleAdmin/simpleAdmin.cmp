@@ -8,19 +8,16 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <aura:attribute name="currentUser" type="User" access="private" />
     <aura:attribute name="environmentMetadata" type="EnvironmentMetadata" access="private" />
     <aura:attribute name="fieldMetadata" type="FieldMetadata" access="private" />
-    <aura:attribute name="listViewMetadata" type="ListViewMetadata" access="private" />
     <aura:attribute name="queueMetadata" type="QueueMetadata" access="private" />
     <aura:attribute name="recordTypeMetadata" type="RecordTypeMetadata" access="private" />
-    <aura:attribute name="sobjectMetadata" type="SObjectMetadata" access="private" />
+    <aura:attribute name="sobjectMetadata" type="SobjectMetadata" access="private" />
 
     <!-- Private attributes for controlling UI -->
     <aura:attribute name="selectedSObject" type="String" access="private" />
     <aura:attribute name="selectedField" type="String" access="private" />
-    <aura:attribute name="selectedListView" type="String" access="private" />
     <aura:attribute name="selectedQueue" type="String" access="private" />
     <aura:attribute name="selectedRecordType" type="String" access="private" />
     <aura:attribute name="showFieldModal" type="String" access="private" />
-    <aura:attribute name="showListViewModal" type="String" access="private" />
     <aura:attribute name="showRecordTypeModal" type="String" access="private" />
 
     <!-- Private attributes for input field demos -->
@@ -34,7 +31,6 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
     <c:currentUser aura:id="currentUserService" />
     <c:environmentMetadata aura:id="environmentMetadataService" />
     <c:fieldMetadata aura:id="fieldMetadataService" sobjectApiName="{!v.selectedSObject}" fieldApiName="{!v.selectedField}" />
-    <c:listViewMetadata aura:id="listViewMetadataService" sobjectApiName="{!v.selectedSObject}" listViewApiName="{!v.selectedListView}" />
     <c:queueMetadata aura:id="queueMetadataService" queueApiName="{!v.selectedQueue}" />
     <c:recordTypeMetadata aura:id="recordTypeMetadataService" sobjectApiName="{!v.selectedSObject}" recordTypeApiName="{!v.selectedRecordType}" />
     <c:sobjectMetadata aura:id="sobjectMetadataService" sobjectApiName="{!v.selectedSObject}" />
@@ -197,7 +193,6 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
             <aura:if isTrue="{!empty(v.selectedSObject) == false}">
                 <div class="slds-float--right" style="margin: 10px 30px;">
                     <lightning:button variant="brand" label="View Fields" onclick="{!c.viewFieldMetadata}" />
-                    <lightning:button variant="brand" label="View List Views" onclick="{!c.viewListViewMetadata}" />
                     <lightning:button variant="brand" label="View Record Types" onclick="{!c.viewRecordTypeMetadata}" />
                 </div>
                 <c:modal showModal="{!v.showFieldModal}" title="{!'Field Metadata for ' + v.selectedSObject}">
@@ -266,33 +261,6 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                                 <tr><td>scale</td><td>{!v.fieldMetadata.scale}</td></tr>
                                 <tr><td>soapType</td><td>{!v.fieldMetadata.soapType}</td></tr>
                                 <tr><td>sobjectApiName</td><td>{!v.fieldMetadata.sobjectApiName}</td></tr>
-                            </tbody>
-                        </table>
-                    </aura:if>
-                </c:modal>
-                <c:modal showModal="{!v.showListViewModal}" title="{!'List View Metadata for ' + v.selectedSObject}">
-                    <lightning:select label="Select a list view" value="{!v.selectedListView}" onchange="{!c.fetchListViewMetadata}">
-                        <option value="" text="" />
-                        <aura:iteration items="{!v.sobjectMetadata.listViewApiNames}" var="listViewApiName">
-                            <option value="{!listViewApiName}" text="{!listViewApiName}" />
-                        </aura:iteration>
-                    </lightning:select>
-                    <aura:if isTrue="{!empty(v.selectedListView) == false}">
-                        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
-                            <thead>
-                                <tr class="slds-text-title_caps ">
-                                    <th scope="col" style="width:50%"><div class="slds-truncate">Attribute</div></th>
-                                    <th scope="col" style="width:50%"><div class="slds-truncate">Value</div></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>apiName</td><td>{!v.listViewMetadata.apiName}</td></tr>
-                                <tr><td>id</td><td>{!v.listViewMetadata.id}</td></tr>
-                                <tr><td>isSoqlCompatible</td><td style="{!v.listViewMetadata.isSoqlCompatible ? 'color:green' : 'color:red'}">{!v.listViewMetadata.isSoqlCompatible}</td></tr>
-                                <tr><td>label</td><td>{!v.listViewMetadata.label}</td></tr>
-                                <tr><td>localApiName</td><td>{!v.listViewMetadata.localApiName}</td></tr>
-                                <tr><td>namespace</td><td>{!v.listViewMetadata.namespace}</td></tr>
-                                <tr><td>sobjectApiName</td><td>{!v.listViewMetadata.sobjectApiName}</td></tr>
                             </tbody>
                         </table>
                     </aura:if>
@@ -376,16 +344,6 @@ See LICENSE file or go to https://github.com/jongpie/LightningComponents for ful
                         <tr><td>keyPrefix</td><td>{!v.sobjectMetadata.keyPrefix}</td></tr>
                         <tr><td>label</td><td>{!v.sobjectMetadata.label}</td></tr>
                         <tr><td>labelPlural</td><td>{!v.sobjectMetadata.labelPlural}</td></tr>
-                        <tr>
-                            <td>listViewApiNames</td>
-                            <td>
-                                <ul style="border:1px solid #000; max-height:300px; overflow-y:scroll;">
-                                    <aura:iteration items="{!v.sobjectMetadata.listViewApiNames}" var="listViewApiName">
-                                        <li>{!listViewApiName}</li>
-                                    </aura:iteration>
-                                </ul>
-                            </td>
-                        </tr>
                         <tr><td>localApiName</td><td>{!v.sobjectMetadata.localApiName}</td></tr>
                         <tr><td>namespace</td><td>{!v.sobjectMetadata.namespace}</td></tr>
                         <tr>

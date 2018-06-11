@@ -17,12 +17,6 @@
             component.set('v.fieldMetadata', response);
         }));
     },
-    fetchListViewMetadata : function(component, event) {
-        var listViewMetadataService = component.find('listViewMetadataService');
-        listViewMetadataService.fetch($A.getCallback(function(error, response) {
-            component.set('v.listViewMetadata', response);
-        }));
-    },
     fetchQueueMetadata : function(component, event) {
         console.log('simpl adm q');
         var queueMetadataService = component.find('queueMetadataService');

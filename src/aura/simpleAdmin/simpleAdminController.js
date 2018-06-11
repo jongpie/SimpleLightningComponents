@@ -17,12 +17,6 @@
     fetchRecordTypeMetadata : function(component, event, helper) {
         helper.fetchRecordTypeMetadata(component, event);
     },
-    viewListViewMetadata : function(component, event, helper) {
-        component.set('v.showListViewModal', true);
-    },
-    fetchListViewMetadata : function(component, event, helper) {
-        helper.fetchListViewMetadata(component, event);
-    },
     viewRecordTypeMetadata : function(component, event, helper) {
         component.set('v.showRecordTypeModal', true);
     },
