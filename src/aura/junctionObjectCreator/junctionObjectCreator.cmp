@@ -1,0 +1,121 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName,force:lightningQuickAction" controller="JunctionObjectCreatorController">
+
+    <aura:attribute name="recordId"                 type="Id" />
+
+    <aura:attribute name="secondarySobject"         type="String" />
+    <aura:attribute name="secondarySobjectFilter"   type="String"                 /> <!--  default="{! 'WHERE Pricebook2Id = \'' + v.primaryRecord.Pricebook2Id + '\''}" /-->
+    <aura:attribute name="secondarySobjectFieldSet"         type="String" />
+
+    <aura:attribute name="junctionSobject"         type="String" />
+    <aura:attribute name="junctionSobjectFieldSet"         type="String" />
+    <aura:attribute name="relationshipFieldToPrimarySobject"          type="String" />
+    <aura:attribute name="relationshipFieldToSecondarySobject"          type="String" />
+
+    <!--aura:attribute name="primaryRecord"            type="Sobject" access="private" /-->
+    <aura:attribute name="secondarySobjectRecordResults"  type="Object" access="private" />
+    <aura:attribute name="junctionSobjectRecordResults"   type="Object" access="private" />
+    <!--aura:attribute name="pricebookId"              type="Id" /-->
+
+<aura:attribute name="selectedSecondarySobjectRecords" type="SObject[]" access="private" default="[]" />
+
+<aura:attribute name="stepNumber"                 type="Integer" access="private" default="1" />
+    <aura:attribute name="columns"            type="List" access="private" />
+    <aura:attribute name="selectedrecords"          type="Map"  access="private" default="{}"/>
+
+    <!-- Atributos utilizados para la ordenación de la tabla -->
+    <aura:attribute name="sortedBy"                 type="String" access="private" default="Name" />
+    <aura:attribute name="sortedDirection"          type="String" access="private" default="asc" />
+
+    <!-- Atributos utilizados para la paginiación -->
+    <aura:attribute name="recordsPerPage"           type="Integer"  default="5" />
+<!--aura:attribute name="PaginationList"                                               type="Pricebookentry" /-->
+    <aura:attribute name="currentPage"              type="Integer" />
+    <aura:attribute name="startPage"                type="Integer" />
+    <aura:attribute name="endPage"                  type="Integer" />
+    <aura:attribute name="totalNumberOfRecords"     type="Integer" />
+
+    <!-- Acciones inmediatas -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+<h1>Selected Records</h1>
+<aura:iteration items="{!v.selectedSecondarySobjectRecords}" var="selectedSecondarySobjectRecord">
+
+    <lightning:pill name="{!selectedSecondarySobjectRecord.Id}" label="{!selectedSecondarySobjectRecord.Name}" onremove="{!c.removeSelectedRecord}">
+        <aura:set attribute="media">
+            <lightning:icon iconName="{!v.secondarySobjectRecordResults.tabIcon}"  alternativeText="Account"/>
+        </aura:set>
+    </lightning:pill>
+</aura:iteration>
+
+
+
+[step number: {!v.stepNumber}]
+    sup
+    [length: {!v.secondarySobjectRecordResults.records.length}]
+    <aura:iteration items="{!v.secondarySobjectRecordResults.records}" var="secondarySobjectRecord">
+        {!secondarySobjectRecord.Name}
+    </aura:iteration>
+    <aura:if isTrue="{!v.stepNumber == 1}">
+        <!-- Sección: Tabla con datos -->
+        <lightning:datatable aura:id            = "secondarySobjectRecords"
+                             columns            = "{!v.secondarySobjectRecordResults.columns}"
+                             data               = "{!v.secondarySobjectRecordResults.records}"
+                             keyField           = "Id"
+                             sortable           = "true"
+                             onsort             = "{!c.columnSorting}"
+                             onrowselection     = "{!c.rowSelected}"
+                             sortedBy           = "{!v.sortedBy}"
+                             sortedDirection    = "{!v.sortedDirection}"
+        />
+        <lightning:buttonGroup >
+                <lightning:button label        = "Previous"
+                                  value        = "PreviousPage"
+                                  disabled     = "{!v.startPage == 0}"
+                                  onclick      = "{!c.pageMovement}"
+                                  variant      = "brand"
+                                  iconName     = "utility:back"
+                                  iconPosition = "left"
+                />
+                &nbsp; &nbsp;
+                <lightning:button label        = "Next"
+                                  value        = "NextPage"
+                                  disabled     = "{!v.endPage >= v.totalNumberOfRecords}"
+                                  onclick      = "{!c.pageMovement}"
+                                  variant      = "brand"
+                                  iconName     = "utility:forward"
+                                  iconPosition = "right"
+                />
+            </lightning:buttonGroup>
+
+            <lightning:button label   = "Save"
+                disabled = "{!empty(v.selectedSecondarySobjectRecords)}"
+                              onclick = "{!c.createJunctionRecords}"
+                              variant = "brand"
+            />
+    </aura:if>
+    <aura:if isTrue="{!v.stepNumber == 2}">
+        step 2: [{!v.junctionSobjectRecordResults.sobjectType}]
+        <aura:iteration items="{!v.junctionSobjectRecordResults}" var="junctionSobjectRecord">
+            {!junctionSobjectRecord.Name}
+        </aura:iteration>
+        <lightning:datatable aura:id            = "recordEntries"
+                             columns            = "{!v.junctionSobjectRecordResults.columns}"
+                             data               = "{!v.junctionSobjectRecordResults.records}"
+                             keyField           = "Id"
+                             sortable           = "true"
+                             onsort             = "{!c.columnSorting}"
+                             sortedBy           = "{!v.sortedBy}"
+                             sortedDirection    = "{!v.sortedDirection}"
+                             hideCheckboxColumn = "true"
+        />
+        <lightning:button label        = "Back"
+                          value        = "Back"
+                          disabled     = "{!v.startPage == 0}"
+                          onclick      = "{!c.back}"
+                          variant      = "brand"
+                          iconName     = "utility:back"
+                          iconPosition = "left"
+        />
+    </aura:if>
+
+</aura:component>

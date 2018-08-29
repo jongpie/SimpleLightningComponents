@@ -1,0 +1,11 @@
+<design:component>
+
+    <design:attribute name="secondarySobject" label="Second parent object API name" />
+    <design:attribute name="secondarySobjectFieldSet" label="Second parent object's field set" />
+    <design:attribute name="secondarySobjectFilter" label="Query filter for second parent object" />
+    <design:attribute name="junctionSobject" label="Junction object API name" />
+    <design:attribute name="junctionSobjectFieldSet" label="Junction object's field set" />
+    <design:attribute name="relationshipFieldToPrimarySobject" label="Junction object's lookup to primary object" />
+    <design:attribute name="relationshipFieldToSecondarySobject" label="Junction object's lookup to secondary object" />
+
+</design:component>
